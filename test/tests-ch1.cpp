@@ -12,16 +12,16 @@
 //
 // License: Apache License 2.0
 //========================================================================
-#include <gtest/gtest.h>
 #include <Chapter_1.h>
-#include <vector>
+#include <gtest/gtest.h>
 #include <string_view>
+#include <vector>
 
 struct CciChapter1Q1 : public ::testing::Test {
 
   // A vector of test strings and bools. For each string the corresponding bool
   // identifies whether the characters in the string are unique.
-  std::vector< std::tuple<std::string, bool>> test_strings;
+  std::vector<std::tuple<std::string, bool>> test_strings;
 
   CciChapter1Q1() {
     // Construct a string containing all (extended) ASCII characters. Make sure
@@ -41,13 +41,11 @@ struct CciChapter1Q1 : public ::testing::Test {
     almost_ascii_alphabet.at(5) = 'a';
 
     // Finally, populate test_strings
-    test_strings = {
-      {"", true},
-      {"aa", false},
-      {std::string(256, 'a'), false},
-      {ascii_alphabet, true},
-      {almost_ascii_alphabet, false}
-    };
+    test_strings = {{"", true},
+                    {"aa", false},
+                    {std::string(256, 'a'), false},
+                    {ascii_alphabet, true},
+                    {almost_ascii_alphabet, false}};
   }
 
 protected:

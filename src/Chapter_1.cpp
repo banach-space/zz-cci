@@ -15,7 +15,9 @@
 #include <string_view>
 
 bool unique_chars(const std::string &input_str) {
-  if (input_str.empty()) { return true;}
+  if (input_str.empty()) {
+    return true;
+  }
 
   uint32_t present[256] = {};
 
@@ -33,7 +35,9 @@ bool unique_chars(const std::string &input_str) {
 }
 
 bool unique_chars(const std::string_view input_str) {
-  if (input_str.empty()) { return true;}
+  if (input_str.empty()) {
+    return true;
+  }
 
   uint32_t present[256] = {};
 
@@ -51,7 +55,9 @@ bool unique_chars(const std::string_view input_str) {
 }
 
 bool unique_chars(const char *input_str) {
-  if ('\0' == *input_str) { return true;}
+  if ('\0' == *input_str) {
+    return true;
+  }
 
   uint32_t present[256] = {};
 
