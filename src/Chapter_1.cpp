@@ -99,25 +99,60 @@ void reverse(char *input_str) {
   }
 }
 
-static void reverse_cpp_ver_1(std::string& input_str)
+template<>
+void reverse<ver_1>(std::string& input_str)
 {
     size_t length = input_str.length();
 
     // Swap character starting from two corners
-    for (size_t ii = 0; ii < length / 2; ii++)
+    for (size_t ii = 0; ii < length / 2; ii++) {
         std::swap(input_str[ii], input_str[length - ii - 1]);
+    }
 }
 
-static void reverse_cpp_ver_2(std::string& input_str)
+template<>
+void reverse<ver_2>(std::string& input_str)
 {
     reverse(input_str.begin(), input_str.end());
 }
 
-void reverse(std::string &input_str, reverse_ver ver) {
-  if (ver == ver_1) {
-    return reverse_cpp_ver_1(input_str);
-  } else {
-    return reverse_cpp_ver_2(input_str);
+template<>
+bool permutation<ver_1>(const std::string &str1, const std::string &str2) {
+  if (str1.length() != str2.length()) {
+    return false;
   }
+
+  std::string str1_sorted = str1;
+  sort(str1_sorted.begin(), str1_sorted.end());
+
+  std::string str2_sorted = str2;
+  sort(str2_sorted.begin(), str2_sorted.end());
+
+  return (str1_sorted == str2_sorted);
 }
 
+template<>
+bool permutation<ver_2>(const std::string &str1, const std::string &str2) {
+  if (str1.length() != str2.length()) {
+    return false;
+  }
+
+  char chars_in_string1[256] = {};
+  char chars_in_string2[256] = {};
+
+  for (auto current_char : str1) {
+    chars_in_string1[(static_cast<uint8_t>(current_char))]++;
+  }
+
+  for (auto current_char : str2) {
+    chars_in_string2[(static_cast<uint8_t>(current_char))]++;
+  }
+
+  for (size_t ii = 0; ii < 256; ii++) {
+    if (chars_in_string1[ii] != chars_in_string2[ii]) {
+      return false;
+    }
+  }
+
+  return true;
+}

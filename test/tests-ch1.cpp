@@ -72,7 +72,34 @@ struct CciChapter1_Q2 : public ::testing::Test {
     {{"aaaaaaaaaaaaaaaaaaaa"}, {"aaaaaaaaaaaaaaaaaaaa"}},
     {{"xxxxxxxxxxyyyyyyyyyy"}, {"yyyyyyyyyyxxxxxxxxxx"}}
   };
+  }
 
+protected:
+  void SetUp() override {}
+  void TearDown() override {}
+};
+
+struct CciChapter1_Q3 : public ::testing::Test {
+  // A vector of test strings tuples: {original string, anagram|antigram}
+  std::vector<std::tuple<std::string, std::string>> anagrams;
+  std::vector<std::tuple<std::string, std::string>> antigrams;
+
+  CciChapter1_Q3() {
+    anagrams = {
+      {{""}, {""}},
+      {{"dog"}, {"god"}},
+      {{"Andrzej"}, {"jezrdnA"}},
+      {{"Warzynski"}, {"iksnyzraW"}},
+      {{"¬!£$%^&*()_+{}:@~<>?|"}, {"|?><~@:}{+_)(*&^%$£!¬"}}
+    };
+
+    antigrams = {
+      {{"dog"}, {"goG"}},
+      {{"Andrzej"}, {"Warzynski"}},
+      {{"Warzynski"}, {"Andrzej"}},
+      {{"Andrzej"}, {"andrzej"}},
+      {{"Andrzej"}, {" Andrzej"}},
+    };
   }
 
 protected:
@@ -134,11 +161,11 @@ TEST_F(CciChapter1_Q2, reverse_c_string) {
   }
 }
 
-TEST_F(CciChapter1_Q2, reverse_cpp_string) {
+TEST_F(CciChapter1_Q2, reverse_cpp_string_ver1) {
   for (auto pair : test_strings) {
     std::string current_str(std::get<0>(pair));
 
-    reverse(current_str, ver_2);
+    reverse<ver_1>(current_str);
     ASSERT_EQ(current_str, std::get<1>(pair).c_str());
   }
 }
@@ -147,7 +174,27 @@ TEST_F(CciChapter1_Q2, reverse_cpp_string_ver2) {
   for (auto pair : test_strings) {
     std::string current_str(std::get<0>(pair));
 
-    reverse(current_str, ver_1);
+    reverse<ver_2>(current_str);
     ASSERT_EQ(current_str, std::get<1>(pair).c_str());
+  }
+}
+
+TEST_F(CciChapter1_Q3, permutation_ver1) {
+  for (auto pair : anagrams) {
+    ASSERT_TRUE(permutation<ver_1>(std::get<0>(pair), std::get<1>(pair)));
+  }
+
+  for (auto pair : antigrams) {
+    ASSERT_FALSE(permutation<ver_1>(std::get<0>(pair), std::get<1>(pair)));
+  }
+}
+
+TEST_F(CciChapter1_Q3, permutation_ver2) {
+  for (auto pair : anagrams) {
+    ASSERT_TRUE(permutation<ver_2>(std::get<0>(pair), std::get<1>(pair)));
+  }
+
+  for (auto pair : antigrams) {
+    ASSERT_FALSE(permutation<ver_2>(std::get<0>(pair), std::get<1>(pair)));
   }
 }

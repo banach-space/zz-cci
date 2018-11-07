@@ -24,12 +24,18 @@ bool unique_chars(const char *input_str);
 bool unique_chars(const std::string_view input_str);
 
 // Q2
+void reverse(char *input_str);
+
 enum reverse_ver {
   ver_1 = 0,
   ver_2 = 1
 };
 
-void reverse(char *input_str);
-void reverse(std::string& input_str, reverse_ver ver);
+template<reverse_ver ver>
+void reverse(std::string& input_str);
+
+// Q3
+template<reverse_ver ver>
+bool permutation(const std::string &str1, const std::string &str2);
 
 #endif
