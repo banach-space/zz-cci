@@ -13,9 +13,9 @@
 // License: Apache License 2.0
 //========================================================================
 #include <Chapter_1.h>
+#include <algorithm>
 #include <string>
 #include <string_view>
-#include <algorithm>
 
 bool unique_chars(const std::string &input_str) {
   if (input_str.empty()) {
@@ -99,24 +99,20 @@ void reverse(char *input_str) {
   }
 }
 
-template<>
-void reverse<ver_1>(std::string& input_str)
-{
-    size_t length = input_str.length();
+template <> void reverse<ver_1>(std::string &input_str) {
+  size_t length = input_str.length();
 
-    // Swap character starting from two corners
-    for (size_t ii = 0; ii < length / 2; ii++) {
-        std::swap(input_str[ii], input_str[length - ii - 1]);
-    }
+  // Swap character starting from two corners
+  for (size_t ii = 0; ii < length / 2; ii++) {
+    std::swap(input_str[ii], input_str[length - ii - 1]);
+  }
 }
 
-template<>
-void reverse<ver_2>(std::string& input_str)
-{
-    reverse(input_str.begin(), input_str.end());
+template <> void reverse<ver_2>(std::string &input_str) {
+  reverse(input_str.begin(), input_str.end());
 }
 
-template<>
+template <>
 bool permutation<ver_1>(const std::string &str1, const std::string &str2) {
   if (str1.length() != str2.length()) {
     return false;
@@ -131,7 +127,7 @@ bool permutation<ver_1>(const std::string &str1, const std::string &str2) {
   return (str1_sorted == str2_sorted);
 }
 
-template<>
+template <>
 bool permutation<ver_2>(const std::string &str1, const std::string &str2) {
   if (str1.length() != str2.length()) {
     return false;
@@ -155,4 +151,27 @@ bool permutation<ver_2>(const std::string &str1, const std::string &str2) {
   }
 
   return true;
+}
+
+void replace_space_with_code(std::string &input_str, size_t length) {
+  size_t space_count = 0;
+  for (size_t ii = 0; ii < length; ii++) {
+    if (' ' == input_str[ii]) {
+      space_count++;
+    }
+  }
+
+  size_t new_length = length + space_count * 2;
+  size_t input_idx = new_length - 1;
+  for (int ii = length - 1; ii >= 0; ii--) {
+    if (' ' == input_str[ii]) {
+      input_str[input_idx] = '0';
+      input_str[input_idx - 1] = '2';
+      input_str[input_idx - 2] = '%';
+      input_idx -= 3;
+    } else {
+      input_str[input_idx] = input_str[ii];
+      input_idx--;
+    }
+  }
 }

@@ -38,4 +38,8 @@ void reverse(std::string& input_str);
 template<reverse_ver ver>
 bool permutation(const std::string &str1, const std::string &str2);
 
+// Q4
+// FYI The code refers to %20 from the Question
+void replace_space_with_code(std::string &input_str, size_t len);
+
 #endif

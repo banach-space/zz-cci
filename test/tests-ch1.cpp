@@ -14,10 +14,10 @@
 //========================================================================
 #include <Chapter_1.h>
 #include <gtest/gtest.h>
+#include <iostream>
+#include <string.h>
 #include <string_view>
 #include <vector>
-#include <string.h>
-#include <iostream>
 
 //========================================================================
 // Test Fixtures
@@ -64,14 +64,12 @@ struct CciChapter1_Q2 : public ::testing::Test {
   std::vector<std::tuple<std::string, std::string>> test_strings;
 
   CciChapter1_Q2() {
-    test_strings = {
-    {{""}, {""}},
-    {{"aba"}, {"aba"}},
-    {{"abba"}, {"abba"}},
-    {{"Andrzej Warzynski"}, {"iksnyzraW jezrdnA"}},
-    {{"aaaaaaaaaaaaaaaaaaaa"}, {"aaaaaaaaaaaaaaaaaaaa"}},
-    {{"xxxxxxxxxxyyyyyyyyyy"}, {"yyyyyyyyyyxxxxxxxxxx"}}
-  };
+    test_strings = {{{""}, {""}},
+                    {{"aba"}, {"aba"}},
+                    {{"abba"}, {"abba"}},
+                    {{"Andrzej Warzynski"}, {"iksnyzraW jezrdnA"}},
+                    {{"aaaaaaaaaaaaaaaaaaaa"}, {"aaaaaaaaaaaaaaaaaaaa"}},
+                    {{"xxxxxxxxxxyyyyyyyyyy"}, {"yyyyyyyyyyxxxxxxxxxx"}}};
   }
 
 protected:
@@ -85,20 +83,16 @@ struct CciChapter1_Q3 : public ::testing::Test {
   std::vector<std::tuple<std::string, std::string>> antigrams;
 
   CciChapter1_Q3() {
-    anagrams = {
-      {{""}, {""}},
-      {{"dog"}, {"god"}},
-      {{"Andrzej"}, {"jezrdnA"}},
-      {{"Warzynski"}, {"iksnyzraW"}},
-      {{"¬!£$%^&*()_+{}:@~<>?|"}, {"|?><~@:}{+_)(*&^%$£!¬"}}
-    };
+    anagrams = {{{""}, {""}},
+                {{"dog"}, {"god"}},
+                {{"Andrzej"}, {"jezrdnA"}},
+                {{"Warzynski"}, {"iksnyzraW"}},
+                {{"¬!£$%^&*()_+{}:@~<>?|"}, {"|?><~@:}{+_)(*&^%$£!¬"}}};
 
     antigrams = {
-      {{"dog"}, {"goG"}},
-      {{"Andrzej"}, {"Warzynski"}},
-      {{"Warzynski"}, {"Andrzej"}},
-      {{"Andrzej"}, {"andrzej"}},
-      {{"Andrzej"}, {" Andrzej"}},
+        {{"dog"}, {"goG"}},           {{"Andrzej"}, {"Warzynski"}},
+        {{"Warzynski"}, {"Andrzej"}}, {{"Andrzej"}, {"andrzej"}},
+        {{"Andrzej"}, {" Andrzej"}},
     };
   }
 
@@ -148,7 +142,7 @@ TEST_F(CciChapter1_Q2, reverse_c_string) {
     char *current_str = nullptr;
     if (length > 0) {
       current_str = new char[length];
-      strncpy(current_str, std::get<0>(pair).c_str(), length+1);
+      strncpy(current_str, std::get<0>(pair).c_str(), length + 1);
     } else {
       current_str = new char[1];
       *current_str = '\0';
@@ -196,5 +190,19 @@ TEST_F(CciChapter1_Q3, permutation_ver2) {
 
   for (auto pair : antigrams) {
     ASSERT_FALSE(permutation<ver_2>(std::get<0>(pair), std::get<1>(pair)));
+  }
+}
+
+TEST(CciChapter1_Q4, replace_space_with_code) {
+  std::vector<std::tuple<std::string, std::string, size_t>> test_strings = {
+      {{"Mr John Smith    "}, {"Mr%20John%20Smith"}, 13},
+      {{"Mr  John  Smith        "}, {"Mr%20%20John%20%20Smith"}, 15},
+      {{"MrJohnSmith"}, {"MrJohnSmith"}, 11},
+  };
+
+  for (auto test_case : test_strings) {
+    replace_space_with_code(std::get<0>(test_case), std::get<2>(test_case));
+
+    ASSERT_EQ(std::get<0>(test_case), std::get<1>(test_case));
   }
 }
