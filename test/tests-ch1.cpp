@@ -206,3 +206,19 @@ TEST(CciChapter1_Q4, replace_space_with_code) {
     ASSERT_EQ(std::get<0>(test_case), std::get<1>(test_case));
   }
 }
+
+TEST(CciChapter1_Q5, string_compress) {
+  std::vector<std::tuple<std::string, std::string>> test_strings = {
+    {{"aabcccccaaa"}, {"a2b1c5a3"}},  
+    {{"abcd"}, {"abcd"}},  
+    {{"abcdaaaaaaaaa"}, {"a1b1c1d1a9"}},  
+    {{"abcdaaaaaaaaa"}, {"a1b1c1d1a9"}},  
+    {{"abcdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, {"a1b1c1d1a30"}},  
+  };
+
+  for (auto test_case : test_strings) {
+    std::string compressed_str = string_compress(std::get<0>(test_case));
+
+    ASSERT_EQ(compressed_str, std::get<1>(test_case));
+  }
+}

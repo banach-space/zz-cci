@@ -154,6 +154,7 @@ bool permutation<ver_2>(const std::string &str1, const std::string &str2) {
 }
 
 void replace_space_with_code(std::string &input_str, size_t length) {
+  // Count the number of whitespaces.
   size_t space_count = 0;
   for (size_t ii = 0; ii < length; ii++) {
     if (' ' == input_str[ii]) {
@@ -161,6 +162,8 @@ void replace_space_with_code(std::string &input_str, size_t length) {
     }
   }
 
+  // Replaces the whitespaces with %20 (as per the question). Start from the
+  // back (that's easier).
   size_t new_length = length + space_count * 2;
   size_t input_idx = new_length - 1;
   for (int ii = length - 1; ii >= 0; ii--) {
@@ -174,4 +177,58 @@ void replace_space_with_code(std::string &input_str, size_t length) {
       input_idx--;
     }
   }
+}
+
+std::string string_compress(const std::string &input_str) {
+  size_t compressed_string_length = 0;
+  size_t current_char_count = 1;
+
+  // Step 1 - calculate the length of the compressed string
+  // Assume that null character is never a valid char so that it can be used in
+  // the initialisation below.
+  char prev_char = '\0';
+  for (auto current_char : input_str) {
+    if (current_char == prev_char) { 
+      current_char_count++; 
+    } else {
+      compressed_string_length++;
+      compressed_string_length += std::to_string(current_char_count).length();
+
+      prev_char = current_char;
+      current_char_count = 1;
+    }
+  }
+
+  // Step 2 - if the compressed string is longer than the original one, then
+  // return the original string.
+  if (compressed_string_length >= input_str.length()) {
+    std::string compressed_string = input_str;
+    return compressed_string;
+  }
+
+  // Step 3 - compress the string and return the compressed version
+  std::string compressed_string;
+  // This vvvv is important, otherwise concatention could be very expensive.
+  compressed_string.reserve(compressed_string_length);
+  prev_char = input_str[0];
+  current_char_count = 1;
+
+  for (size_t ii= 1; ii < input_str.length(); ii++) {
+    if (input_str[ii] == prev_char) { 
+      current_char_count++; 
+    } else {
+      // Add the last char and it's count
+      compressed_string += prev_char;
+      compressed_string += std::to_string(current_char_count);
+
+      // Reset the current char count, prev_char and add the current character
+      current_char_count = 1;
+      prev_char = input_str[ii];
+    }
+  }
+  // Append the final character and the corresponding character count
+  compressed_string += prev_char;
+  compressed_string += std::to_string(current_char_count);
+
+  return compressed_string;
 }

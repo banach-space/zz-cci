@@ -42,4 +42,7 @@ bool permutation(const std::string &str1, const std::string &str2);
 // FYI The code refers to %20 from the Question
 void replace_space_with_code(std::string &input_str, size_t len);
 
+// Q5
+std::string string_compress(const std::string &);
+
 #endif
