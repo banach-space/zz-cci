@@ -17,6 +17,7 @@
 #define _CHAPTER_1_
 
 #include <string>
+#include <vector>
 
 // Q1
 bool unique_chars(const std::string &input_str);
@@ -44,5 +45,16 @@ void replace_space_with_code(std::string &input_str, size_t len);
 
 // Q5
 std::string string_compress(const std::string &);
+
+// Q6
+using image = std::vector<std::vector<char>>;
+void rotate(image&);
+
+// Q7
+using matrix = std::vector<std::vector<int>>;
+void setZeros(matrix&);
+
+// Q8
+bool isRotation(const std::string &parent_string, const std::string &substring);
 
 #endif

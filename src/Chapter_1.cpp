@@ -232,3 +232,78 @@ std::string string_compress(const std::string &input_str) {
 
   return compressed_string;
 }
+
+void rotate(image& in_image) {
+  for (size_t layer = 0; layer < in_image.size() / 2; layer++) {
+    size_t first = layer;
+    size_t last = in_image.size() - 1 - layer;
+
+    for (size_t ii = first; ii < last; ii++) {
+      size_t offset = ii - first;
+
+      // save top
+      char top = in_image[first][ii];
+
+      // left --> top
+      in_image[first][ii] = in_image[last-offset][first];
+
+      // bottom --> left
+      in_image[last - offset][first] = in_image[last][last - offset];
+
+      // right --> bottom
+      in_image[last][last - offset] = in_image[ii][last];
+
+      // top --> right
+      in_image[ii][last] = top;
+    }
+  }
+}
+
+void setZeros(matrix &in_matrix) {
+
+  if (0 == in_matrix.size()) {
+    return;
+  }
+
+  size_t n_rows = in_matrix.size();
+  size_t n_columns = in_matrix[0].size();
+  std::vector<bool> rows_is_zero(n_rows, false);
+  std::vector<bool> columns_is_zero(n_columns, false);
+
+  for (size_t ii = 0; ii < n_rows; ii++) {
+    for (size_t jj = 0; jj < n_columns; jj++) {
+      if (in_matrix[ii][jj] == 0) {
+        rows_is_zero[ii] = true;
+        columns_is_zero[jj] = true;
+      }
+    }
+  }
+
+  for (size_t ii = 0; ii < n_rows; ii++) {
+    if (rows_is_zero[ii] == true) {
+      std::fill(in_matrix[ii].begin(), in_matrix[ii].end(), 0);
+    }
+  }
+
+  for (size_t jj = 0; jj < n_columns; jj++) {
+    if (columns_is_zero[jj] == true) {
+      for (size_t ii = 0; ii < n_rows; ii++) {
+        in_matrix[ii][jj] = 0; 
+      }
+    }
+  }
+}
+
+bool isRotation(const std::string &s1, const std::string &s2) {
+  if ((s1.length() == 0) || (s1.length() != s2.length())) {
+    return false;
+  }
+
+  std::string s1s1 = s1 + s1;
+
+  if (s1s1.find(s2) == std::string::npos) {
+    return false;
+  }
+
+  return true;
+}
