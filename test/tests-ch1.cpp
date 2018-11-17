@@ -12,7 +12,7 @@
 //
 // License: Apache License 2.0
 //========================================================================
-#include <Chapter_1.h>
+#include <Chapter_1.hpp>
 #include <gtest/gtest.h>
 
 #include <iostream>
