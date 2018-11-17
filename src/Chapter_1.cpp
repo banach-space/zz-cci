@@ -7,12 +7,15 @@
 //
 // DESCRIPTION:
 //    Solutions to practice questions from Chapter 1 in [1] - implementation.
+//    In many cases I've assumed that we only care about ASCII characters - it
+//    felt like a reasonable assumption.
 //
 //    "Cracking the Coding Interview", Gayle Laakmann McDowell
 //
 // License: Apache License 2.0
 //========================================================================
 #include <Chapter_1.h>
+
 #include <algorithm>
 #include <string>
 #include <string_view>
@@ -22,7 +25,7 @@ bool unique_chars(const std::string &input_str) {
     return true;
   }
 
-  uint32_t present[256] = {};
+  uint32_t present[k_num_ascii_chars] = {};
 
   for (auto &item : input_str) {
     present[(static_cast<uint8_t>(item))]++;
@@ -42,7 +45,7 @@ bool unique_chars(const std::string_view input_str) {
     return true;
   }
 
-  uint32_t present[256] = {};
+  uint32_t present[k_num_ascii_chars] = {};
 
   for (auto &item : input_str) {
     present[(static_cast<uint8_t>(item))]++;
@@ -62,7 +65,7 @@ bool unique_chars(const char *input_str) {
     return true;
   }
 
-  uint32_t present[256] = {};
+  uint32_t present[k_num_ascii_chars] = {};
 
   auto current_char = '\0';
   while ('\0' != (current_char = *input_str++)) {
@@ -133,8 +136,8 @@ bool permutation<ver_2>(const std::string &str1, const std::string &str2) {
     return false;
   }
 
-  char chars_in_string1[256] = {};
-  char chars_in_string2[256] = {};
+  char chars_in_string1[k_num_ascii_chars] = {};
+  char chars_in_string2[k_num_ascii_chars] = {};
 
   for (auto current_char : str1) {
     chars_in_string1[(static_cast<uint8_t>(current_char))]++;
@@ -144,7 +147,7 @@ bool permutation<ver_2>(const std::string &str1, const std::string &str2) {
     chars_in_string2[(static_cast<uint8_t>(current_char))]++;
   }
 
-  for (size_t ii = 0; ii < 256; ii++) {
+  for (size_t ii = 0; ii < k_num_ascii_chars; ii++) {
     if (chars_in_string1[ii] != chars_in_string2[ii]) {
       return false;
     }
@@ -295,7 +298,7 @@ void setZeros(matrix &in_matrix) {
 }
 
 bool isRotation(const std::string &s1, const std::string &s2) {
-  if ((s1.length() == 0) || (s1.length() != s2.length())) {
+  if ((s1.empty()) || (s1.length() != s2.length())) {
     return false;
   }
 
