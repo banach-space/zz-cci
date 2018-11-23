@@ -12,13 +12,14 @@
 //
 // License: Apache License 2.0
 //========================================================================
-#include <Chapter_1.hpp>
 #include <gtest/gtest.h>
 
+#include <cstring>
 #include <iostream>
-#include <string.h>
 #include <string_view>
 #include <vector>
+
+#include <chapter_1.hpp>
 
 //========================================================================
 // Test Fixtures

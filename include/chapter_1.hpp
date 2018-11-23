@@ -30,7 +30,7 @@ const size_t k_num_ascii_chars = 256;
 // Q1
 bool unique_chars(const std::string &input_str);
 bool unique_chars(const char *input_str);
-bool unique_chars(const std::string_view input_str);
+bool unique_chars(std::string_view input_str);
 
 // Q2
 void reverse(char *input_str);

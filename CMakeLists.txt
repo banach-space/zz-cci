@@ -5,8 +5,8 @@ project(cci)
 set(cci_COMPILER_OPTIONS_CLANG -fcolor-diagnostics -std=c++17)
 
 add_executable(cci-chapter1-UnitTest
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/Chapter_1.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/Chapter_2.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/chapter_1.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/chapter_2.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/test/test-main.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/test/tests-ch1.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/test/tests-ch2.cpp
