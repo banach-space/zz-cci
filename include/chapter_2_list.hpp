@@ -13,6 +13,10 @@
 //    contains both the declaration as well as the implementation of the
 //    class.
 //
+//    This file is a bit bloated as I first designed and implemented my own
+//    interface, and only then added methods for compability with
+//    std::list. I've kept both implementation for learning purposes.
+//
 //    [1] "Cracking the Coding Interview", Gayle Laakmann McDowell
 //
 //  License: Apache License 2.0
@@ -21,10 +25,11 @@
 #define _CHAPTER_2_LIST_
 
 #include <iostream>
+#include <list>
 #include <map>
 #include <vector>
 
-namespace Cci {
+namespace cci {
 
 //------------------------------------------------------------------------
 // CLASS: List (declaration)
@@ -33,25 +38,22 @@ namespace Cci {
 // Implemented with simplicity in mind and as a coding excerise.
 //------------------------------------------------------------------------
 template<typename T>
-class List {
+class list {
 public:
-  explicit List() : head(nullptr) {};
-  ~List();
+  explicit list() : head(nullptr) {};
+  ~list();
 
   // A non-default constructor/destructor is required because this class deals
   // with raw memory. However, this triggers the generation of the following
   // special functions, which are not required. Hence they are "delete"d here.
-  List(List&) = delete;
-  List(List&&) = delete;
-  List operator=(List) = delete;
-  List operator=(List&&) = delete;
+  list(list&) = delete;
+  list(list&&) = delete;
+  list operator=(list) = delete;
+  list operator=(list&&) = delete;
 
-  bool isEmpty() { return (nullptr == head); };
-  std::vector<T> getAllValues();
-  void appendToTail(T newVal);
+  bool isEmpty() const { return (nullptr == head); };
+  void appendToTail(const T& newVal);
   void printAllVals();
-  // Solution to Q1
-  void removeDuplicates();
 
   struct Node {
     explicit Node(T newVal) : val(newVal), next(nullptr) {}
@@ -59,8 +61,16 @@ public:
     Node *next;
   };
 
-  Node* getHead() {return head; }
+  Node* getHead() const {return head; }
+  // Deletes the node pointed by the argument and invalidates the corresponding
+  // pointer.
   void deleteNode(Node *nodeToDelete);
+
+  // The following methods were implemented for compability with std::list.
+  // They also make the interface much cleaner (only realised after
+  // having implemented everything else).
+  void push_back(const T& newVal) { appendToTail(newVal);}
+  Node* erase(Node *nodeToDelete);
 
 private:
   Node *head;
@@ -70,7 +80,7 @@ private:
 // CLASS: List (implementation)
 //------------------------------------------------------------------------
 template<typename T>
-List<T>::~List() {
+list<T>::~list() {
   // The list is already empty - nothing to do
   if (nullptr == head) {
     return;
@@ -92,25 +102,7 @@ List<T>::~List() {
 }
 
 template<typename T>
-std::vector<T> List<T>::getAllValues() {
-  std::vector<T> all_vals {};
-
-  if (nullptr == head) {
-    return all_vals;
-  }
-
-  all_vals.push_back(head->val);
-  Node *temp = head;
-  while (nullptr != temp->next) {
-    temp = temp->next;
-    all_vals.push_back(temp->val);
-  }
-
-  return all_vals;
-}
-
-template<typename T>
-void List<T>::appendToTail(T newVal) {
+void list<T>::appendToTail(const T& newVal) {
   // If the list is still empty then this is defining the head
   if (nullptr == head) {
     auto *newNode = new Node(newVal);
@@ -129,7 +121,7 @@ void List<T>::appendToTail(T newVal) {
 }
 
 template<typename T>
-void List<T>::printAllVals() {
+void list<T>::printAllVals() {
   Node *temp = head;
   while (nullptr != temp) {
     std::cout << temp->val << std::endl;
@@ -138,7 +130,40 @@ void List<T>::printAllVals() {
 }
 
 template<typename T>
-void List<T>::deleteNode(Node *nodeToDelete) {
+std::vector<T> extractAllValues(const cci::list<T> &list) {
+  std::vector<T> all_vals {};
+
+  if (list.isEmpty()) {
+    return all_vals;
+  }
+
+  auto *temp = list.getHead();
+  all_vals.push_back(temp->val);;
+  while (nullptr != temp->next) {
+    temp = temp->next;
+    all_vals.push_back(temp->val);
+  }
+
+  return all_vals;
+}
+
+template<typename T>
+std::vector<T> extractAllValues(const std::list<T> &list) {
+  std::vector<T> all_vals {};
+
+  if (list.empty()) {
+    return all_vals;
+  }
+
+  for (auto it = list.begin(); it != list.end(); it++) {
+    all_vals.push_back(*it);
+  }
+
+  return all_vals;
+}
+
+template<typename T>
+void list<T>::deleteNode(Node *nodeToDelete) {
   // If the list is empty then there's nothing to do
   if (nullptr == head) {
     return;
@@ -168,32 +193,36 @@ void List<T>::deleteNode(Node *nodeToDelete) {
 }
 
 template<typename T>
-  void List<T>::removeDuplicates() {
-    // If the list is empty then there's nothing to do
-    if (nullptr == head) {
-      return;
-    }
-
-    // A hash table of items in the list
-    std::map<T, unsigned int> entries {};
-
-    Node *temp = head->next;
-    Node *previous = head;
-
-    entries.insert({head->val, 1u});
-
-    while (nullptr != temp) {
-      if (1 == entries.count(temp->val)) {
-        deleteNode(temp);
-        temp = previous->next;
-      } else {
-        entries.insert({temp->val, 1u});
-        previous = temp;
-        temp = temp->next;
-      }
-    }
+typename list<T>::Node* list<T>::erase(Node *nodeToDelete) {
+  // If the list is empty then there's nothing to do
+  if (nullptr == head) {
+    return head;
   }
-}  // namespace Cci
 
+  if (head == nodeToDelete) {
+    Node *temp = head;
+    head = head->next;
+    delete temp;
+    return head;
+  }
+
+  // If the list is not empty, use the "runner" technique to loop over all
+  // nodes and find the one that is to be deleted.
+  Node *temp = head->next;
+  Node *previous = head;
+
+  while (nullptr != temp) {
+    if (temp == nodeToDelete) {
+      previous->next = temp->next;
+      delete temp;
+      return previous->next;
+    }
+    previous = temp;
+    temp = temp->next;
+  }
+
+  return temp;
+}
+}  // namespace cci
 
 #endif

@@ -19,51 +19,36 @@
 #include <chapter_2.hpp>
 #include <chapter_2_list.hpp>
 
-// TEST(CciChapter2_List, smokeTest) {
-//   std::vector<std::vector<int>> test_lists = {
-//     {},
-//     {0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
-//   };
 
-//   for (auto &test_case : test_lists) {
-//     Cci::List<int> list;
-
-//     for (auto value : test_case) {
-//       list.appendToTail(value);
-//     }
-
-//     std::vector<int> out_vect = list.getAllValues();
-//     EXPECT_EQ(out_vect, test_case);
-//   }
-// }
-
+//========================================================================
+// Tests fot cci::list
+//========================================================================
 template <typename T>
-class CciChapter2_List : public ::testing::Test {
-
+class CciChapter2_list : public ::testing::Test {
 };
 
 using ListValTypes = ::testing::Types<int, unsigned int, float, double>;
-TYPED_TEST_CASE(CciChapter2_List, ListValTypes);
+TYPED_TEST_CASE(CciChapter2_list, ListValTypes);
 
-TYPED_TEST(CciChapter2_List, SmokeTest) {
+TYPED_TEST(CciChapter2_list, appendToTail) {
   std::vector<std::vector<TypeParam>> test_lists = {
     {},
     {0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
   };
 
   for (auto &test_case : test_lists) {
-    Cci::List<TypeParam> list;
+    cci::list<TypeParam> list;
 
     for (auto value : test_case) {
       list.appendToTail(value);
     }
 
-    std::vector<TypeParam> out_vect = list.getAllValues();
+    std::vector<TypeParam> out_vect = cci::extractAllValues(list);
     EXPECT_EQ(out_vect, test_case);
   }
 }
 
-TYPED_TEST(CciChapter2_List, deleteAllNodes) {
+TYPED_TEST(CciChapter2_list, deleteAllNodes) {
   std::vector<std::vector<TypeParam>> test_lists = {
     {},
     {0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
@@ -72,24 +57,24 @@ TYPED_TEST(CciChapter2_List, deleteAllNodes) {
 
   std::vector<TypeParam> expected_vec{};
   for (auto &test_case : test_lists) {
-    Cci::List<TypeParam> list;
+    cci::list<TypeParam> list;
 
     for (auto value : test_case) {
       list.appendToTail(value);
     }
 
-    typename Cci::List<TypeParam>::Node *temp = list.getHead();
+    typename cci::list<TypeParam>::Node *temp = list.getHead();
     while (nullptr != temp) {
       list.deleteNode(temp);
       temp = list.getHead();
     }
 
-    std::vector<TypeParam> out_vect = list.getAllValues();
+    std::vector<TypeParam> out_vect = cci::extractAllValues(list);
     EXPECT_EQ(out_vect, expected_vec);
   }
 }
 
-TYPED_TEST(CciChapter2_List, deleteNodesEqual_1) {
+TYPED_TEST(CciChapter2_list, deleteNodesEqual_1) {
   std::vector<std::tuple<std::vector<TypeParam>, std::vector<TypeParam>>> test_lists = {
     {{}, {}},
     {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, {0, 2, 3, 4, 5, 6, 7, 8, 9}},
@@ -98,14 +83,14 @@ TYPED_TEST(CciChapter2_List, deleteNodesEqual_1) {
   };
 
   for (auto &test_case : test_lists) {
-    Cci::List<TypeParam> list;
+    cci::list<TypeParam> list;
 
     for (auto value : std::get<0>(test_case)) {
       list.appendToTail(value);
     }
 
-    typename Cci::List<TypeParam>::Node *temp = list.getHead();
-    typename Cci::List<TypeParam>::Node *prev = list.getHead();
+    typename cci::list<TypeParam>::Node *temp = list.getHead();
+    typename cci::list<TypeParam>::Node *prev = list.getHead();
 
     // Remove 1's at the beginning
     while ((nullptr != temp) && (1 == temp->val)) {
@@ -127,24 +112,62 @@ TYPED_TEST(CciChapter2_List, deleteNodesEqual_1) {
       }
     }
 
-    std::vector<TypeParam> out_vect = list.getAllValues();
+    std::vector<TypeParam> out_vect = cci::extractAllValues(list);
     EXPECT_EQ(out_vect, std::get<1>(test_case));
   }
 }
 
-TYPED_TEST(CciChapter2_List, deleteNodesEqual_n) {
+TYPED_TEST(CciChapter2_list, eraseNodesEqual_1) {
+  std::vector<std::tuple<std::vector<TypeParam>, std::vector<TypeParam>>> test_lists = {
+    {{}, {}},
+    {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, {0, 2, 3, 4, 5, 6, 7, 8, 9}},
+    {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {}},
+    {{1, 1, 1, 1, 1, 2, 2, 2, 2, 2}, {2, 2, 2, 2, 2}},
+  };
+
+  for (auto &test_case : test_lists) {
+    cci::list<TypeParam> list;
+
+    for (auto value : std::get<0>(test_case)) {
+      list.appendToTail(value);
+    }
+
+    typename cci::list<TypeParam>::Node *it = list.getHead();
+
+    // Remove 1's at the beginning
+    while ((nullptr != it) && (1 == it->val)) {
+      it = list.erase(it);
+    }
+
+    if (!list.isEmpty()) {
+      while (nullptr != it) {
+        if (1 == it->val) {
+          it = list.erase(it);
+          continue;
+        }
+
+        it = it->next;
+      }
+    }
+
+    std::vector<TypeParam> out_vect = cci::extractAllValues(list);
+    EXPECT_EQ(out_vect, std::get<1>(test_case));
+  }
+}
+
+TYPED_TEST(CciChapter2_list, deleteNodesEqual_n) {
   std::vector<TypeParam> test_list_ref{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
   std::vector<TypeParam> test_list_ref2{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
   for (auto item : test_list_ref) {
     std::vector<TypeParam> test_list(test_list_ref);
-    Cci::List<TypeParam> list;
+    cci::list<TypeParam> list;
 
     for (auto value : test_list_ref2) {
       list.appendToTail(value);
     }
 
-    typename Cci::List<TypeParam>::Node *temp = list.getHead();
+    typename cci::list<TypeParam>::Node *temp = list.getHead();
     while (nullptr != temp && temp->val != item) {
       temp = temp->next;
     }
@@ -152,12 +175,22 @@ TYPED_TEST(CciChapter2_List, deleteNodesEqual_n) {
 
     auto it = std::find(test_list.begin(), test_list.end(), item);
     test_list.erase(it);
-    std::vector<TypeParam> out_vect = list.getAllValues();
+    std::vector<TypeParam> out_vect = cci::extractAllValues(list);
     EXPECT_EQ(out_vect, test_list);
   }
 }
 
-TEST(CciChapter2_Q1, removeDuplicates) {
+//========================================================================
+// Tests for solution to Q1
+//========================================================================
+template <typename T>
+class CciChapter2_Q1 : public ::testing::Test {
+};
+
+using ListValTypes_Q1 = ::testing::Types<cci::list<int>, std::list<int>>;
+TYPED_TEST_CASE(CciChapter2_Q1, ListValTypes_Q1);
+
+TYPED_TEST(CciChapter2_Q1, removeDuplicates) {
   std::vector<std::tuple<std::vector<int>, std::vector<int>>> test_lists = {
     {{}, {}},
     {{1, 2, 3, 4}, {1, 2, 3, 4}},
@@ -166,15 +199,15 @@ TEST(CciChapter2_Q1, removeDuplicates) {
   };
 
   for (auto &test_case : test_lists) {
-    Cci::List<int> list;
+    TypeParam list;
 
     for (auto value : std::get<0>(test_case)) {
-      list.appendToTail(value);
+      list.push_back(value);
     }
 
-    list.removeDuplicates();
+    removeDuplicates(&list);
 
-    std::vector<int> out_vect = list.getAllValues();
+    std::vector<int> out_vect = cci::extractAllValues(list);
     EXPECT_EQ(out_vect, std::get<1>(test_case));
   }
 }
