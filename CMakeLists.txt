@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.4.3 FATAL_ERROR)
 
 project(cci)
 
-set(cci_COMPILER_OPTIONS_CLANG -fcolor-diagnostics -std=c++17)
+set(cci_COMPILER_OPTIONS_CLANG -fcolor-diagnostics -Wpedantic -std=c++17)
+set(cci_COMPILER_OPTIONS_GNU -Wall -Wpedantic -std=c++17)
 
 add_executable(cciUT
   ${CMAKE_CURRENT_SOURCE_DIR}/src/chapter_1.cpp
@@ -21,6 +22,7 @@ target_include_directories(cciUT PRIVATE SYSTEM
 set(executables cciUT)
 
 target_compile_options(cciUT PRIVATE
+  "$<$<CXX_COMPILER_ID:GNU>:${cci_COMPILER_OPTIONS_GNU}>"
   "$<$<CXX_COMPILER_ID:Clang>:${cci_COMPILER_OPTIONS_CLANG}>")
 
 if(UNIX)
