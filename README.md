@@ -1,5 +1,6 @@
  zz-cci
 ==========
+[![Build Status](https://travis-ci.org/banach-space/zz-cci.svg?branch=master)](https://travis-ci.org/banach-space/zz-cci)
 
 My solutions to the problems from this
 [book](https://www.amazon.co.uk/Cracking-Coding-Interview-Programming-Questions/dp/098478280X)
