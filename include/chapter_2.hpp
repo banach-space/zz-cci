@@ -25,7 +25,7 @@
 //------------------------------------------------------------------------
 // Solution to Q1
 //------------------------------------------------------------------------
-// cci::list<T>
+// A solution for cci::list<T>
 template<typename T>
 void removeDuplicates(cci::list<T> *list) {
   // If the list is empty then there's nothing to do
@@ -47,7 +47,7 @@ void removeDuplicates(cci::list<T> *list) {
   }
 }
 
-// std::list<T>
+// A solution for std::list<T>
 template<typename T>
 void removeDuplicates(std::list<T> *list) {
   // If the list is empty then there's nothing to do
@@ -66,6 +66,52 @@ void removeDuplicates(std::list<T> *list) {
       it++;
     }
   }
+}
+
+//------------------------------------------------------------------------
+// Solution to Q2
+//------------------------------------------------------------------------
+// A solution for cci::list<T>
+template<typename T>
+typename cci::list<T>::Node* findKthElement(const cci::list<T> &list, size_t k) {
+  if (list.isEmpty()) {
+    return nullptr;
+  }
+
+  auto *it_first = list.getHead();
+  auto *it_second = list.getHead();
+
+  for (size_t i = 0; i < k; i++) {
+    it_first = it_first->next;
+  }
+
+  while (nullptr != it_first->next) {
+    it_first = it_first->next;
+    it_second = it_second->next;
+  }
+
+  return it_second;
+}
+
+// A solution for std::list<T>
+template<typename T>
+typename std::list<T>::const_iterator findKthElement(const std::list<T> &list, size_t k) {
+  if (list.empty()) {
+    return list.end();
+  }
+
+  auto it_first = list.begin();
+  auto it_second = list.begin();
+
+  for (size_t i = 0; i < k; i++) {
+    it_first++;
+  }
+
+  while (list.end() != ++it_first) {
+    it_second++;
+  }
+
+  return it_second;
 }
 
 #endif

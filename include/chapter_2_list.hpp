@@ -61,7 +61,10 @@ public:
     Node *next;
   };
 
+  // Marking this as "const" is a bit iffy. I should probably think of
+  // something that mimics begin()/cbegin()
   Node* getHead() const {return head; }
+
   // Deletes the node pointed by the argument and invalidates the corresponding
   // pointer.
   void deleteNode(Node *nodeToDelete);
