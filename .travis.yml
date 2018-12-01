@@ -9,6 +9,18 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-7
+      - clang-6.0
+
+matrix:
+  include:
+  - os: linux
+    env:
+    - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+    - LINKER_FLAGS=""
+  - os: linux
+    env:
+    - MATRIX_EVAL="CC=clang-6.0 && CXX=clang-6.0"
+    - LINKER_FLAGS=""
 
 script:
   # CLONE GTEST
@@ -16,8 +28,6 @@ script:
   # BUILD ZZ-CCI
   - mkdir build
   - cd build
-  - export CC=gcc-7
-  - export CXX=g++-7
   - cmake  -DCMAKE_BUILD_TYPE=Release ../
   - make -j8
   # RUN UNIT TESTS
