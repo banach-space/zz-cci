@@ -139,16 +139,11 @@ TEST_F(CciChapter1_Q2, reverse_c_string) {
     // follows is a bit nasty way of generating a modifiable C-string (i.e.
     // char*) from a CPP string (i.e. resorting to raw painters and dynamic
     // memory allocation).
-    // (one gotcha: std::string.length() won't include the null character)
-    auto length = std::get<1>(pair).length();
+    // (one gotcha: std::string.length() doesn't include the null character)
+    auto length = std::get<1>(pair).length() + 1;
     char *current_str = nullptr;
-    if (length > 0) {
-      current_str = new char[length];
-      strncpy(current_str, std::get<0>(pair).c_str(), length + 1);
-    } else {
-      current_str = new char[1];
-      *current_str = '\0';
-    }
+    current_str = new char[length];
+    strncpy(current_str, std::get<0>(pair).c_str(), length);
 
     reverse(current_str);
     ASSERT_STREQ(current_str, std::get<1>(pair).c_str());
