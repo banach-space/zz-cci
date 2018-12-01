@@ -18,7 +18,7 @@ matrix:
     - LINKER_FLAGS=""
   - os: linux
     env:
-    - MATRIX_EVAL="CC=clang-6.0 && CXX=clang-6.0"
+    - MATRIX_EVAL="CC=clang-6.0 && CXX=clang++-6.0"
     - LINKER_FLAGS=""
 
 before_install:
