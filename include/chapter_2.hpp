@@ -23,11 +23,49 @@
 #include <list>
 
 //------------------------------------------------------------------------
+// Helper functions
+//------------------------------------------------------------------------
+namespace cci {
+template<typename T>
+std::vector<T> extractAllValues(const cci::List<T> &List) {
+  std::vector<T> all_vals {};
+
+  if (List.isEmpty()) {
+    return all_vals;
+  }
+
+  auto *temp = List.getHead();
+  all_vals.push_back(temp->val);;
+  while (nullptr != temp->next_) {
+    temp = temp->next_;
+    all_vals.push_back(temp->val);
+  }
+
+  return all_vals;
+}
+
+template<typename T>
+std::vector<T> extractAllValues(const std::list<T> &List) {
+  std::vector<T> all_vals {};
+
+  if (List.empty()) {
+    return all_vals;
+  }
+
+  for (auto it = List.begin(); it != List.end(); it++) {
+    all_vals.push_back(*it);
+  }
+
+  return all_vals;
+}
+} // namespace cci
+
+//------------------------------------------------------------------------
 // Solution to Q1
 //------------------------------------------------------------------------
-// A solution for cci::list<T>
+// A solution for cci::List<T>
 template<typename T>
-void removeDuplicates(cci::list<T> *list) {
+void removeDuplicates(cci::List<T> *list) {
   // If the list is empty then there's nothing to do
   if (list->isEmpty()) {
     return;
@@ -42,7 +80,7 @@ void removeDuplicates(cci::list<T> *list) {
       it = list->erase(it);
     } else {
       entries.insert({it->val, 1u});
-      it = it->next;
+      it = it->next_;
     }
   }
 }
@@ -71,9 +109,9 @@ void removeDuplicates(std::list<T> *list) {
 //------------------------------------------------------------------------
 // Solution to Q2
 //------------------------------------------------------------------------
-// A solution for cci::list<T>
+// A Basic solution for cci::List<T> (not using iterators)
 template<typename T>
-typename cci::list<T>::Node* findKthElement(const cci::list<T> &list, size_t k) {
+typename cci::List<T>::Node* findKthElementBasic(const cci::List<T> &list, size_t k) {
   if (list.isEmpty()) {
     return nullptr;
   }
@@ -82,36 +120,58 @@ typename cci::list<T>::Node* findKthElement(const cci::list<T> &list, size_t k) 
   auto *it_second = list.getHead();
 
   for (size_t i = 0; i < k; i++) {
-    it_first = it_first->next;
+    it_first = it_first->next_;
   }
 
-  while (nullptr != it_first->next) {
-    it_first = it_first->next;
-    it_second = it_second->next;
+  while (nullptr != it_first->next_) {
+    it_first = it_first->next_;
+    it_second = it_second->next_;
   }
 
   return it_second;
 }
 
-// A solution for std::list<T>
-template<typename T>
-typename std::list<T>::const_iterator findKthElement(const std::list<T> &list, size_t k) {
+// A solution for std::list<T> and cci::List<T> (using iterators)
+template<typename ListType>
+typename ListType::const_iterator findKthElement(const ListType &list, size_t k) {
   if (list.empty()) {
-    return list.end();
+    return list.cend();
   }
 
-  auto it_first = list.begin();
-  auto it_second = list.begin();
+  auto it_first = list.cbegin();
+  auto it_second = list.cbegin();
 
   for (size_t i = 0; i < k; i++) {
     it_first++;
   }
 
-  while (list.end() != ++it_first) {
+  while (list.cend() != ++it_first) {
     it_second++;
   }
 
   return it_second;
+}
+
+//------------------------------------------------------------------------
+// Solution to Q3
+//------------------------------------------------------------------------
+// Note that this implementation is not capable of removing the last node in
+// the list. And in general it is not possible unless you have acces to the
+// list.
+template<typename T>
+void deleteNode(typename cci::List<T>::Node *nodeToDelete) {
+  // Check if this is the last node in the list. If that's the case do nothing.
+  if (nullptr == nodeToDelete->next_) {
+    return;
+  }
+
+  // Otherwise, copy the contents of nodeToDelete->next_ into nodeToDelete and
+  // delete nodeToDelete->next_ instead.
+  typename cci::List<T>::Node* temp = nodeToDelete->next_;
+  nodeToDelete->val = temp->val;
+  nodeToDelete->next_ = temp->next_;
+
+  delete temp;
 }
 
 #endif

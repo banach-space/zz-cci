@@ -7,7 +7,7 @@
 //
 // DESCRIPTION:
 //    Unit tests for:
-//      * the implementation of cci::list<T> from chapter_2_list.hpp
+//      * the implementation of cci::List<T> from chapter_2_list.hpp
 //      * solutions to practice questions from Chapter 2 in [1]
 //
 //    Most of the tests adhere to this workflow:
@@ -33,7 +33,7 @@
 #include <vector>
 
 //========================================================================
-// Unit tests fot cci::list
+// Unit tests fot cci::List
 //========================================================================
 template <typename T>
 class CciChapter2_list : public ::testing::Test {
@@ -49,7 +49,7 @@ TYPED_TEST(CciChapter2_list, appendToTail) {
   };
 
   for (auto &test_case : test_cases) {
-    cci::list<TypeParam> test_list;
+    cci::List<TypeParam> test_list;
 
     for (auto value : test_case) {
       test_list.appendToTail(value);
@@ -69,13 +69,13 @@ TYPED_TEST(CciChapter2_list, deleteAllNodes) {
 
   std::vector<TypeParam> expected_vec{};
   for (auto &test_case : test_cases) {
-    cci::list<TypeParam> test_list;
+    cci::List<TypeParam> test_list;
 
     for (auto value : test_case) {
       test_list.appendToTail(value);
     }
 
-    typename cci::list<TypeParam>::Node *temp = test_list.getHead();
+    typename cci::List<TypeParam>::Node *temp = test_list.getHead();
     while (nullptr != temp) {
       test_list.deleteNode(temp);
       temp = test_list.getHead();
@@ -95,14 +95,14 @@ TYPED_TEST(CciChapter2_list, deleteNodesEqual_1) {
   };
 
   for (auto &test_case : test_cases) {
-    cci::list<TypeParam> test_list;
+    cci::List<TypeParam> test_list;
 
     for (auto value : std::get<0>(test_case)) {
       test_list.appendToTail(value);
     }
 
-    typename cci::list<TypeParam>::Node *temp = test_list.getHead();
-    typename cci::list<TypeParam>::Node *prev = test_list.getHead();
+    typename cci::List<TypeParam>::Node *temp = test_list.getHead();
+    typename cci::List<TypeParam>::Node *prev = test_list.getHead();
 
     // Remove 1's at the beginning
     while ((nullptr != temp) && (1 == temp->val)) {
@@ -111,16 +111,16 @@ TYPED_TEST(CciChapter2_list, deleteNodesEqual_1) {
     }
 
     if (!test_list.isEmpty()) {
-      temp = temp->next;
+      temp = temp->next_;
       while (nullptr != temp) {
         if (1 == temp->val) {
           test_list.deleteNode(temp);
-          temp = prev->next;
+          temp = prev->next_;
           continue;
         }
 
         prev = temp;
-        temp = temp->next;
+        temp = temp->next_;
       }
     }
 
@@ -138,13 +138,13 @@ TYPED_TEST(CciChapter2_list, eraseNodesEqual_1) {
   };
 
   for (auto &test_case : test_cases) {
-    cci::list<TypeParam> test_list;
+    cci::List<TypeParam> test_list;
 
     for (auto value : std::get<0>(test_case)) {
       test_list.appendToTail(value);
     }
 
-    typename cci::list<TypeParam>::Node *it = test_list.getHead();
+    typename cci::List<TypeParam>::Node *it = test_list.getHead();
 
     // Remove 1's at the beginning
     while ((nullptr != it) && (1 == it->val)) {
@@ -158,7 +158,7 @@ TYPED_TEST(CciChapter2_list, eraseNodesEqual_1) {
           continue;
         }
 
-        it = it->next;
+        it = it->next_;
       }
     }
 
@@ -180,15 +180,15 @@ TYPED_TEST(CciChapter2_list, deleteNodesEqual_n) {
     test_case.erase(it);
 
     // Construct a list using test_case_ref
-    cci::list<TypeParam> test_list;
+    cci::List<TypeParam> test_list;
     for (auto value : test_case_ref) {
       test_list.appendToTail(value);
     }
 
     // Remove "item" from the list and extract the elements in the list.
-    typename cci::list<TypeParam>::Node *temp = test_list.getHead();
+    typename cci::List<TypeParam>::Node *temp = test_list.getHead();
     while (nullptr != temp && temp->val != item) {
-      temp = temp->next;
+      temp = temp->next_;
     }
     test_list.deleteNode(temp);
     std::vector<TypeParam> out_vect = cci::extractAllValues(test_list);
@@ -199,13 +199,16 @@ TYPED_TEST(CciChapter2_list, deleteNodesEqual_n) {
 }
 
 //========================================================================
-// Tests for solution to Q1
+// Tests for solutions to the questions in Chapter 2
 //========================================================================
+//------------------------------------------------------------------------
+// Tests for Solution to Q1
+//------------------------------------------------------------------------
 template <typename T>
 class CciChapter2_Q1 : public ::testing::Test {
 };
 
-using ListValTypes_Q1 = ::testing::Types<cci::list<int>, std::list<int>>;
+using ListValTypes_Q1 = ::testing::Types<cci::List<int>, std::list<int>>;
 TYPED_TEST_CASE(CciChapter2_Q1, ListValTypes_Q1);
 
 TYPED_TEST(CciChapter2_Q1, removeDuplicates) {
@@ -231,28 +234,28 @@ TYPED_TEST(CciChapter2_Q1, removeDuplicates) {
   }
 }
 
-//========================================================================
-// Tests for solution to Q2
-//========================================================================
-// For Question 2 I can't used TYPED_TESTs because the interface for cci::list
-// and std::list are too different (e.g. cci::list has no iterators, etc, so
+//------------------------------------------------------------------------
+// Tests for Solution to Q2
+//------------------------------------------------------------------------
+// For Question 2 I can't used TYPED_TESTs because the interface for cci::List
+// and std::list are too different (e.g. cci::List has no iterators, etc, so
 // the implementation of the test must be different). I could re-factor
-// cci::list to this end, but wanted to avoid it and focus on solving the
+// cci::List to this end, but wanted to avoid it and focus on solving the
 // puzzles instead.
 static size_t k_q2_num_samples;
 
-TEST(CciChapter2_Q2, findKthElement) {
+TEST(CciChapter2_Q2, findKthElementBasic) {
   std::vector<int> test_case{};
   test_case.resize(k_q2_num_samples);
   std::iota(test_case.begin(), test_case.end(), 0);
 
-  cci::list<int> test_list;
+  cci::List<int> test_list;
   for (auto ii = 0u; ii < k_q2_num_samples; ii++) {
     test_list.push_back(ii);
   }
 
   for (auto ii = 0u; ii < k_q2_num_samples; ii++) {
-    auto result = findKthElement(test_list, ii);
+    typename cci::List<int>::Node* result = findKthElementBasic(test_list, ii);
 
     auto expected_val = test_case[k_q2_num_samples - 1 - ii];
     EXPECT_NE(nullptr, result);
@@ -260,20 +263,68 @@ TEST(CciChapter2_Q2, findKthElement) {
   }
 }
 
-TEST(CciChapter2_Q2, findKthElement2) {
+template <typename T>
+class CciChapter2_Q2 : public ::testing::Test {
+};
+
+using ListValTypes_Q2 = ::testing::Types<cci::List<int>, std::list<int>>;
+TYPED_TEST_CASE(CciChapter2_Q2, ListValTypes_Q2);
+
+TYPED_TEST(CciChapter2_Q2, findKthElement3) {
   std::vector<int> test_case{};
   test_case.resize(k_q2_num_samples);
   std::iota(test_case.begin(), test_case.end(), 0);
 
-  std::list<int> test_list;
+  TypeParam test_list;
   for (auto ii = 0u; ii < k_q2_num_samples; ii++) {
     test_list.push_back(ii);
   }
 
-  for (auto ii = 0u; ii < k_q2_num_samples; ii++) {
-    auto result = findKthElement(test_list, ii);
+  for (auto k = 0u; k < k_q2_num_samples; k++) {
+    typename TypeParam::const_iterator result = findKthElement(test_list, k);
 
-    auto expected_val = test_case[k_q2_num_samples - 1 - ii];
+    auto expected_val = test_case[k_q2_num_samples - 1 - k];
     EXPECT_EQ(*result, expected_val);
+  }
+
+}
+
+//------------------------------------------------------------------------
+// Tests for Solution to Q3
+//------------------------------------------------------------------------
+TEST(CciChapter2_Q3, deleteNode) {
+
+  // The initial state of the list
+  std::vector<int> test_case_ref{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+  // Loop over all items in the list and try removing each (one at a time)
+  for (auto it = test_case_ref.begin(); it < test_case_ref.end(); it++) {
+    // deleteNode can't delete the last node in a list, so skip it
+    if (it == --test_case_ref.end()) {
+      return;
+    }
+
+    // Construct a list using test_case_ref
+    cci::List<int> test_list;
+    for (auto value : test_case_ref) {
+      test_list.appendToTail(value);
+    }
+
+    // Remove "item" from the list and extract the elements in the list.
+    typename cci::List<int>::Node *temp = test_list.getHead();
+    while (nullptr != temp && temp->val != *it) {
+      temp = temp->next_;
+    }
+    deleteNode<int>(temp);
+    std::vector<int> out_vect = cci::extractAllValues(test_list);
+
+    // Construct a vector (test_case) using test_case_ref with item pointed by
+    // "it" being removed. This will be used as the expected output.
+    std::vector<int> test_case(test_case_ref);
+    auto it2 = std::find(std::begin(test_case), std::end(test_case), *it);
+    test_case.erase(it2);
+
+    // Finally, do the comparison
+    EXPECT_EQ(out_vect, test_case);
   }
 }
