@@ -292,7 +292,7 @@ TYPED_TEST(CciChapter2_Q2, findKthElement3) {
 //------------------------------------------------------------------------
 // Tests for Solution to Q3
 //------------------------------------------------------------------------
-TEST(CciChapter2_Q3, deleteNode) {
+TEST(CciChapter2_Q3, deleteNodePtr) {
 
   // The initial state of the list
   std::vector<int> test_case_ref{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -316,6 +316,52 @@ TEST(CciChapter2_Q3, deleteNode) {
       temp = temp->next_;
     }
     deleteNode<int>(temp);
+    std::vector<int> out_vect = cci::extractAllValues(test_list);
+
+    // Construct a vector (test_case) using test_case_ref with item pointed by
+    // "it" being removed. This will be used as the expected output.
+    std::vector<int> test_case(test_case_ref);
+    auto it2 = std::find(std::begin(test_case), std::end(test_case), *it);
+    test_case.erase(it2);
+
+    // Finally, do the comparison
+    EXPECT_EQ(out_vect, test_case);
+  }
+}
+
+template <typename T>
+class CciChapter2_Q3 : public ::testing::Test {
+};
+
+using ListValTypes_Q3 = ::testing::Types<cci::List<int>, std::list<int>>;
+TYPED_TEST_CASE(CciChapter2_Q3, ListValTypes_Q3);
+
+TYPED_TEST(CciChapter2_Q3, deleteNodeIterator) {
+  // The initial state of the list
+  std::vector<int> test_case_ref{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+  // Loop over all items in the list and try removing each (one at a time)
+  for (auto it = test_case_ref.begin(); it < test_case_ref.end(); it++) {
+    // deleteNode can't delete the last node in a list, so skip it
+    if (it == --test_case_ref.end()) {
+      return;
+    }
+
+    // Construct a list using test_case_ref
+    TypeParam test_list;
+    for (auto value : test_case_ref) {
+      test_list.push_back(value);
+    }
+
+    // Remove "item" from the list and extract the elements in the list.
+    typename TypeParam::iterator temp = test_list.begin();
+    if (*temp != *it) {
+      do {
+        temp++;
+      }
+      while (test_list.end() != temp && *temp != *it);
+    }
+    test_list.erase(temp);
     std::vector<int> out_vect = cci::extractAllValues(test_list);
 
     // Construct a vector (test_case) using test_case_ref with item pointed by

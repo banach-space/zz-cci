@@ -90,7 +90,12 @@ public:
 
     void swap(ForwardIterator &other) noexcept {
       using std::swap;
-      swap(itr, other.iter);
+      swap(itr, other.itr);
+    }
+
+    void updateNode(ForwardIterator &other) noexcept {
+      itr->val = other.itr->val;
+      itr->next_ = other.itr->next_;
     }
 
     ForwardIterator &operator++() // Pre-increment
@@ -99,6 +104,8 @@ public:
       itr = itr->next_;
       return *this;
     }
+
+    Node* get() { return itr;}
 
     const ForwardIterator operator++(int) // Post-increment
     {
@@ -153,6 +160,11 @@ public:
   // Iterators
   using iterator = ForwardIterator<T>;
   using const_iterator = ForwardIterator<const T>;
+
+  // Added as solution to Q3. Like the implementation from std::list, returns
+  // an iterator pointing to the element after the deleted element. Takes an
+  // iterator pointing to the element to be removed.
+  iterator erase(iterator nodeToDelete);
 
   const_iterator cbegin() const noexcept {
     return const_iterator(this->head_);
@@ -253,6 +265,23 @@ void List<T>::deleteNode(Node *nodeToDelete) {
     previous = temp;
     temp = temp->next_;
   }
+}
+
+template<typename T>
+typename List<T>::iterator List<T>::erase(typename List<T>::iterator nodeToDelete) {
+  // Check if this is the last node in the list. If that's the case do nothing.
+  typename List<T>::iterator next = nodeToDelete;
+  if (nodeToDelete == end() || ++next == end()) {
+    return end();
+  }
+
+  // Otherwise, copy the contents of nodeToDelete->next_ into nodeToDelete and
+  // delete nodeToDelete->next_ instead.
+  typename cci::List<T>::iterator temp = nodeToDelete;
+  nodeToDelete.updateNode(next);
+  delete next.get();
+
+  return nodeToDelete;
 }
 
 template<typename T>
