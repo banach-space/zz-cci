@@ -191,8 +191,8 @@ std::string string_compress(const std::string &input_str) {
   // the initialisation below.
   char prev_char = '\0';
   for (auto current_char : input_str) {
-    if (current_char == prev_char) { 
-      current_char_count++; 
+    if (current_char == prev_char) {
+      current_char_count++;
     } else {
       compressed_string_length++;
       compressed_string_length += std::to_string(current_char_count).length();
@@ -216,9 +216,9 @@ std::string string_compress(const std::string &input_str) {
   prev_char = input_str[0];
   current_char_count = 1;
 
-  for (size_t ii= 1; ii < input_str.length(); ii++) {
-    if (input_str[ii] == prev_char) { 
-      current_char_count++; 
+  for (size_t ii = 1; ii < input_str.length(); ii++) {
+    if (input_str[ii] == prev_char) {
+      current_char_count++;
     } else {
       // Add the last char and it's count
       compressed_string += prev_char;
@@ -236,7 +236,7 @@ std::string string_compress(const std::string &input_str) {
   return compressed_string;
 }
 
-void rotate(image& in_image) {
+void rotate(image &in_image) {
   for (size_t layer = 0; layer < in_image.size() / 2; layer++) {
     size_t first = layer;
     size_t last = in_image.size() - 1 - layer;
@@ -248,7 +248,7 @@ void rotate(image& in_image) {
       char top = in_image[first][ii];
 
       // left --> top
-      in_image[first][ii] = in_image[last-offset][first];
+      in_image[first][ii] = in_image[last - offset][first];
 
       // bottom --> left
       in_image[last - offset][first] = in_image[last][last - offset];
@@ -291,7 +291,7 @@ void setZeros(matrix &in_matrix) {
   for (size_t jj = 0; jj < n_columns; jj++) {
     if (columns_is_zero[jj] == true) {
       for (size_t ii = 0; ii < n_rows; ii++) {
-        in_matrix[ii][jj] = 0; 
+        in_matrix[ii][jj] = 0;
       }
     }
   }

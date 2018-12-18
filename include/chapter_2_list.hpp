@@ -48,7 +48,7 @@ class List {
 public:
   explicit List() : head_(nullptr) {};
   ~List();
-  List(List& other) {
+  List(List&& other) {
     head_ = other.head_;
     other.head_ = nullptr;
   };
@@ -56,7 +56,7 @@ public:
   // A non-default constructor/destructor is required because this class deals
   // with raw memory. However, this triggers the generation of the following
   // special functions, which are not required. Hence they are "delete"d here.
-  List(List&&) = delete;
+  List(List&) = delete;
   List operator=(List) = delete;
   List operator=(List&&) = delete;
 
