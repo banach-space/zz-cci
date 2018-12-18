@@ -35,10 +35,10 @@ std::vector<T> extractAllValues(const cci::List<T> &List) {
   }
 
   auto *temp = List.getHead();
-  all_vals.push_back(temp->val);;
+  all_vals.push_back(temp->val_);;
   while (nullptr != temp->next_) {
     temp = temp->next_;
-    all_vals.push_back(temp->val);
+    all_vals.push_back(temp->val_);
   }
 
   return all_vals;
@@ -76,10 +76,10 @@ void removeDuplicates(cci::List<T> *list) {
 
   auto *it = list->getHead();
   while (nullptr != it) {
-    if (1 == entries.count(it->val)) {
+    if (1 == entries.count(it->val_)) {
       it = list->erase(it);
     } else {
-      entries.insert({it->val, 1u});
+      entries.insert({it->val_, 1u});
       it = it->next_;
     }
   }
@@ -159,19 +159,67 @@ typename ListType::const_iterator findKthElement(const ListType &list, size_t k)
 // the list. And in general it is not possible unless you have acces to the
 // list.
 template<typename T>
-void deleteNode(typename cci::List<T>::Node *nodeToDelete) {
+void deleteNode(typename cci::List<T>::Node *node_to_delete) {
   // Check if this is the last node in the list. If that's the case do nothing.
-  if (nullptr == nodeToDelete->next_) {
+  if (nullptr == node_to_delete->next_) {
     return;
   }
 
-  // Otherwise, copy the contents of nodeToDelete->next_ into nodeToDelete and
-  // delete nodeToDelete->next_ instead.
-  typename cci::List<T>::Node* temp = nodeToDelete->next_;
-  nodeToDelete->val = temp->val;
-  nodeToDelete->next_ = temp->next_;
+  // Otherwise, copy the contents of node_to_delete->next_ into node_to_delete and
+  // delete node_to_delete->next_ instead.
+  typename cci::List<T>::Node* temp = node_to_delete->next_;
+  node_to_delete->val_ = temp->val_;
+  node_to_delete->next_ = temp->next_;
 
   delete temp;
+}
+
+//------------------------------------------------------------------------
+// Solution to Q4
+//------------------------------------------------------------------------
+// This solution generates a new list, so it's not in-place. But doing this
+// in-place would require changing the API and exposing a lot of the internals
+// (i.e. the nodes).
+template<typename T, typename ListType>
+cci::List<T> partition(ListType &input_list, T partition_point) {
+  // Elements "before" the parition point
+  cci::List<T> before;
+  // Elements "after" the partition point
+  cci::List<T> after;
+
+  if (input_list.empty()) {
+    return before;
+  }
+
+  // Populate "after" and "before" lists
+  typename cci::List<T>::Node *it = input_list.getHead();
+  do {
+    if (it->val_ <= partition_point) {
+      before.push_back(it->val_);
+    } else {
+      after.push_back(it->val_);
+    }
+    it = it->next_;
+  } while (nullptr != it);
+
+  // If "before" is empty, then all elements were copied to "after" and it's safe
+  // to return that as the result.
+  if (nullptr == before.getHead()) {
+    return after;
+  }
+
+  // Merge the two lists together
+  typename cci::List<T>::Node *before_last = before.getHead();
+  while (before_last->next_ != nullptr) {
+    before_last = before_last->next_;
+  }
+  before_last->next_ = after.getHead();
+
+  // This is important as "before" took ownership of all elements in "after"
+  after.markAsEmpty();
+
+  // At this point "before" containes everything and "after" is empty
+  return before;
 }
 
 #endif

@@ -48,23 +48,29 @@ class List {
 public:
   explicit List() : head_(nullptr) {};
   ~List();
+  List(List& other) {
+    head_ = other.head_;
+    other.head_ = nullptr;
+  };
 
   // A non-default constructor/destructor is required because this class deals
   // with raw memory. However, this triggers the generation of the following
   // special functions, which are not required. Hence they are "delete"d here.
-  List(List&) = delete;
   List(List&&) = delete;
   List operator=(List) = delete;
   List operator=(List&&) = delete;
 
   bool isEmpty() const { return (nullptr == head_); };
-  void appendToTail(const T& newVal);
+  // Marks the list as empty. Can be used when the underlying nodes have been
+  // attached/linked to a different list.
+  void markAsEmpty() { head_ = nullptr; };
+  void appendToTail(const T& new_val);
   void printAllVals();
 
   // A struct representing a node in the List
   struct Node {
-    explicit Node(T newVal) : val(newVal), next_(nullptr) {}
-    T val;
+    explicit Node(T new_val) : val_(new_val), next_(nullptr) {}
+    T val_;
     Node *next_;
   };
 
@@ -94,7 +100,7 @@ public:
     }
 
     void updateNode(ForwardIterator &other) noexcept {
-      itr->val = other.itr->val;
+      itr->val_ = other.itr->val_;
       itr->next_ = other.itr->next_;
     }
 
@@ -126,14 +132,19 @@ public:
       return itr != rhs.itr;
     }
 
+    template <class OtherType>
+    bool operator<(const ForwardIterator<OtherType> &rhs) const {
+      return itr < rhs.itr;
+    }
+
     Type &operator*() const {
-      assert(itr != nullptr && "Invalid iterator dereference!");
-      return itr->val;
+      assert(itr != nullptr && "Inval_id iterator dereference!");
+      return itr->val_;
     }
 
     Type &operator->() const {
-      assert(itr != nullptr && "Invalid iterator dereference!");
-      return itr->val;
+      assert(itr != nullptr && "Inval_id iterator dereference!");
+      return itr->val_;
     }
 
     // One way conversion: iterator -> const_iterator
@@ -146,15 +157,15 @@ public:
   // something that mimics begin()/cbegin()
   Node* getHead() const {return head_; }
 
-  // Deletes the node pointed by the argument and invalidates the corresponding
+  // Deletes the node pointed by the argument and inval_idates the corresponding
   // pointer.
-  void deleteNode(Node *nodeToDelete);
+  void deleteNode(Node *node_to_delete);
 
   // The following methods were implemented for compability with std::list.
   // They also make the interface much cleaner (only realised after
   // having implemented everything else).
-  void push_back(const T& newVal) { appendToTail(newVal);}
-  Node* erase(Node *nodeToDelete);
+  void push_back(const T& new_val) { appendToTail(new_val);}
+  Node* erase(Node *node_to_delete);
   bool empty() const { return isEmpty(); };
 
   // Iterators
@@ -164,7 +175,7 @@ public:
   // Added as solution to Q3. Like the implementation from std::list, returns
   // an iterator pointing to the element after the deleted element. Takes an
   // iterator pointing to the element to be removed.
-  iterator erase(iterator nodeToDelete);
+  iterator erase(iterator node_to_delete);
 
   const_iterator cbegin() const noexcept {
     return const_iterator(this->head_);
@@ -210,11 +221,11 @@ List<T>::~List() {
 }
 
 template<typename T>
-void List<T>::appendToTail(const T& newVal) {
+void List<T>::appendToTail(const T& new_val) {
   // If the List is still empty then this is defining the head
   if (nullptr == head_) {
-    auto *newNode = new Node(newVal);
-    head_ = newNode;
+    auto *new_node = new Node(new_val);
+    head_ = new_node;
     return;
   }
 
@@ -224,27 +235,27 @@ void List<T>::appendToTail(const T& newVal) {
   while (nullptr != temp->next_) {
     temp = temp->next_;
   }
-  auto *newNode = new Node(newVal);
-  temp->next_ = newNode;
+  auto *new_node = new Node(new_val);
+  temp->next_ = new_node;
 }
 
 template<typename T>
 void List<T>::printAllVals() {
   Node *temp = head_;
   while (nullptr != temp) {
-    std::cout << temp->val << std::endl;
+    std::cout << temp->val_ << std::endl;
     temp = temp->next_;
   }
 }
 
 template<typename T>
-void List<T>::deleteNode(Node *nodeToDelete) {
+void List<T>::deleteNode(Node *node_to_delete) {
   // If the List is empty then there's nothing to do
   if (nullptr == head_) {
     return;
   }
 
-  if (head_ == nodeToDelete) {
+  if (head_ == node_to_delete) {
     Node *temp = head_;
     head_ = head_->next_;
     delete temp;
@@ -257,7 +268,7 @@ void List<T>::deleteNode(Node *nodeToDelete) {
   Node *previous = head_;
 
   while (nullptr != temp) {
-    if (temp == nodeToDelete) {
+    if (temp == node_to_delete) {
       previous->next_ = temp->next_;
       delete temp;
       return;
@@ -268,30 +279,30 @@ void List<T>::deleteNode(Node *nodeToDelete) {
 }
 
 template<typename T>
-typename List<T>::iterator List<T>::erase(typename List<T>::iterator nodeToDelete) {
+typename List<T>::iterator List<T>::erase(typename List<T>::iterator node_to_delete) {
   // Check if this is the last node in the list. If that's the case do nothing.
-  typename List<T>::iterator next = nodeToDelete;
-  if (nodeToDelete == end() || ++next == end()) {
+  typename List<T>::iterator next = node_to_delete;
+  if (node_to_delete == end() || ++next == end()) {
     return end();
   }
 
-  // Otherwise, copy the contents of nodeToDelete->next_ into nodeToDelete and
-  // delete nodeToDelete->next_ instead.
-  typename cci::List<T>::iterator temp = nodeToDelete;
-  nodeToDelete.updateNode(next);
+  // Otherwise, copy the contents of node_to_delete->next_ into node_to_delete and
+  // delete node_to_delete->next_ instead.
+  typename cci::List<T>::iterator temp = node_to_delete;
+  node_to_delete.updateNode(next);
   delete next.get();
 
-  return nodeToDelete;
+  return node_to_delete;
 }
 
 template<typename T>
-typename List<T>::Node* List<T>::erase(Node *nodeToDelete) {
+typename List<T>::Node* List<T>::erase(Node *node_to_delete) {
   // If the List is empty then there's nothing to do
   if (nullptr == head_) {
     return head_;
   }
 
-  if (head_ == nodeToDelete) {
+  if (head_ == node_to_delete) {
     Node *temp = head_;
     head_ = head_->next_;
     delete temp;
@@ -304,7 +315,7 @@ typename List<T>::Node* List<T>::erase(Node *nodeToDelete) {
   Node *previous = head_;
 
   while (nullptr != temp) {
-    if (temp == nodeToDelete) {
+    if (temp == node_to_delete) {
       previous->next_ = temp->next_;
       delete temp;
       return previous->next_;

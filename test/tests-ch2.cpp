@@ -105,7 +105,7 @@ TYPED_TEST(CciChapter2_list, deleteNodesEqual_1) {
     typename cci::List<TypeParam>::Node *prev = test_list.getHead();
 
     // Remove 1's at the beginning
-    while ((nullptr != temp) && (1 == temp->val)) {
+    while ((nullptr != temp) && (1 == temp->val_)) {
       test_list.deleteNode(temp);
       temp = test_list.getHead();
     }
@@ -113,7 +113,7 @@ TYPED_TEST(CciChapter2_list, deleteNodesEqual_1) {
     if (!test_list.isEmpty()) {
       temp = temp->next_;
       while (nullptr != temp) {
-        if (1 == temp->val) {
+        if (1 == temp->val_) {
           test_list.deleteNode(temp);
           temp = prev->next_;
           continue;
@@ -147,13 +147,13 @@ TYPED_TEST(CciChapter2_list, eraseNodesEqual_1) {
     typename cci::List<TypeParam>::Node *it = test_list.getHead();
 
     // Remove 1's at the beginning
-    while ((nullptr != it) && (1 == it->val)) {
+    while ((nullptr != it) && (1 == it->val_)) {
       it = test_list.erase(it);
     }
 
     if (!test_list.isEmpty()) {
       while (nullptr != it) {
-        if (1 == it->val) {
+        if (1 == it->val_) {
           it = test_list.erase(it);
           continue;
         }
@@ -187,7 +187,7 @@ TYPED_TEST(CciChapter2_list, deleteNodesEqual_n) {
 
     // Remove "item" from the list and extract the elements in the list.
     typename cci::List<TypeParam>::Node *temp = test_list.getHead();
-    while (nullptr != temp && temp->val != item) {
+    while (nullptr != temp && temp->val_ != item) {
       temp = temp->next_;
     }
     test_list.deleteNode(temp);
@@ -259,7 +259,7 @@ TEST(CciChapter2_Q2, findKthElementBasic) {
 
     auto expected_val = test_case[k_q2_num_samples - 1 - ii];
     EXPECT_NE(nullptr, result);
-    EXPECT_EQ(result->val, expected_val);
+    EXPECT_EQ(result->val_, expected_val);
   }
 }
 
@@ -312,7 +312,7 @@ TEST(CciChapter2_Q3, deleteNodePtr) {
 
     // Remove "item" from the list and extract the elements in the list.
     typename cci::List<int>::Node *temp = test_list.getHead();
-    while (nullptr != temp && temp->val != *it) {
+    while (nullptr != temp && temp->val_ != *it) {
       temp = temp->next_;
     }
     deleteNode<int>(temp);
@@ -372,5 +372,42 @@ TYPED_TEST(CciChapter2_Q3, deleteNodeIterator) {
 
     // Finally, do the comparison
     EXPECT_EQ(out_vect, test_case);
+  }
+}
+
+//------------------------------------------------------------------------
+// Tests for Solution to Q4
+//------------------------------------------------------------------------
+template <typename T>
+class CciChapter2_Q4 : public ::testing::Test {
+};
+
+using ListValTypes_Q4 = ::testing::Types<cci::List<int>, std::list<int>>;
+TYPED_TEST_CASE(CciChapter2_Q4, ListValTypes_Q4);
+
+TYPED_TEST(CciChapter2_Q4, partition) {
+
+  std::vector<std::tuple<std::vector<int>, std::vector<int>, int>> test_cases = {
+    {{}, {}, 5},
+    {{0, 9, 0, 9, 0, 9, 0, 9, 0, 9}, {0, 0, 0, 0, 0, 9, 9, 9, 9, 9}, 5},
+    {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, 5},
+    {{13, 13, 13, 13, 13, 7, 7}, {13, 13, 13, 13, 13, 7, 7}, 5},
+    {{1, 2, 3, 4, 5, 6, 7, 8, 9}, {1, 2, 3, 4, 5, 6, 7, 8, 9}, 5},
+  };
+  std::vector<int> test_case_in{0, 9, 0, 9, 0, 9, 0, 9, 0, 9};
+  std::vector<int> test_case_out{0, 0, 0, 0, 0, 9, 9, 9, 9, 9};
+
+  for (auto test_case : test_cases) {
+    // Construct a list using the current test_case
+    cci::List<int> test_list;
+    for (auto value : std::get<0>(test_case)) {
+      test_list.appendToTail(value);
+    }
+
+    cci::List<int> out_list = partition<int>(test_list, std::get<2>(test_case));
+
+    std::vector<int> out_vect = cci::extractAllValues(out_list);
+
+    EXPECT_EQ(out_vect, std::get<1>(test_case));
   }
 }
