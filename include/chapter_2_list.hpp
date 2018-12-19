@@ -288,7 +288,6 @@ typename List<T>::iterator List<T>::erase(typename List<T>::iterator node_to_del
 
   // Otherwise, copy the contents of node_to_delete->next_ into node_to_delete and
   // delete node_to_delete->next_ instead.
-  typename cci::List<T>::iterator temp = node_to_delete;
   node_to_delete.updateNode(next);
   delete next.get();
 
