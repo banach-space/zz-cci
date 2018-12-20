@@ -394,17 +394,40 @@ TYPED_TEST(CciChapter2_Q4, partition) {
     {{13, 13, 13, 13, 13, 7, 7}, {13, 13, 13, 13, 13, 7, 7}, 5},
     {{1, 2, 3, 4, 5, 6, 7, 8, 9}, {1, 2, 3, 4, 5, 6, 7, 8, 9}, 5},
   };
-  std::vector<int> test_case_in{0, 9, 0, 9, 0, 9, 0, 9, 0, 9};
-  std::vector<int> test_case_out{0, 0, 0, 0, 0, 9, 9, 9, 9, 9};
+
+  for (auto test_case : test_cases) {
+    // Construct a list using the current test_case
+    TypeParam test_list;
+    for (auto value : std::get<0>(test_case)) {
+      test_list.push_back(value);
+    }
+
+    partition<TypeParam, int>(test_list, std::get<2>(test_case));
+
+    std::vector<int> out_vect = cci::extractAllValues(test_list);
+
+    EXPECT_EQ(out_vect, std::get<1>(test_case));
+  }
+}
+
+TEST(CciChapter2_Q4, partition2) {
+
+  std::vector<std::tuple<std::vector<int>, std::vector<int>, int>> test_cases = {
+    {{}, {}, 5},
+    {{0, 9, 0, 9, 0, 9, 0, 9, 0, 9}, {0, 0, 0, 0, 0, 9, 9, 9, 9, 9}, 5},
+    {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, 5},
+    {{13, 13, 13, 13, 13, 7, 7}, {13, 13, 13, 13, 13, 7, 7}, 5},
+    {{1, 2, 3, 4, 5, 6, 7, 8, 9}, {1, 2, 3, 4, 5, 6, 7, 8, 9}, 5},
+  };
 
   for (auto test_case : test_cases) {
     // Construct a list using the current test_case
     cci::List<int> test_list;
     for (auto value : std::get<0>(test_case)) {
-      test_list.appendToTail(value);
+      test_list.push_back(value);
     }
 
-    cci::List<int> out_list = partition<int>(test_list, std::get<2>(test_case));
+    auto out_list = partition2<int>(test_list, std::get<2>(test_case));
 
     std::vector<int> out_vect = cci::extractAllValues(out_list);
 

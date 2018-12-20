@@ -178,11 +178,17 @@ void deleteNode(typename cci::List<T>::Node *node_to_delete) {
 //------------------------------------------------------------------------
 // Solution to Q4
 //------------------------------------------------------------------------
-// This solution generates a new list, so it's not in-place. But doing this
-// in-place would require changing the API and exposing a lot of the internals
-// (i.e. the nodes).
+template<typename ListType, typename ElemType>
+void partition(ListType &input_list, ElemType partition_point) {
+  auto comp = [&](ElemType val) { return val <= partition_point;};
+  auto bound = std::partition(input_list.begin(), input_list.end(), comp);
+  (void)bound;
+}
+
+// This solution generates a new list, so it's not in-place. It was my first
+// naive solution that only works for cci::List.
 template<typename T>
-cci::List<T> partition(cci::List<T> &input_list, T partition_point) {
+cci::List<T> partition2(cci::List<T> &input_list, T partition_point) {
   // Elements "before" the parition point
   cci::List<T> before;
   // Elements "after" the partition point
@@ -223,12 +229,5 @@ cci::List<T> partition(cci::List<T> &input_list, T partition_point) {
   return before;
 }
 
-template<typename T>
-std::list<T> partition(std::list<T> &input_list, T partition_point) {
-  auto comp = [&](T val) { return val <= partition_point;};
-  auto bound = std::partition(input_list.begin(), input_list.end(), comp);
-
-  return input_list;
-}
 
 #endif
