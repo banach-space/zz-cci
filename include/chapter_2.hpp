@@ -229,5 +229,51 @@ cci::List<T> partition2(cci::List<T> &input_list, T partition_point) {
   return before;
 }
 
+//------------------------------------------------------------------------
+// Solution to Q5
+//------------------------------------------------------------------------
+// Most trivial solution - the digits are stored in reverse order
+template<typename ListType, typename ElemType>
+ListType sumNumbersAsAList(ListType &input_list1, ListType &input_list2) {
+  ListType out_list {};
+  ElemType carry {};
+
+  constexpr ElemType kTen{10};
+
+  // Make sure that the number of elements in each in list is identical (may
+  // need to pad with 0s)
+  if (input_list1.size() > input_list2.size()) {
+    size_t size_diff =  input_list1.size() - input_list2.size();
+
+    for (auto ii = 0; ii < size_diff; ii++) {
+      input_list2.push_back(0);
+    }
+  } else if (input_list1.size() > input_list2.size()) {
+    size_t size_diff =  input_list2.size() - input_list1.size();
+
+    for (auto ii = 0; ii < size_diff; ii++) {
+      input_list1.push_back(0);
+    }
+  }
+
+  // Sum the elements
+  for (auto it1 = input_list1.begin(), it2 = input_list2.begin();
+      it1 != input_list1.end() && it2 != input_list2.end();
+      ++it1, ++it2) {
+    ElemType value {};
+    value = *it1 + *it2 + carry;
+
+    carry = value >= kTen ? 1 : 0;
+    value = value % kTen;
+
+    out_list.push_back(value);
+  }
+
+  if (1 == carry) {
+    out_list.push_back(carry);
+  }
+
+  return out_list;
+}
 
 #endif

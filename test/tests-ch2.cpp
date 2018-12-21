@@ -434,3 +434,43 @@ TEST(CciChapter2_Q4, partition2) {
     EXPECT_EQ(out_vect, std::get<1>(test_case));
   }
 }
+
+//------------------------------------------------------------------------
+// Tests for Solution to Q5
+//------------------------------------------------------------------------
+template <typename T>
+class CciChapter2_Q5 : public ::testing::Test {
+};
+
+using ListValTypes_Q5 = ::testing::Types<cci::List<int>, std::list<int>>;
+TYPED_TEST_CASE(CciChapter2_Q5, ListValTypes_Q5);
+
+TYPED_TEST(CciChapter2_Q5, sumNumbersAsAList) {
+  std::vector<std::tuple<std::vector<int>, std::vector<int>, std::vector<int>>>
+    test_cases = {
+    {{}, {}, {}},
+    {{1, 2, 3}, {1, 2, 3}, {2, 4, 6}},
+    {{1, 2, 3}, {9, 8, 7}, {0, 1, 1, 1}},
+    {{1, 2, 3, 1, 1}, {9, 8, 7}, {0, 1, 1, 2, 1}},
+  };
+
+  for (auto test_case : test_cases) {
+    // Construct input_list1 using the current test_case
+    TypeParam test_list1;
+    for (auto value : std::get<0>(test_case)) {
+      test_list1.push_back(value);
+    }
+
+    // Construct input_list2 using the current test_case
+    TypeParam test_list2;
+    for (auto value : std::get<1>(test_case)) {
+      test_list2.push_back(value);
+    }
+
+    auto out_list = sumNumbersAsAList<TypeParam, int>(test_list1, test_list2);
+
+    std::vector<int> out_vect = cci::extractAllValues(out_list);
+
+    EXPECT_EQ(out_vect, std::get<2>(test_case));
+  }
+}

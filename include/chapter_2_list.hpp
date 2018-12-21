@@ -65,6 +65,7 @@ public:
   // attached/linked to a different list.
   void markAsEmpty() { head_ = nullptr; };
   void appendToTail(const T& new_val);
+  void appendToFront(const T& new_val);
   void printAllVals();
 
   // A struct representing a node in the List
@@ -165,8 +166,10 @@ public:
   // They also make the interface much cleaner (only realised after
   // having implemented everything else).
   void push_back(const T& new_val) { appendToTail(new_val);}
+  void push_front(const T& new_val) { appendToFront(new_val);}
   Node* erase(Node *node_to_delete);
   bool empty() const { return isEmpty(); };
+  ptrdiff_t size() const { return std::distance(cbegin(), cend());}
 
   // Iterators
   using iterator = ForwardIterator<T>;
@@ -237,6 +240,17 @@ void List<T>::appendToTail(const T& new_val) {
   }
   auto *new_node = new Node(new_val);
   temp->next_ = new_node;
+}
+
+template<typename T>
+void List<T>::appendToFront(const T& new_val) {
+  auto *new_node = new Node(new_val);
+  if (nullptr == head_) {
+    head_ = new_node;
+  } else {
+    new_node->next_ = head_;
+    head_ = new_node;
+  }
 }
 
 template<typename T>
