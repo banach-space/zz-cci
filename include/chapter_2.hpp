@@ -27,34 +27,16 @@
 // Helper functions
 //------------------------------------------------------------------------
 namespace cci {
-template<typename T>
-std::vector<T> extractAllValues(const cci::List<T> &List) {
-  std::vector<T> all_vals {};
-
-  if (List.isEmpty()) {
-    return all_vals;
-  }
-
-  auto *temp = List.getHead();
-  all_vals.push_back(temp->val_);;
-  while (nullptr != temp->next_) {
-    temp = temp->next_;
-    all_vals.push_back(temp->val_);
-  }
-
-  return all_vals;
-}
-
-template<typename T>
-std::vector<T> extractAllValues(const std::list<T> &List) {
+template<typename ListType, typename T>
+std::vector<T> getVector(const ListType &List) {
   std::vector<T> all_vals {};
 
   if (List.empty()) {
     return all_vals;
   }
 
-  for (auto it = List.begin(); it != List.end(); it++) {
-    all_vals.push_back(*it);
+  for (auto &item : List) {
+    all_vals.push_back(item);
   }
 
   return all_vals;
@@ -64,31 +46,8 @@ std::vector<T> extractAllValues(const std::list<T> &List) {
 //------------------------------------------------------------------------
 // Solution to Q1
 //------------------------------------------------------------------------
-// A solution for cci::List<T>
-template<typename T>
-void removeDuplicates(cci::List<T> *list) {
-  // If the list is empty then there's nothing to do
-  if (list->isEmpty()) {
-    return;
-  }
-
-  // A hash table of items in the list
-  std::map<T, unsigned int> entries {};
-
-  auto *it = list->getHead();
-  while (nullptr != it) {
-    if (1 == entries.count(it->val_)) {
-      it = list->erase(it);
-    } else {
-      entries.insert({it->val_, 1u});
-      it = it->next_;
-    }
-  }
-}
-
-// A solution for std::list<T>
-template<typename T>
-void removeDuplicates(std::list<T> *list) {
+template<typename ListType, typename T>
+void removeDuplicates(ListType *list) {
   // If the list is empty then there's nothing to do
   if (list->empty()) {
     return;
@@ -113,12 +72,12 @@ void removeDuplicates(std::list<T> *list) {
 // A Basic solution for cci::List<T> (not using iterators)
 template<typename T>
 typename cci::List<T>::Node* findKthElementBasic(const cci::List<T> &list, size_t k) {
-  if (list.isEmpty()) {
+  if (list.empty()) {
     return nullptr;
   }
 
-  auto *it_first = list.getHead();
-  auto *it_second = list.getHead();
+  auto *it_first = list.begin().get();
+  auto *it_second = it_first;
 
   for (size_t i = 0; i < k; i++) {
     it_first = it_first->next_;
@@ -183,50 +142,6 @@ void partition(ListType &input_list, ElemType partition_point) {
   auto comp = [&](ElemType val) { return val <= partition_point;};
   auto bound = std::partition(input_list.begin(), input_list.end(), comp);
   (void)bound;
-}
-
-// This solution generates a new list, so it's not in-place. It was my first
-// naive solution that only works for cci::List.
-template<typename T>
-cci::List<T> partition2(cci::List<T> &input_list, T partition_point) {
-  // Elements "before" the parition point
-  cci::List<T> before;
-  // Elements "after" the partition point
-  cci::List<T> after;
-
-  if (input_list.empty()) {
-    return before;
-  }
-
-  // Populate "after" and "before" lists
-  typename cci::List<T>::Node *it = input_list.getHead();
-  do {
-    if (it->val_ <= partition_point) {
-      before.push_back(it->val_);
-    } else {
-      after.push_back(it->val_);
-    }
-    it = it->next_;
-  } while (nullptr != it);
-
-  // If "before" is empty, then all elements were copied to "after" and it's safe
-  // to return that as the result.
-  if (nullptr == before.getHead()) {
-    return after;
-  }
-
-  // Merge the two lists together
-  typename cci::List<T>::Node *before_last = before.getHead();
-  while (before_last->next_ != nullptr) {
-    before_last = before_last->next_;
-  }
-  before_last->next_ = after.getHead();
-
-  // This is important as "before" took ownership of all elements in "after"
-  after.markAsEmpty();
-
-  // At this point "before" containes everything and "after" is empty
-  return before;
 }
 
 //------------------------------------------------------------------------

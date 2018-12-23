@@ -11,6 +11,7 @@ add_executable(cciUT
   ${CMAKE_CURRENT_SOURCE_DIR}/test/test-main.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/test/tests-ch1.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/test/tests-ch2.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/test/tests-List.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/googletest/googletest/src/gtest-all.cc)
 
 target_include_directories(cciUT PRIVATE SYSTEM
