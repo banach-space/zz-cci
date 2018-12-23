@@ -182,20 +182,20 @@ TEST(CciChapter2_list, empty) {
 }
 
 TEST(CciChapter2_list, size) {
-  std::vector<std::tuple<std::vector<int>, size_t>> test_cases = {
-    {{}, 0},
-    {{1}, 1},
-    {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, 10},
+  std::vector<std::vector<int>> test_cases = {
+    {},
+    {1},
+    {0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
   };
 
   for (auto &test_case : test_cases) {
     cci::List<int> test_list;
 
-    for (auto value : std::get<0>(test_case)) {
+    for (auto value : test_case) {
       test_list.push_back(value);
     }
 
-    EXPECT_EQ(test_list.size(), std::get<1>(test_case));
+    EXPECT_EQ(test_list.size(), test_case.size());
   }
 }
 

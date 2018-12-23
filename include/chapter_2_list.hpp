@@ -174,7 +174,7 @@ public:
   void push_front(const T& new_val);
   Node* erase(Node *node_to_delete);
   bool empty() const { return (head_sentinel_->next_ == head_sentinel_); };
-  ptrdiff_t size() const { return std::distance(cbegin(), cend());}
+  size_t size() const { return std::distance(cbegin(), cend());}
 
   // Iterators
   using iterator = Iterator<T>;
@@ -266,13 +266,16 @@ void List<T>::push_back(const T& new_val) {
 template<typename T>
 void List<T>::push_front(const T& new_val) {
   auto *new_node = new Node(new_val);
-  if (head_sentinel_ == head_sentinel_->next_) {
-    head_sentinel_->next_ = new_node;
+  if (empty()) {
     new_node->next_ = head_sentinel_;
+    head_sentinel_->prev_ = new_node;
   } else {
     new_node->next_ = head_sentinel_->next_;
-    head_sentinel_->next_ = new_node;
+    new_node->next_->prev_ = new_node;
   }
+
+  head_sentinel_->next_ = new_node;
+  new_node->prev_ = head_sentinel_;
 }
 
 template<typename T>

@@ -149,7 +149,7 @@ void partition(ListType &input_list, ElemType partition_point) {
 //------------------------------------------------------------------------
 // Most trivial solution - the digits are stored in reverse order
 template<typename ListType, typename ElemType>
-ListType sumNumbersAsAList(ListType &input_list1, ListType &input_list2) {
+ListType sumNumbersAsAListReverse(ListType &input_list1, ListType &input_list2) {
   ListType out_list {};
   ElemType carry {};
 
@@ -160,13 +160,13 @@ ListType sumNumbersAsAList(ListType &input_list1, ListType &input_list2) {
   if (input_list1.size() > input_list2.size()) {
     size_t size_diff =  input_list1.size() - input_list2.size();
 
-    for (auto ii = 0; ii < size_diff; ii++) {
+    for (auto ii = 0u; ii < size_diff; ii++) {
       input_list2.push_back(0);
     }
   } else if (input_list1.size() > input_list2.size()) {
     size_t size_diff =  input_list2.size() - input_list1.size();
 
-    for (auto ii = 0; ii < size_diff; ii++) {
+    for (auto ii = 0u; ii < size_diff; ii++) {
       input_list1.push_back(0);
     }
   }
@@ -190,5 +190,56 @@ ListType sumNumbersAsAList(ListType &input_list1, ListType &input_list2) {
 
   return out_list;
 }
+
+template<typename ListType, typename ElemType>
+ListType sumNumbersAsAList(ListType &input_list1, ListType &input_list2) {
+  ListType out_list {};
+  ElemType carry {};
+
+  constexpr ElemType kTen{10};
+
+  // Make sure that the number of elements in each in list is identical (may
+  // need to pad with 0s)
+  if (input_list1.size() > input_list2.size()) {
+    size_t size_diff =  input_list1.size() - input_list2.size();
+
+    for (auto ii = 0u; ii < size_diff; ii++) {
+      input_list2.push_front(0);
+    }
+  } else if (input_list1.size() > input_list2.size()) {
+    size_t size_diff =  input_list2.size() - input_list1.size();
+
+    for (auto ii = 0u; ii < size_diff; ii++) {
+      input_list1.push_front(0);
+    }
+  }
+
+  // Sum the elements. A bit hacky way, but cci::List has no reverse iterators
+  auto it1 = input_list1.end();
+  auto it2 = input_list2.end();
+  while (it1 != input_list1.begin()) {
+    --it1;
+    --it2;
+
+    ElemType value {};
+    value = *it1 + *it2 + carry;
+
+    carry = value >= kTen ? 1 : 0;
+    value = value % kTen;
+
+    out_list.push_front(value);
+  }
+
+  if (1 == carry) {
+    out_list.push_front(carry);
+  }
+
+  return out_list;
+}
+//------------------------------------------------------------------------
+// Solution to Q6
+//------------------------------------------------------------------------
+// Skipping this one. Not sure how to model cycles in a list with std::list or
+// cci::List. I would have to implement a much more basic list for this.
 
 #endif
