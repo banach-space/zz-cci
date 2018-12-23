@@ -308,3 +308,32 @@ TYPED_TEST(CciChapter2_Q5, sumNumbersAsAList) {
     EXPECT_EQ(out_vect, std::get<2>(test_case));
   }
 }
+
+//------------------------------------------------------------------------
+// Tests for Solution to Q6
+//------------------------------------------------------------------------
+template <typename T>
+class CciChapter2_Q6 : public ::testing::Test {
+};
+
+using ListValTypes_Q6 = ::testing::Types<cci::List<int>, std::list<int>>;
+TYPED_TEST_CASE(CciChapter2_Q6, ListValTypes_Q6);
+
+TYPED_TEST(CciChapter2_Q6, polindrone) {
+  std::vector<std::tuple<std::vector<int>, bool>>
+    test_cases = {
+    {{}, true},
+    {{1, 2, 3}, false},
+    {{1, 2, 1}, true},
+    {{1, 2, 2, 1}, true},
+  };
+
+  for (auto test_case : test_cases) {
+    TypeParam test_list;
+    for (auto value : std::get<0>(test_case)) {
+      test_list.push_back(value);
+    }
+
+    EXPECT_EQ(polindrone(test_list), std::get<1>(test_case));
+  }
+}

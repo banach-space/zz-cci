@@ -236,10 +236,34 @@ ListType sumNumbersAsAList(ListType &input_list1, ListType &input_list2) {
 
   return out_list;
 }
+
 //------------------------------------------------------------------------
 // Solution to Q6
 //------------------------------------------------------------------------
 // Skipping this one. Not sure how to model cycles in a list with std::list or
 // cci::List. I would have to implement a much more basic list for this.
+
+//------------------------------------------------------------------------
+// Solution to Q7
+//------------------------------------------------------------------------
+template<typename ListType>
+bool polindrone(ListType &input_list) {
+  if (input_list.empty()) {
+    return true;
+  }
+
+  ListType temp(input_list);
+  temp.reverse();
+
+  for (auto it1 = input_list.begin(), it2 = temp.begin();
+      it1 != input_list.end();
+      ++it1, ++it2) {
+    if (*it1 != *it2) {
+      return false;
+    }
+  }
+  return true;
+}
+
 
 #endif

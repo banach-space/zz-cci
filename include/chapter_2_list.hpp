@@ -54,10 +54,19 @@ public:
     other.head_sentinel_ = nullptr;
   };
 
+  List(List& other) {
+    head_sentinel_ = new Node({});
+    head_sentinel_->next_ = head_sentinel_;
+    head_sentinel_->prev_ = head_sentinel_;
+
+    for (auto item : other) {
+      this->push_back(item);
+    }
+  };
+
   // A non-default constructor/destructor is required because this class deals
   // with raw memory. However, this triggers the generation of the following
   // special functions, which are not required. Hence they are "delete"d here.
-  List(List& other)  = delete;
   List operator=(List) = delete;
   List operator=(List&&) = delete;
 
@@ -151,6 +160,11 @@ public:
       return itr < rhs.itr;
     }
 
+    template <class OtherType>
+    bool operator>(const Iterator<OtherType> &rhs) const {
+      return itr > rhs.itr;
+    }
+
     Type &operator*() const {
       assert(itr != nullptr && "Invalid iterator dereference!");
       return itr->val_;
@@ -175,6 +189,7 @@ public:
   Node* erase(Node *node_to_delete);
   bool empty() const { return (head_sentinel_->next_ == head_sentinel_); };
   size_t size() const { return std::distance(cbegin(), cend());}
+  void reverse();
 
   // Iterators
   using iterator = Iterator<T>;
@@ -332,6 +347,18 @@ typename List<T>::Node* List<T>::erase(Node *node_to_delete) {
   }
 
   return temp;
+}
+
+template<typename T>
+void List<T>::reverse() {
+  auto it_start = this->begin();
+  auto it_end = --this->end();
+
+  while (it_start > it_end) {
+    T tmp = *it_start;
+    *it_start++ = *it_end;
+    *it_end-- = tmp;
+  }
 }
 
 }  // namespace cci
