@@ -326,6 +326,9 @@ TYPED_TEST(CciChapter2_Q6, polindrone) {
       std::make_tuple<std::vector<int>, bool>({1, 2, 3}, false),
       std::make_tuple<std::vector<int>, bool>({1, 2, 1}, true),
       std::make_tuple<std::vector<int>, bool>({1, 2, 2, 1}, true),
+      std::make_tuple<std::vector<int>, bool>({1, 2, 3, 2, 1}, true),
+      std::make_tuple<std::vector<int>, bool>({1, 2, 3, 2, 1}, true),
+      std::make_tuple<std::vector<int>, bool>({1, 2, 2, 2, 1, 1}, false),
   };
 
   for (auto test_case : test_cases) {
