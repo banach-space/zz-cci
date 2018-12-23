@@ -155,16 +155,6 @@ public:
       return itr != rhs.itr;
     }
 
-    template <class OtherType>
-    bool operator<(const Iterator<OtherType> &rhs) const {
-      return itr < rhs.itr;
-    }
-
-    template <class OtherType>
-    bool operator>(const Iterator<OtherType> &rhs) const {
-      return itr > rhs.itr;
-    }
-
     Type &operator*() const {
       assert(itr != nullptr && "Invalid iterator dereference!");
       return itr->val_;
@@ -354,7 +344,8 @@ void List<T>::reverse() {
   auto it_start = this->begin();
   auto it_end = --this->end();
 
-  while (it_start > it_end) {
+  size_t num_elements = this->size();
+  for (auto ii = 0u; ii < num_elements/2; ii++) {
     T tmp = *it_start;
     *it_start++ = *it_end;
     *it_end-- = tmp;
