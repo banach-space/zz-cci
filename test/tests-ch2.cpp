@@ -323,9 +323,9 @@ TYPED_TEST(CciChapter2_Q6, polindrone) {
   std::vector<std::tuple<std::vector<int>, bool>>
     test_cases = {
       std::make_tuple<std::vector<int>, bool>({}, true),
-      // std::make_tuple<std::vector<int>, bool>({1, 2, 3}, false),
-      // std::make_tuple<std::vector<int>, bool>({1, 2, 1}, true),
-      // std::make_tuple<std::vector<int>, bool>({1, 2, 2, 1}, true),
+      std::make_tuple<std::vector<int>, bool>({1, 2, 3}, false),
+      std::make_tuple<std::vector<int>, bool>({1, 2, 1}, true),
+      std::make_tuple<std::vector<int>, bool>({1, 2, 2, 1}, true),
   };
 
   for (auto test_case : test_cases) {
@@ -334,6 +334,7 @@ TYPED_TEST(CciChapter2_Q6, polindrone) {
       test_list.push_back(value);
     }
 
-    EXPECT_EQ(polindrone(test_list), std::get<1>(test_case));
+    bool res = polindrone(test_list);
+    EXPECT_EQ(res, std::get<1>(test_case));
   }
 }

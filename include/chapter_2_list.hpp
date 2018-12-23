@@ -354,7 +354,7 @@ void List<T>::reverse() {
   auto it_start = this->begin();
   auto it_end = --this->end();
 
-  while (it_start > it_end) {
+  while (it_start < it_end) {
     T tmp = *it_start;
     *it_start++ = *it_end;
     *it_end-- = tmp;
