@@ -165,9 +165,9 @@ TYPED_TEST(CciChapter2_list, erase_nodes_equal_n) {
 
 TEST(CciChapter2_list, empty) {
   std::vector<std::tuple<std::vector<int>, bool>> test_cases = {
-    {{}, true},
-    {{1}, false},
-    {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, false},
+    std::make_tuple<std::vector<int>, bool>({}, true),
+    std::make_tuple<std::vector<int>, bool>({1}, false),
+    std::make_tuple<std::vector<int>, bool>({0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, false),
   };
 
   for (auto &test_case : test_cases) {
