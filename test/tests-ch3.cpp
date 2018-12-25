@@ -167,7 +167,7 @@ TYPED_TEST(CciChapter3_Q1, pop_out_of_range) {
 // Tests for Solution to Q2
 //-----------------------------------------------------------------------------
 TEST(CciChapter3_Q2, StackWithMin) {
-  const size_t k_stack_min = 7;
+  const int k_stack_min = 7;
   const size_t k_num_elements = 20;
 
   cci::StackWithMin test_stack;
