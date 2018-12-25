@@ -40,8 +40,7 @@ namespace cci {
 // Represents a singly linked List. Manages all the underlying memory.
 // Implemented with simplicity in mind and as a coding excerise.
 //------------------------------------------------------------------------
-template<typename T>
-class List {
+template <typename T> class List {
 public:
   explicit List() {
     head_sentinel_ = new Node({});
@@ -49,12 +48,12 @@ public:
     head_sentinel_->prev_ = head_sentinel_;
   };
   ~List();
-  List(List&& other) {
+  List(List &&other) {
     head_sentinel_ = other.head_sentinel_;
     other.head_sentinel_ = nullptr;
   };
 
-  List(List& other) {
+  List(List &other) {
     head_sentinel_ = new Node({});
     head_sentinel_->next_ = head_sentinel_;
     head_sentinel_->prev_ = head_sentinel_;
@@ -68,7 +67,7 @@ public:
   // with raw memory. However, this triggers the generation of the following
   // special functions, which are not required. Hence they are "delete"d here.
   List operator=(List) = delete;
-  List operator=(List&&) = delete;
+  List operator=(List &&) = delete;
 
   // A struct representing a node in the List
   struct Node {
@@ -88,11 +87,8 @@ public:
   //    https://stackoverflow.com/questions/14626033/implicit-instantiation-of-undefined-template-class?rq=1
   template <class Type, class UnqualifiedType = std::remove_cv_t<Type>>
   class Iterator
-      : public std::iterator<std::bidirectional_iterator_tag,
-                             UnqualifiedType,
-                             std::ptrdiff_t,
-                             Type *,
-                             Type &> {
+      : public std::iterator<std::bidirectional_iterator_tag, UnqualifiedType,
+                             std::ptrdiff_t, Type *, Type &> {
     using Node = typename List<UnqualifiedType>::Node;
     Node *itr;
 
@@ -112,7 +108,7 @@ public:
       other.itr->next_->prev_ = itr;
     }
 
-    Node* get() { return itr;}
+    Node *get() { return itr; }
 
     Iterator &operator++() // Pre-increment
     {
@@ -166,19 +162,17 @@ public:
     }
 
     // One way conversion: iterator -> const_iterator
-    operator Iterator<const Type>() const {
-      return Iterator<const Type>(itr);
-    }
+    operator Iterator<const Type>() const { return Iterator<const Type>(itr); }
   };
 
   // The following methods were implemented for compability with std::list.
   // They also make the interface much cleaner (only realised after
   // having implemented everything else).
-  void push_back(const T& new_val);
-  void push_front(const T& new_val);
-  Node* erase(Node *node_to_delete);
+  void push_back(const T &new_val);
+  void push_front(const T &new_val);
+  Node *erase(Node *node_to_delete);
   bool empty() const { return (head_sentinel_->next_ == head_sentinel_); };
-  size_t size() const { return std::distance(cbegin(), cend());}
+  size_t size() const { return std::distance(cbegin(), cend()); }
   void reverse();
 
   // Iterators
@@ -194,23 +188,19 @@ public:
     return const_iterator(this->head_sentinel_->next_);
   }
 
-  const_iterator cend() const noexcept { return const_iterator(head_sentinel_); }
-
-  iterator begin()  noexcept {
-    return iterator(this->head_sentinel_->next_);
+  const_iterator cend() const noexcept {
+    return const_iterator(head_sentinel_);
   }
+
+  iterator begin() noexcept { return iterator(this->head_sentinel_->next_); }
 
   const_iterator begin() const noexcept {
     return iterator(this->head_sentinel_->next_);
   }
 
-  const_iterator end() const noexcept {
-    return iterator(this->head_sentinel_);
-  }
+  const_iterator end() const noexcept { return iterator(this->head_sentinel_); }
 
-  iterator end() noexcept {
-    return iterator(this->head_sentinel_);
-  }
+  iterator end() noexcept { return iterator(this->head_sentinel_); }
 
 private:
   Node *head_sentinel_;
@@ -219,8 +209,7 @@ private:
 //------------------------------------------------------------------------
 // CLASS: List (implementation)
 //------------------------------------------------------------------------
-template<typename T>
-List<T>::~List() {
+template <typename T> List<T>::~List() {
   // The List is already empty - nothing to do
   if (head_sentinel_->next_ == head_sentinel_) {
     return;
@@ -241,10 +230,9 @@ List<T>::~List() {
   delete previous;
 }
 
-template<typename T>
-void List<T>::push_back(const T& new_val) {
+template <typename T> void List<T>::push_back(const T &new_val) {
   // If the List is still empty then this is defining the head
-  if ( head_sentinel_->next_ == head_sentinel_) {
+  if (head_sentinel_->next_ == head_sentinel_) {
     auto *new_node = new Node(new_val);
     new_node->prev_ = head_sentinel_;
     new_node->next_ = head_sentinel_;
@@ -268,8 +256,7 @@ void List<T>::push_back(const T& new_val) {
   new_node->prev_ = temp;
 }
 
-template<typename T>
-void List<T>::push_front(const T& new_val) {
+template <typename T> void List<T>::push_front(const T &new_val) {
   auto *new_node = new Node(new_val);
   if (empty()) {
     new_node->next_ = head_sentinel_;
@@ -283,8 +270,9 @@ void List<T>::push_front(const T& new_val) {
   new_node->prev_ = head_sentinel_;
 }
 
-template<typename T>
-typename List<T>::iterator List<T>::erase(typename List<T>::iterator node_to_delete) {
+template <typename T>
+typename List<T>::iterator
+List<T>::erase(typename List<T>::iterator node_to_delete) {
   // Check if this is the last node in the list. If that's the case do nothing.
   typename List<T>::iterator next = node_to_delete;
   next++;
@@ -299,16 +287,16 @@ typename List<T>::iterator List<T>::erase(typename List<T>::iterator node_to_del
     return iterator(head_sentinel_);
   }
 
-  // Otherwise, copy the contents of node_to_delete->next_ into node_to_delete and
-  // delete node_to_delete->next_ instead.
+  // Otherwise, copy the contents of node_to_delete->next_ into node_to_delete
+  // and delete node_to_delete->next_ instead.
   node_to_delete.updateNode(next);
   delete next.get();
 
   return node_to_delete;
 }
 
-template<typename T>
-typename List<T>::Node* List<T>::erase(Node *node_to_delete) {
+template <typename T>
+typename List<T>::Node *List<T>::erase(Node *node_to_delete) {
   // If the List is empty then there's nothing to do
   if (head_sentinel_->next_ == head_sentinel_) {
     return head_sentinel_->next_;
@@ -339,19 +327,18 @@ typename List<T>::Node* List<T>::erase(Node *node_to_delete) {
   return temp;
 }
 
-template<typename T>
-void List<T>::reverse() {
+template <typename T> void List<T>::reverse() {
   auto it_start = this->begin();
   auto it_end = --this->end();
 
   size_t num_elements = this->size();
-  for (auto ii = 0u; ii < num_elements/2; ii++) {
+  for (auto ii = 0u; ii < num_elements / 2; ii++) {
     T tmp = *it_start;
     *it_start++ = *it_end;
     *it_end-- = tmp;
   }
 }
 
-}  // namespace cci
+} // namespace cci
 
 #endif

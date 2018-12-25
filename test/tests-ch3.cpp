@@ -14,17 +14,15 @@
 //========================================================================
 #include <gtest/gtest.h>
 
-#include <vector>
 #include <numeric>
+#include <vector>
 
 #include <chapter_3.hpp>
 
 //-----------------------------------------------------------------------------
 // Tests for Solution to Q1
 //-----------------------------------------------------------------------------
-template <typename T>
-class CciChapter3_Q1 : public ::testing::Test {
-};
+template <typename T> class CciChapter3_Q1 : public ::testing::Test {};
 
 using StackTypes_Q1 = ::testing::Types<cci::SimpleMultiStack, cci::MultiStack>;
 TYPED_TEST_CASE(CciChapter3_Q1, StackTypes_Q1);
@@ -41,16 +39,17 @@ TYPED_TEST(CciChapter3_Q1, push_and_pop) {
   TypeParam test_stack(k_substack_size, k_num_substacks);
 
   for (size_t ii = 0u; ii < k_num_substacks; ii++) {
-    for (auto item: stack_vals) {
+    for (auto item : stack_vals) {
       test_stack.push(ii, item);
     }
   }
 
   for (size_t ii = 0u; ii < k_num_substacks; ii++) {
-    std::vector<int> current_stack_vector {};
+    std::vector<int> current_stack_vector{};
 
-    while (! test_stack.isEmpty(ii)) {
-      current_stack_vector.insert(current_stack_vector.begin(), test_stack.pop(ii));
+    while (!test_stack.isEmpty(ii)) {
+      current_stack_vector.insert(current_stack_vector.begin(),
+                                  test_stack.pop(ii));
     }
     EXPECT_EQ(current_stack_vector, stack_vals);
   }
@@ -67,7 +66,7 @@ TYPED_TEST(CciChapter3_Q1, push_and_peek) {
   TypeParam test_stack(k_substack_size, k_num_substacks);
 
   for (size_t ii = 0u; ii < k_num_substacks; ii++) {
-    for (auto item: stack_vals) {
+    for (auto item : stack_vals) {
       test_stack.push(ii, item);
     }
   }
@@ -91,9 +90,9 @@ TYPED_TEST(CciChapter3_Q1, push_out_of_range) {
 
   try {
     test_stack.push(0, k_stack_val);
-  } catch(std::out_of_range const & err) {
+  } catch (std::out_of_range const &err) {
     EXPECT_EQ(err.what(), std::string("Reached the capacity of the stack"));
-  } catch(...) {
+  } catch (...) {
     FAIL() << "Expected std::out_of_range";
   }
 }
@@ -109,9 +108,9 @@ TEST(CciChapter3_Q1, SimpleMultiStack_push_out_of_range) {
 
   try {
     test_stack.push(0, k_stack_val);
-  } catch(std::out_of_range const & err) {
+  } catch (std::out_of_range const &err) {
     EXPECT_EQ(err.what(), std::string("Reached the capacity of the stack"));
-  } catch(...) {
+  } catch (...) {
     FAIL() << "Expected std::out_of_range";
   }
 }
@@ -128,9 +127,9 @@ TEST(CciChapter3_Q1, MultiStack_push_out_of_range) {
 
   try {
     test_stack.push(0, k_stack_val);
-  } catch(std::out_of_range const & err) {
+  } catch (std::out_of_range const &err) {
     EXPECT_EQ(err.what(), std::string("Reached the capacity of the stack"));
-  } catch(...) {
+  } catch (...) {
     FAIL() << "Expected std::out_of_range";
   }
 }
@@ -154,9 +153,9 @@ TYPED_TEST(CciChapter3_Q1, pop_out_of_range) {
 
   try {
     test_stack.pop(0);
-  } catch(std::out_of_range const & err) {
+  } catch (std::out_of_range const &err) {
     EXPECT_EQ(err.what(), std::string("Empty stack"));
-  } catch(...) {
+  } catch (...) {
     FAIL() << "Expected std::out_of_range";
   }
 }

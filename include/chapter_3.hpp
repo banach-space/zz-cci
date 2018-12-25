@@ -28,14 +28,14 @@
 //    this is flexible and adjusted as required at runtime
 namespace cci {
 class SimpleMultiStack {
-  public:
-  explicit SimpleMultiStack(int size = 100, size_t num_stacks_ = 3) :
-                       stack_size_(size), num_substacks__(num_stacks_) {
+public:
+  explicit SimpleMultiStack(int size = 100, size_t num_stacks_ = 3)
+      : stack_size_(size), num_substacks__(num_stacks_) {
     buffer_ = std::make_unique<int[]>(size * num_substacks__);
     stack_top_ = std::make_unique<int[]>(num_substacks__);
 
     for (size_t ii = 0; ii < num_substacks__; ii++) {
-      stack_top_[ii] = -1; 
+      stack_top_[ii] = -1;
     }
   }
 
@@ -62,11 +62,9 @@ class SimpleMultiStack {
     return buffer_[index];
   }
 
-  bool isEmpty(int stack_num) {
-    return stack_top_[stack_num] == -1;
-  }
+  bool isEmpty(int stack_num) { return stack_top_[stack_num] == -1; }
 
-  private:
+private:
   int stack_size_;
   size_t num_substacks__;
   std::unique_ptr<int[]> buffer_;
@@ -81,44 +79,47 @@ class SimpleMultiStack {
 // StackData is a simple class that holds a set of data about each sub-stack. It
 // does not hold the actual items in the stack.
 struct StackData {
-    explicit StackData(int start, int capacity) : start_(start), capacity_(capacity) {
-      top_ = start_ - 1;
+  explicit StackData(int start, int capacity)
+      : start_(start), capacity_(capacity) {
+    top_ = start_ - 1;
+  }
+
+  bool isWithinStack(size_t index, size_t total_size) {
+    // Note: if stack wraps, the head (right side) wraps around to the lef.
+    if (start_ <= index && index < start_ + capacity_) {
+      // Non-wrapping, or "head" (right side) of wrapping case
+      return true;
     }
 
-    bool isWithinStack(size_t index, size_t total_size) {
-      // Note: if stack wraps, the head (right side) wraps around to the lef.
-      if (start_ <= index && index < start_ + capacity_) {
-        // Non-wrapping, or "head" (right side) of wrapping case
-        return true;
-      }
-
-      if ((start_ + capacity_ > total_size) && 
-                 (index < (start_ + capacity_) % total_size)) {
-        // tail (left side) of wrapping case
-        return true;
-      }
-
-      return false;
+    if ((start_ + capacity_ > total_size) &&
+        (index < (start_ + capacity_) % total_size)) {
+      // tail (left side) of wrapping case
+      return true;
     }
 
-    // The location of the beginning of the stack
-    unsigned int start_;
-    // The location of the top of the stack (-1 if empty)
-    int top_;
-    // The number of elemenents in the stack
-    unsigned size_ = 0;
-    unsigned capacity_;
+    return false;
+  }
+
+  // The location of the beginning of the stack
+  unsigned int start_;
+  // The location of the top of the stack (-1 if empty)
+  int top_;
+  // The number of elemenents in the stack
+  unsigned size_ = 0;
+  unsigned capacity_;
 };
 
-// 
+//
 class MultiStack {
-  public:
-  explicit MultiStack(size_t stack_size = 0, size_t num_stacks_ = 0) : init_substack_size_(stack_size), num_of_substacks_(num_stacks_) {
+public:
+  explicit MultiStack(size_t stack_size = 0, size_t num_stacks_ = 0)
+      : init_substack_size_(stack_size), num_of_substacks_(num_stacks_) {
     total_size_ = init_substack_size_ * num_of_substacks_;
 
     stacks_.reserve(num_of_substacks_);
     for (size_t ii = 0; ii < num_of_substacks_; ii++) {
-      stacks_.emplace_back(StackData(ii * init_substack_size_, init_substack_size_));
+      stacks_.emplace_back(
+          StackData(ii * init_substack_size_, init_substack_size_));
     }
 
     buffer_.resize(total_size_);
@@ -127,7 +128,7 @@ class MultiStack {
   size_t numOfElements() {
     size_t res = 0;
     for (auto stack : stacks_) {
-      res += stack.size_; 
+      res += stack.size_;
     }
     return res;
   }
@@ -136,7 +137,7 @@ class MultiStack {
     if (index + 1 == total_size_) {
       return 0;
     }
-    
+
     return index + 1;
   }
 
@@ -144,7 +145,7 @@ class MultiStack {
     if (index == 0) {
       return total_size_ - 1;
     }
-    
+
     return index - 1;
   }
 
@@ -159,15 +160,14 @@ class MultiStack {
 
     // Shift elements in reverse order
     for (int i = (stack.start_ + stack.capacity_ - 1) % total_size_;
-         stack.isWithinStack(i, total_size_);
-         i = previousElement(i)) {
-         buffer_[i] = buffer_[previousElement(i)];
+         stack.isWithinStack(i, total_size_); i = previousElement(i)) {
+      buffer_[i] = buffer_[previousElement(i)];
     }
 
     buffer_[stack.start_] = 0;
     stack.start_ = nextElement(stack.start_); // move stack start
-    stack.top_ = nextElement(stack.top_); //move pointer
-    stack.capacity_--; // return capacity to original
+    stack.top_ = nextElement(stack.top_);     // move pointer
+    stack.capacity_--;                        // return capacity to original
   }
 
   void expand(int stackNum) {
@@ -179,10 +179,9 @@ class MultiStack {
     StackData &stack = stacks_[stackNum];
     // Check that we have space
     if (stack.size_ >= stack.capacity_) {
-      if (numOfElements() >= total_size_) {// Totally full
+      if (numOfElements() >= total_size_) { // Totally full
         throw std::out_of_range("Reached the capacity of the stack");
-      }
-      else {
+      } else {
         // Just need to shift things around
         expand(stackNum);
       }
@@ -235,6 +234,4 @@ private:
 // Solution to Q1
 //------------------------------------------------------------------------
 
-
 #endif
-

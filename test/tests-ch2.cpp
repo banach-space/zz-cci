@@ -11,8 +11,8 @@
 //    Most of the tests adhere to this workflow:
 //      1. Construct the test_list using the predefined elements
 //      2. Apply an operation to the test_list
-//      3. Check the state of the test_list after the operation and verify that it
-//      matches the expected state.
+//      3. Check the state of the test_list after the operation and verify that
+//      it matches the expected state.
 //    For convenience, the elements defining test_lists as well as well the
 //    elements defining the expected states after the operator are stored in
 //    std::vector<T>. Each distinct test list (i.e. test vector) is referred to
@@ -33,20 +33,18 @@
 //------------------------------------------------------------------------
 // Tests for Solution to Q1
 //------------------------------------------------------------------------
-template <typename T>
-class CciChapter2_Q1 : public ::testing::Test {
-};
+template <typename T> class CciChapter2_Q1 : public ::testing::Test {};
 
 using ListValTypes_Q1 = ::testing::Types<cci::List<int>, std::list<int>>;
 TYPED_TEST_CASE(CciChapter2_Q1, ListValTypes_Q1);
 
 TYPED_TEST(CciChapter2_Q1, removeDuplicates) {
   std::vector<std::tuple<std::vector<int>, std::vector<int>>> test_cases = {
-    {{}, {}},
-    {{1, 2, 3, 4}, {1, 2, 3, 4}},
-    {{1, 1, 2, 2, 3, 3, 4, 4}, {1, 2, 3, 4}},
-    {{1, 2, 3, 4, 1, 2, 3, 4}, {1, 2, 3, 4}},
-    {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {1}},
+      {{}, {}},
+      {{1, 2, 3, 4}, {1, 2, 3, 4}},
+      {{1, 1, 2, 2, 3, 3, 4, 4}, {1, 2, 3, 4}},
+      {{1, 2, 3, 4, 1, 2, 3, 4}, {1, 2, 3, 4}},
+      {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {1}},
   };
 
   for (auto &test_case : test_cases) {
@@ -84,7 +82,7 @@ TEST(CciChapter2_Q2, findKthElementBasic) {
   }
 
   for (auto ii = 0u; ii < k_q2_num_samples; ii++) {
-    typename cci::List<int>::Node* result = findKthElementBasic(test_list, ii);
+    typename cci::List<int>::Node *result = findKthElementBasic(test_list, ii);
 
     auto expected_val = test_case[k_q2_num_samples - 1 - ii];
     EXPECT_NE(nullptr, result);
@@ -92,9 +90,7 @@ TEST(CciChapter2_Q2, findKthElementBasic) {
   }
 }
 
-template <typename T>
-class CciChapter2_Q2 : public ::testing::Test {
-};
+template <typename T> class CciChapter2_Q2 : public ::testing::Test {};
 
 using ListValTypes_Q2 = ::testing::Types<cci::List<int>, std::list<int>>;
 TYPED_TEST_CASE(CciChapter2_Q2, ListValTypes_Q2);
@@ -115,7 +111,6 @@ TYPED_TEST(CciChapter2_Q2, findKthElement3) {
     auto expected_val = test_case[k_q2_num_samples - 1 - k];
     EXPECT_EQ(*result, expected_val);
   }
-
 }
 
 //------------------------------------------------------------------------
@@ -158,9 +153,7 @@ TEST(CciChapter2_Q3, deleteNodePtr) {
   }
 }
 
-template <typename T>
-class CciChapter2_Q3 : public ::testing::Test {
-};
+template <typename T> class CciChapter2_Q3 : public ::testing::Test {};
 
 using ListValTypes_Q3 = ::testing::Types<cci::List<int>, std::list<int>>;
 TYPED_TEST_CASE(CciChapter2_Q3, ListValTypes_Q3);
@@ -187,8 +180,7 @@ TYPED_TEST(CciChapter2_Q3, deleteNodeIterator) {
     if (*temp != *it) {
       do {
         temp++;
-      }
-      while (test_list.end() != temp && *temp != *it);
+      } while (test_list.end() != temp && *temp != *it);
     }
     test_list.erase(temp);
     std::vector<int> out_vect = cci::getVector<TypeParam, int>(test_list);
@@ -207,22 +199,21 @@ TYPED_TEST(CciChapter2_Q3, deleteNodeIterator) {
 //------------------------------------------------------------------------
 // Tests for Solution to Q4
 //------------------------------------------------------------------------
-template <typename T>
-class CciChapter2_Q4 : public ::testing::Test {
-};
+template <typename T> class CciChapter2_Q4 : public ::testing::Test {};
 
 using ListValTypes_Q4 = ::testing::Types<cci::List<int>, std::list<int>>;
 TYPED_TEST_CASE(CciChapter2_Q4, ListValTypes_Q4);
 
 TYPED_TEST(CciChapter2_Q4, partition) {
 
-  std::vector<std::tuple<std::vector<int>, std::vector<int>, int>> test_cases = {
-    {{}, {}, 5},
-    {{0, 9, 0, 9, 0, 9, 0, 9, 0, 9}, {0, 0, 0, 0, 0, 9, 9, 9, 9, 9}, 5},
-    {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, 5},
-    {{13, 13, 13, 13, 13, 7, 7}, {13, 13, 13, 13, 13, 7, 7}, 5},
-    {{1, 2, 3, 4, 5, 6, 7, 8, 9}, {1, 2, 3, 4, 5, 6, 7, 8, 9}, 5},
-  };
+  std::vector<std::tuple<std::vector<int>, std::vector<int>, int>> test_cases =
+      {
+          {{}, {}, 5},
+          {{0, 9, 0, 9, 0, 9, 0, 9, 0, 9}, {0, 0, 0, 0, 0, 9, 9, 9, 9, 9}, 5},
+          {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, 5},
+          {{13, 13, 13, 13, 13, 7, 7}, {13, 13, 13, 13, 13, 7, 7}, 5},
+          {{1, 2, 3, 4, 5, 6, 7, 8, 9}, {1, 2, 3, 4, 5, 6, 7, 8, 9}, 5},
+      };
 
   for (auto test_case : test_cases) {
     // Construct a list using the current test_case
@@ -242,21 +233,19 @@ TYPED_TEST(CciChapter2_Q4, partition) {
 //------------------------------------------------------------------------
 // Tests for Solution to Q5
 //------------------------------------------------------------------------
-template <typename T>
-class CciChapter2_Q5 : public ::testing::Test {
-};
+template <typename T> class CciChapter2_Q5 : public ::testing::Test {};
 
 using ListValTypes_Q5 = ::testing::Types<cci::List<int>, std::list<int>>;
 TYPED_TEST_CASE(CciChapter2_Q5, ListValTypes_Q5);
 
 TYPED_TEST(CciChapter2_Q5, sumNumbersAsAListReverse) {
   std::vector<std::tuple<std::vector<int>, std::vector<int>, std::vector<int>>>
-    test_cases = {
-    {{}, {}, {}},
-    {{1, 2, 3}, {1, 2, 3}, {2, 4, 6}},
-    {{1, 2, 3}, {9, 8, 7}, {0, 1, 1, 1}},
-    {{1, 2, 3, 1, 1}, {9, 8, 7}, {0, 1, 1, 2, 1}},
-  };
+      test_cases = {
+          {{}, {}, {}},
+          {{1, 2, 3}, {1, 2, 3}, {2, 4, 6}},
+          {{1, 2, 3}, {9, 8, 7}, {0, 1, 1, 1}},
+          {{1, 2, 3, 1, 1}, {9, 8, 7}, {0, 1, 1, 2, 1}},
+      };
 
   for (auto test_case : test_cases) {
     // Construct input_list1 using the current test_case
@@ -271,7 +260,8 @@ TYPED_TEST(CciChapter2_Q5, sumNumbersAsAListReverse) {
       test_list2.push_back(value);
     }
 
-    auto out_list = sumNumbersAsAListReverse<TypeParam, int>(test_list1, test_list2);
+    auto out_list =
+        sumNumbersAsAListReverse<TypeParam, int>(test_list1, test_list2);
 
     std::vector<int> out_vect = cci::getVector<TypeParam, int>(out_list);
 
@@ -281,12 +271,12 @@ TYPED_TEST(CciChapter2_Q5, sumNumbersAsAListReverse) {
 
 TYPED_TEST(CciChapter2_Q5, sumNumbersAsAList) {
   std::vector<std::tuple<std::vector<int>, std::vector<int>, std::vector<int>>>
-    test_cases = {
-    {{}, {}, {}},
-    {{1, 2, 3}, {1, 2, 3}, {2, 4, 6}},
-    {{1, 2, 3}, {9, 8, 7}, {1, 1, 1, 0}},
-    {{1, 2, 3, 1, 1}, {9, 8, 7}, {1, 3, 2, 9, 8}},
-  };
+      test_cases = {
+          {{}, {}, {}},
+          {{1, 2, 3}, {1, 2, 3}, {2, 4, 6}},
+          {{1, 2, 3}, {9, 8, 7}, {1, 1, 1, 0}},
+          {{1, 2, 3, 1, 1}, {9, 8, 7}, {1, 3, 2, 9, 8}},
+      };
 
   for (auto test_case : test_cases) {
     // Construct input_list1 using the current test_case
@@ -312,16 +302,13 @@ TYPED_TEST(CciChapter2_Q5, sumNumbersAsAList) {
 //------------------------------------------------------------------------
 // Tests for Solution to Q6
 //------------------------------------------------------------------------
-template <typename T>
-class CciChapter2_Q6 : public ::testing::Test {
-};
+template <typename T> class CciChapter2_Q6 : public ::testing::Test {};
 
 using ListValTypes_Q6 = ::testing::Types<cci::List<int>, std::list<int>>;
 TYPED_TEST_CASE(CciChapter2_Q6, ListValTypes_Q6);
 
 TYPED_TEST(CciChapter2_Q6, polindrone) {
-  std::vector<std::tuple<std::vector<int>, bool>>
-    test_cases = {
+  std::vector<std::tuple<std::vector<int>, bool>> test_cases = {
       std::make_tuple<std::vector<int>, bool>({}, true),
       std::make_tuple<std::vector<int>, bool>({1, 2, 3}, false),
       std::make_tuple<std::vector<int>, bool>({1, 2, 1}, true),

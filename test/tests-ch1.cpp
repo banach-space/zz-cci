@@ -206,11 +206,11 @@ TEST(CciChapter1_Q4, replace_space_with_code) {
 
 TEST(CciChapter1_Q5, string_compress) {
   std::vector<std::tuple<std::string, std::string>> test_strings = {
-    {{"aabcccccaaa"}, {"a2b1c5a3"}},  
-    {{"abcd"}, {"abcd"}},  
-    {{"abcdaaaaaaaaa"}, {"a1b1c1d1a9"}},  
-    {{"abcdaaaaaaaaa"}, {"a1b1c1d1a9"}},  
-    {{"abcdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, {"a1b1c1d1a30"}},  
+      {{"aabcccccaaa"}, {"a2b1c5a3"}},
+      {{"abcd"}, {"abcd"}},
+      {{"abcdaaaaaaaaa"}, {"a1b1c1d1a9"}},
+      {{"abcdaaaaaaaaa"}, {"a1b1c1d1a9"}},
+      {{"abcdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, {"a1b1c1d1a30"}},
   };
 
   for (auto test_case : test_strings) {
@@ -222,11 +222,18 @@ TEST(CciChapter1_Q5, string_compress) {
 
 TEST(CciChapter1_Q6, reverse) {
   std::vector<std::tuple<image, image>> test_images = {
-    {{}, {}},
-    {{{'a', 'b'}, {'c', 'd'}}, {{'c', 'a'}, {'d', 'b'}}},
-    {{{'a', 'b', 'c'}, {'d', 'e', 'f'}, {'g', 'h', 'i'}}, {{'g', 'd', 'a'}, {'h', 'e', 'b'}, {'i', 'f', 'c'}}},
-    {{{'a', 'b', 'c', 'd'}, {'e', 'f', 'g', 'h'}, {'i', 'j', 'k', 'l'}, {'m', 'n', 'o', 'p'}}, {{'m', 'i', 'e', 'a'}, {'n', 'j', 'f', 'b'}, {'o', 'k', 'g', 'c'}, {'p', 'l', 'h', 'd'}}}
-  };
+      {{}, {}},
+      {{{'a', 'b'}, {'c', 'd'}}, {{'c', 'a'}, {'d', 'b'}}},
+      {{{'a', 'b', 'c'}, {'d', 'e', 'f'}, {'g', 'h', 'i'}},
+       {{'g', 'd', 'a'}, {'h', 'e', 'b'}, {'i', 'f', 'c'}}},
+      {{{'a', 'b', 'c', 'd'},
+        {'e', 'f', 'g', 'h'},
+        {'i', 'j', 'k', 'l'},
+        {'m', 'n', 'o', 'p'}},
+       {{'m', 'i', 'e', 'a'},
+        {'n', 'j', 'f', 'b'},
+        {'o', 'k', 'g', 'c'},
+        {'p', 'l', 'h', 'd'}}}};
 
   for (auto test_image : test_images) {
     rotate(std::get<0>(test_image));
@@ -237,10 +244,19 @@ TEST(CciChapter1_Q6, reverse) {
 
 TEST(CciChapter1_Q7, setZero) {
   std::vector<std::tuple<matrix, matrix>> test_matrices = {
-    {{}, {}},
-    {{{1, 1}, {0, 1}}, {{0, 1}, {0, 0}}},
-    {{{1, 1, 1}, {0, 0, 1}, {1, 1, 1}}, {{0, 0, 1}, {0, 0, 0}, {0, 0, 1}}},
-    {{{1, 1, 1, 1, 1}, {1, 0, 1, 0, 1}, {1, 0, 1, 1, 1}, {0, 1, 1, 1, 1}, {0, 0, 1, 1, 1}}, {{0, 0, 1, 0, 1}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}}},
+      {{}, {}},
+      {{{1, 1}, {0, 1}}, {{0, 1}, {0, 0}}},
+      {{{1, 1, 1}, {0, 0, 1}, {1, 1, 1}}, {{0, 0, 1}, {0, 0, 0}, {0, 0, 1}}},
+      {{{1, 1, 1, 1, 1},
+        {1, 0, 1, 0, 1},
+        {1, 0, 1, 1, 1},
+        {0, 1, 1, 1, 1},
+        {0, 0, 1, 1, 1}},
+       {{0, 0, 1, 0, 1},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0}}},
   };
 
   for (auto test_matrix : test_matrices) {
@@ -252,13 +268,14 @@ TEST(CciChapter1_Q7, setZero) {
 
 TEST(CciChapter1_Q8, isRotation) {
   std::vector<std::tuple<std::string, std::string, bool>> test_strings = {
-    {{}, {}, false},
-    {{"Andrzej"}, {"Andrzej"}, true},
-    {{"Andrzej"}, {"ejAndrz"}, true},
-    {{"Andrzej"}, {"Andrzje"}, false},
+      {{}, {}, false},
+      {{"Andrzej"}, {"Andrzej"}, true},
+      {{"Andrzej"}, {"ejAndrz"}, true},
+      {{"Andrzej"}, {"Andrzje"}, false},
   };
 
   for (auto &test_case : test_strings) {
-    ASSERT_EQ(isRotation(std::get<0>(test_case), std::get<1>(test_case)), std::get<2>(test_case));
+    ASSERT_EQ(isRotation(std::get<0>(test_case), std::get<1>(test_case)),
+              std::get<2>(test_case));
   }
 }
