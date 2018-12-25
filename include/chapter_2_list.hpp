@@ -212,6 +212,7 @@ private:
 template <typename T> List<T>::~List() {
   // The List is already empty - nothing to do
   if (head_sentinel_->next_ == head_sentinel_) {
+    delete head_sentinel_;
     return;
   }
 
@@ -220,13 +221,14 @@ template <typename T> List<T>::~List() {
   Node *temp = head_sentinel_->next_->next_;
   Node *previous = head_sentinel_->next_;
 
-  while (temp == head_sentinel_) {
+  while (temp != head_sentinel_) {
     delete previous;
     previous = temp;
     temp = temp->next_;
   }
 
   // The above technique doesn't capture/delete the final node. Do it now.
+  delete head_sentinel_;
   delete previous;
 }
 
@@ -273,7 +275,6 @@ template <typename T> void List<T>::push_front(const T &new_val) {
 template <typename T>
 typename List<T>::iterator
 List<T>::erase(typename List<T>::iterator node_to_delete) {
-  // Check if this is the last node in the list. If that's the case do nothing.
   typename List<T>::iterator next = node_to_delete;
   next++;
   if (next == end()) {

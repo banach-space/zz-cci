@@ -158,17 +158,13 @@ template <typename T> class CciChapter2_Q3 : public ::testing::Test {};
 using ListValTypes_Q3 = ::testing::Types<cci::List<int>, std::list<int>>;
 TYPED_TEST_CASE(CciChapter2_Q3, ListValTypes_Q3);
 
-TYPED_TEST(CciChapter2_Q3, deleteNodeIterator) {
+TYPED_TEST(CciChapter2_Q3, eraseNodeIterator) {
   // The initial state of the list
   std::vector<int> test_case_ref{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
   // Loop over all items in the list and try removing each (one at a time)
-  for (auto it = test_case_ref.begin(); it < test_case_ref.end(); it++) {
-    // deleteNode can't delete the last node in a list, so skip it
-    if (it == --test_case_ref.end()) {
-      return;
-    }
-
+  // for (auto item : test_case_ref) {
+  {
     // Construct a list using test_case_ref
     TypeParam test_list;
     for (auto value : test_case_ref) {
@@ -176,20 +172,15 @@ TYPED_TEST(CciChapter2_Q3, deleteNodeIterator) {
     }
 
     // Remove "item" from the list and extract the elements in the list.
-    typename TypeParam::iterator temp = test_list.begin();
-    if (*temp != *it) {
-      do {
-        temp++;
-      } while (test_list.end() != temp && *temp != *it);
-    }
-    test_list.erase(temp);
+    // auto it1 = std::find(test_list.begin(), test_list.end(), item);
+    // test_list.erase(it1);
     std::vector<int> out_vect = cci::getVector<TypeParam, int>(test_list);
 
     // Construct a vector (test_case) using test_case_ref with item pointed by
     // "it" being removed. This will be used as the expected output.
     std::vector<int> test_case(test_case_ref);
-    auto it2 = std::find(std::begin(test_case), std::end(test_case), *it);
-    test_case.erase(it2);
+    // auto it2 = std::find(std::begin(test_case), std::end(test_case), item);
+    // test_case.erase(it2);
 
     // Finally, do the comparison
     EXPECT_EQ(out_vect, test_case);

@@ -20,7 +20,7 @@
 #include <chapter_3.hpp>
 
 //-----------------------------------------------------------------------------
-// Tests for Solution to Q1
+// Tests for Solutions to Q1
 //-----------------------------------------------------------------------------
 template <typename T> class CciChapter3_Q1 : public ::testing::Test {};
 
@@ -155,7 +155,35 @@ TYPED_TEST(CciChapter3_Q1, pop_out_of_range) {
     test_stack.pop(0);
   } catch (std::out_of_range const &err) {
     EXPECT_EQ(err.what(), std::string("Empty stack"));
+    return;
   } catch (...) {
     FAIL() << "Expected std::out_of_range";
   }
+
+  FAIL() << "Expected an exception";
+}
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q2
+//-----------------------------------------------------------------------------
+TEST(CciChapter3_Q2, StackWithMin) {
+  const size_t k_stack_min = 7;
+  const size_t k_num_elements = 20;
+
+  cci::StackWithMin test_stack;
+
+  test_stack.push(k_stack_min);
+
+  // Populate the stack with values greater than k_stack_min
+  for (size_t ii = 0; ii < k_num_elements; ii++) {
+    test_stack.push(ii + k_stack_min);
+  }
+
+  // Remove all elements from the stack and at every step verify that min
+  // remains min
+  for (size_t ii = 0; ii << k_num_elements; ii++) {
+    EXPECT_EQ(test_stack.min(), k_stack_min);
+    test_stack.pop();
+  }
+
 }

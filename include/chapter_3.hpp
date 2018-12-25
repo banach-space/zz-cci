@@ -18,6 +18,8 @@
 
 #include <memory>
 #include <vector>
+#include <stack>
+#include <limits.h>
 
 //------------------------------------------------------------------------
 // Solutions to Q1
@@ -25,7 +27,8 @@
 // There are 2 solutions here:
 //    * SimpleMultiStack for which each substack occupies a fixed space
 //    * Stack for which each substack initilally occpies pre-defined space, but
-//    this is flexible and adjusted as required at runtime
+//      this is flexible and adjusted as required at runtime
+//------------------------------------------------------------------------
 namespace cci {
 class SimpleMultiStack {
 public:
@@ -51,8 +54,13 @@ public:
   }
 
   int pop(size_t stack_num) {
-    int value = buffer_[absTopOfSimpleMultiStack(stack_num)];
-    buffer_[absTopOfSimpleMultiStack(stack_num)] = {};
+    int index = absTopOfSimpleMultiStack(stack_num);
+    if (-1 == index) {
+      throw std::out_of_range("Empty stack");
+    }
+
+    int value = buffer_[index];
+    buffer_[index] = {};
     stack_top_[stack_num]--;
     return value;
   }
@@ -228,10 +236,42 @@ private:
   std::vector<StackData> stacks_;
   std::vector<int> buffer_;
 };
-} // namespace cci
 
 //------------------------------------------------------------------------
-// Solution to Q1
+// Solutions to Q2
 //------------------------------------------------------------------------
+class StackWithMin {
+public:
+  void push(int value) {
+    if (value <= min()) {
+      stack_of_mins_.push(value);
+    }
+    main_stack_.push(value); 
+  }
+
+  int pop() {
+    int value = main_stack_.top();
+    main_stack_.pop();
+    if (value == min()) {
+      stack_of_mins_.pop();
+    }
+
+    return value;
+  }
+
+  int min() {
+    if (!stack_of_mins_.empty()) {
+      return (stack_of_mins_.top());
+    }
+
+    return INT_MIN;
+  }
+
+private:
+  std::stack<int> main_stack_;
+  std::stack<int> stack_of_mins_;
+};
+
+} // namespace cci
 
 #endif
