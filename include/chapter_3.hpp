@@ -134,7 +134,7 @@ public:
   }
 
   size_t nextElement(int index) {
-    if (index + 1 == total_size_) {
+    if (static_cast<size_t>(index + 1) == total_size_) {
       return 0;
     }
 
