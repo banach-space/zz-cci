@@ -185,5 +185,55 @@ TEST(CciChapter3_Q2, StackWithMin) {
     EXPECT_EQ(test_stack.min(), k_stack_min);
     test_stack.pop();
   }
+}
 
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q3
+//-----------------------------------------------------------------------------
+template <typename T> class CciChapter3_Q3 : public ::testing::Test {};
+
+using StackTypes_Q3 = ::testing::Types<cci::StackOfPlatesBasic, cci::StackOfPlatesComplex>;
+TYPED_TEST_CASE(CciChapter3_Q3, StackTypes_Q3);
+
+TYPED_TEST(CciChapter3_Q3, StackOfPlates) {
+  size_t k_num_of_values = 10;
+  size_t k_max_substack_size = 2;
+
+  TypeParam test_stack(k_max_substack_size);
+
+  for (size_t ii = 0; ii < k_num_of_values; ii++) {
+    test_stack.push(static_cast<int>(ii));
+  }
+
+  for (size_t ii = 0; ii < k_num_of_values; ii++) {
+    int value = test_stack.pop();
+    EXPECT_EQ(static_cast<int>(k_num_of_values - 1 - ii), value);
+  }
+}
+
+TYPED_TEST(CciChapter3_Q3, StackOfPlatesComplex) {
+  size_t k_num_of_values = 10;
+  size_t k_max_substack_size = 2;
+
+  cci::StackOfPlatesComplex test_stack(k_max_substack_size);
+
+  for (size_t ii = 0; ii < k_num_of_values; ii++) {
+    test_stack.push(static_cast<int>(ii));
+  }
+
+  // These tests are a bit verbose, sorry.
+  auto value = test_stack.popAt(1);
+  EXPECT_EQ(3, value);
+
+  value = test_stack.popAt(1);
+  EXPECT_EQ(4, value);
+
+  value = test_stack.popAt(2);
+  EXPECT_EQ(7, value);
+
+  value = test_stack.popAt(2);
+  EXPECT_EQ(8, value);
+
+  value = test_stack.popAt(0);
+  EXPECT_EQ(1, value);
 }

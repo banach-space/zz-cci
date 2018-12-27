@@ -272,6 +272,281 @@ private:
   std::stack<int> stack_of_mins_;
 };
 
+//------------------------------------------------------------------------
+// Solutions to Q3
+//------------------------------------------------------------------------
+// What follows is a basic solution that doesn't offer popAt.
+// StackOfPlatesBasic encapsulates a stack that internally is represented as
+// multiple std::stack(s). The name of the class reflects the fact that the
+// original problem was introduced with the aid of "stack of plates" ...
+class StackOfPlatesBasic {
+  public:
+  explicit StackOfPlatesBasic(size_t substack_size) : substack_max_size_(substack_size){
+    // Init by having one std::stack
+    stacks_.emplace_back();
+  }
+
+  void push(int value) {
+    auto &last_stack = stacks_.back();
+    // If the last stack still has space for more elements, push the value there.
+    if (last_stack.size() < substack_max_size_) {
+      last_stack.push(value);
+      return;
+    } 
+
+    // The last stack is already full, so create a new substack and push the
+    // value there.
+    stacks_.emplace_back();
+    stacks_.back().push(value);
+  }
+
+  int pop() {
+    // Pop the value from the last sub-stack
+    auto &last_stack = stacks_.back();
+    int value = last_stack.top();
+    last_stack.pop();
+
+    // If this operation makes the last sub-stack empty then delete it.
+    if (last_stack.empty()) {
+      stacks_.pop_back();
+    }
+
+    return value;
+  }
+
+private:
+  // Contains all the sub-stacks
+  std::vector<std::stack<int>> stacks_;
+  // Size limit for sub-stacks
+  size_t substack_max_size_;
+};
+
+// Implements a stack that will be used in StackOfPlatesComplex. Tracks it's
+// top and bottom to allow a "rollover" system.
+class StackComplex {
+  struct Node;
+  public:
+  explicit StackComplex(size_t capacity) : size_(0), capacity_(capacity), top_(nullptr), bottom_(nullptr) {}
+
+  StackComplex(const StackComplex& other) {
+    // This is inherited from other
+    capacity_ = other.capacity_;
+
+    // These are reset to init state because *this is still empty
+    size_ = 0;
+    bottom_ = nullptr;
+    top_ = nullptr;
+
+    // Fill in *this with values from other
+    auto *it = other.bottom_;
+    while (nullptr != it) {
+      push(it->value);
+      it = it->above_;
+    }
+  }
+
+  StackComplex& operator=(StackComplex other) {
+    // This is inherited from other
+    capacity_ = other.capacity_;
+
+    // These are reset to init state because *this is still empty
+    size_ = 0;
+    bottom_ = nullptr;
+    top_ = nullptr;
+
+    auto *it = other.bottom_;
+    while (nullptr != it) {
+      push(it->value);
+      it = it->above_;
+    }
+
+    return *this;
+  }
+
+  StackComplex(StackComplex&& other) noexcept {
+    // Take/move all data from other
+    size_ = other.size_;
+    capacity_ = other.capacity_;
+    bottom_ = other.bottom_;
+    top_ = other.top_;
+
+    // Set other to empty state
+    other.top_ = nullptr;
+    other.bottom_ = nullptr;
+    other.size_ = 0;
+  }
+
+  ~StackComplex() {
+    while (nullptr != top_) {
+      Node *t = top_;
+      top_ = top_->below_;
+      delete t;
+    }
+  }
+
+  int pop() {
+    if (nullptr == top_) {
+      throw std::out_of_range("Empty stack");
+    }
+
+    // Get the return value
+    Node *t = top_;
+    int ret_val = t->value;
+
+    // Update top_
+    top_ = top_->below_;
+    delete t;
+    size_--;
+
+    return ret_val;
+  }
+
+  // Returns true if successful, false otherwise (which means that this stack is
+  // already full)
+  bool push(int val) {
+    if (size_ >= capacity_) {
+      return false;
+    }
+
+    Node *new_node = new Node(val);
+    if (0 == size_) {
+      bottom_ = new_node;
+    }
+
+    join(new_node, top_);
+    top_ = new_node;
+
+    size_++;
+    return true;
+  }
+
+  // Takes two adjacent nodes and sets their above_ and below_ pointers
+  // accordingly (to mark the relation)
+  void join(Node *above, Node *below) {
+    if (nullptr != below) { below->above_ = above;}
+    if (nullptr != above) { above->below_ = below;}
+  }
+
+  bool isEmpty() {
+    return (0 == size_);
+  }
+
+  // Remove the node from the bottom of the stack and update bottom_
+  // accordingly. Returns the value that was stored in that node.
+  int removeBottom() {
+    // Get the return value
+    int ret_val = bottom_->value;
+
+    // Update bottom_
+    Node *b = bottom_;
+    bottom_ = bottom_->above_;
+    if (nullptr != bottom_) { 
+      // There's nothing "below" the bottom
+      bottom_->below_ = nullptr;
+    }
+    else {
+      // "bottom_" is empty so this stack is empty and "top_" should also be
+      // marked as empty (i.e. before this update we had top_ == bottom_)
+      top_ = nullptr;
+    }
+
+    // Delete old bottom_
+    delete b;
+    size_--;
+    return ret_val;
+  }
+
+  size_t size() {return size_;}
+
+  private:
+  struct Node {
+    explicit Node(int val) : value(val), above_(nullptr), below_(nullptr) {}
+
+    int value;
+    Node *above_;
+    Node *below_;
+  };
+
+  size_t size_;
+  size_t capacity_;
+  // Top of this stack
+  Node *top_;
+  // Bottom of this stack
+  Node *bottom_;
+};
+
+// A complex solution to Q3, provides popAt. Internally the sub-stacks are
+// represented as instances of StackComplex.
+class StackOfPlatesComplex {
+  public:
+  explicit StackOfPlatesComplex(size_t substack_size) : substack_max_size_(substack_size){
+    // Init by creating one sub-stack
+    stacks_.emplace_back(substack_max_size_);
+  }
+
+  void push(int value) {
+    auto &last_stack = stacks_.back();
+
+    // If the last sub-stack has space then push there.
+    if (last_stack.size() < substack_max_size_) {
+      if (!last_stack.push(value)) {
+        throw std::out_of_range("Substack if full");
+      }
+      return;
+    } 
+
+    // The last sub-stack is already full. Create a new substack and push the
+    // value there.
+    stacks_.emplace_back(substack_max_size_);
+    if (!stacks_.back().push(value)) {
+      throw std::out_of_range("Substack if full");
+    }
+  }
+
+  int pop() {
+    // Get the value from the last sub-stack
+    auto &last_stack = stacks_.back();
+    int value = last_stack.pop();
+
+    // Check if this operation makes the last sub-stack empty. If so then
+    // delete it.
+    if (last_stack.isEmpty()) {
+      stacks_.pop_back();
+    }
+
+    return value;
+  }
+
+  // Pop a value from a substack at "index"
+  int popAt(size_t index) {
+    return leftShift(index, true /* Pop from top */);
+  }
+
+  // Grabs a value (either top of bottom) from sub-stack at "index" and returns
+  // it. If this makes the sub-stack at "index" not at its full capacity then
+  // need to grab a value from the following sub-stack and push it here.
+  int leftShift(size_t index, bool remove_top) {
+    StackComplex &current_stack = stacks_.at(index);
+    int removed_item {};
+    
+    if (remove_top) { removed_item = current_stack.pop();}
+    else { removed_item = current_stack.removeBottom();}
+
+    if (current_stack.isEmpty()) {
+      stacks_.erase(stacks_.begin() + index);
+    } else if (stacks_.size() > (index + 1)) {
+      int v = leftShift(index + 1, false);
+      current_stack.push(v);
+    }
+
+    return removed_item;
+  }
+
+  private:
+  std::vector<cci::StackComplex> stacks_;
+  size_t substack_max_size_;
+};
+
 } // namespace cci
 
 #endif
