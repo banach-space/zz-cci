@@ -192,7 +192,8 @@ TEST(CciChapter3_Q2, StackWithMin) {
 //-----------------------------------------------------------------------------
 template <typename T> class CciChapter3_Q3 : public ::testing::Test {};
 
-using StackTypes_Q3 = ::testing::Types<cci::StackOfPlatesBasic, cci::StackOfPlatesComplex>;
+using StackTypes_Q3 =
+    ::testing::Types<cci::StackOfPlatesBasic, cci::StackOfPlatesComplex>;
 TYPED_TEST_CASE(CciChapter3_Q3, StackTypes_Q3);
 
 TYPED_TEST(CciChapter3_Q3, StackOfPlates) {
@@ -236,4 +237,22 @@ TYPED_TEST(CciChapter3_Q3, StackOfPlatesComplex) {
 
   value = test_stack.popAt(0);
   EXPECT_EQ(1, value);
+}
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q4
+//-----------------------------------------------------------------------------
+TEST(CciChapter3_Q4, HanoiTower) {
+  cci::Tower towers[3];
+  size_t k_num_disks = 10;
+
+  for (size_t ii = k_num_disks; ii > 0; ii--) {
+    towers[0].add(ii);
+  }
+
+  towers[0].moveDisks(k_num_disks, &towers[2], &towers[1]);
+
+  for (size_t ii = 1; ii <= k_num_disks; ii++) {
+    EXPECT_EQ(ii, towers[2].pop());
+  }
 }

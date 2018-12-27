@@ -16,10 +16,11 @@
 #ifndef _CHAPTER_3_
 #define _CHAPTER_3_
 
-#include <memory>
-#include <vector>
-#include <stack>
+#include <iostream>
 #include <limits.h>
+#include <memory>
+#include <stack>
+#include <vector>
 
 //------------------------------------------------------------------------
 // Solutions to Q1
@@ -246,7 +247,7 @@ public:
     if (value <= min()) {
       stack_of_mins_.push(value);
     }
-    main_stack_.push(value); 
+    main_stack_.push(value);
   }
 
   int pop() {
@@ -280,19 +281,21 @@ private:
 // multiple std::stack(s). The name of the class reflects the fact that the
 // original problem was introduced with the aid of "stack of plates" ...
 class StackOfPlatesBasic {
-  public:
-  explicit StackOfPlatesBasic(size_t substack_size) : substack_max_size_(substack_size){
+public:
+  explicit StackOfPlatesBasic(size_t substack_size)
+      : substack_max_size_(substack_size) {
     // Init by having one std::stack
     stacks_.emplace_back();
   }
 
   void push(int value) {
     auto &last_stack = stacks_.back();
-    // If the last stack still has space for more elements, push the value there.
+    // If the last stack still has space for more elements, push the value
+    // there.
     if (last_stack.size() < substack_max_size_) {
       last_stack.push(value);
       return;
-    } 
+    }
 
     // The last stack is already full, so create a new substack and push the
     // value there.
@@ -325,10 +328,12 @@ private:
 // top and bottom to allow a "rollover" system.
 class StackComplex {
   struct Node;
-  public:
-  explicit StackComplex(size_t capacity) : size_(0), capacity_(capacity), top_(nullptr), bottom_(nullptr) {}
 
-  StackComplex(const StackComplex& other) {
+public:
+  explicit StackComplex(size_t capacity)
+      : size_(0), capacity_(capacity), top_(nullptr), bottom_(nullptr) {}
+
+  StackComplex(const StackComplex &other) {
     // This is inherited from other
     capacity_ = other.capacity_;
 
@@ -345,7 +350,7 @@ class StackComplex {
     }
   }
 
-  StackComplex& operator=(StackComplex other) {
+  StackComplex &operator=(StackComplex other) {
     // This is inherited from other
     capacity_ = other.capacity_;
 
@@ -363,7 +368,7 @@ class StackComplex {
     return *this;
   }
 
-  StackComplex(StackComplex&& other) noexcept {
+  StackComplex(StackComplex &&other) noexcept {
     // Take/move all data from other
     size_ = other.size_;
     capacity_ = other.capacity_;
@@ -423,13 +428,15 @@ class StackComplex {
   // Takes two adjacent nodes and sets their above_ and below_ pointers
   // accordingly (to mark the relation)
   void join(Node *above, Node *below) {
-    if (nullptr != below) { below->above_ = above;}
-    if (nullptr != above) { above->below_ = below;}
+    if (nullptr != below) {
+      below->above_ = above;
+    }
+    if (nullptr != above) {
+      above->below_ = below;
+    }
   }
 
-  bool isEmpty() {
-    return (0 == size_);
-  }
+  bool isEmpty() { return (0 == size_); }
 
   // Remove the node from the bottom of the stack and update bottom_
   // accordingly. Returns the value that was stored in that node.
@@ -440,11 +447,10 @@ class StackComplex {
     // Update bottom_
     Node *b = bottom_;
     bottom_ = bottom_->above_;
-    if (nullptr != bottom_) { 
+    if (nullptr != bottom_) {
       // There's nothing "below" the bottom
       bottom_->below_ = nullptr;
-    }
-    else {
+    } else {
       // "bottom_" is empty so this stack is empty and "top_" should also be
       // marked as empty (i.e. before this update we had top_ == bottom_)
       top_ = nullptr;
@@ -456,9 +462,9 @@ class StackComplex {
     return ret_val;
   }
 
-  size_t size() {return size_;}
+  size_t size() { return size_; }
 
-  private:
+private:
   struct Node {
     explicit Node(int val) : value(val), above_(nullptr), below_(nullptr) {}
 
@@ -478,8 +484,9 @@ class StackComplex {
 // A complex solution to Q3, provides popAt. Internally the sub-stacks are
 // represented as instances of StackComplex.
 class StackOfPlatesComplex {
-  public:
-  explicit StackOfPlatesComplex(size_t substack_size) : substack_max_size_(substack_size){
+public:
+  explicit StackOfPlatesComplex(size_t substack_size)
+      : substack_max_size_(substack_size) {
     // Init by creating one sub-stack
     stacks_.emplace_back(substack_max_size_);
   }
@@ -493,7 +500,7 @@ class StackOfPlatesComplex {
         throw std::out_of_range("Substack if full");
       }
       return;
-    } 
+    }
 
     // The last sub-stack is already full. Create a new substack and push the
     // value there.
@@ -518,19 +525,20 @@ class StackOfPlatesComplex {
   }
 
   // Pop a value from a substack at "index"
-  int popAt(size_t index) {
-    return leftShift(index, true /* Pop from top */);
-  }
+  int popAt(size_t index) { return leftShift(index, true /* Pop from top */); }
 
   // Grabs a value (either top of bottom) from sub-stack at "index" and returns
   // it. If this makes the sub-stack at "index" not at its full capacity then
   // need to grab a value from the following sub-stack and push it here.
   int leftShift(size_t index, bool remove_top) {
     StackComplex &current_stack = stacks_.at(index);
-    int removed_item {};
-    
-    if (remove_top) { removed_item = current_stack.pop();}
-    else { removed_item = current_stack.removeBottom();}
+    int removed_item{};
+
+    if (remove_top) {
+      removed_item = current_stack.pop();
+    } else {
+      removed_item = current_stack.removeBottom();
+    }
 
     if (current_stack.isEmpty()) {
       stacks_.erase(stacks_.begin() + index);
@@ -542,9 +550,47 @@ class StackOfPlatesComplex {
     return removed_item;
   }
 
-  private:
+private:
   std::vector<cci::StackComplex> stacks_;
   size_t substack_max_size_;
+};
+
+//------------------------------------------------------------------------
+// Solution to Q4
+//------------------------------------------------------------------------
+class Tower {
+public:
+  void add(unsigned d) {
+    if (!disks.empty() && disks.top() <= d) {
+      throw std::out_of_range(std::string("Error placing disk ") +
+                              std::to_string(d));
+    } else {
+      disks.push(d);
+    }
+  }
+
+  void moveTopTo(Tower *t) {
+    unsigned top = disks.top();
+    disks.pop();
+    t->add(top);
+  }
+
+  void moveDisks(size_t n, Tower *destination, Tower *buffer) {
+    if (n > 0) {
+      moveDisks(n - 1, buffer, destination);
+      moveTopTo(destination);
+      buffer->moveDisks(n - 1, destination, this);
+    }
+  }
+
+  unsigned pop() {
+    unsigned ret_val = disks.top();
+    disks.pop();
+    return ret_val;
+  }
+
+private:
+  std::stack<unsigned> disks;
 };
 
 } // namespace cci
