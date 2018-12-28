@@ -16,6 +16,7 @@
 
 #include <numeric>
 #include <vector>
+#include <algorithm>
 
 #include <chapter_3.hpp>
 
@@ -255,4 +256,76 @@ TEST(CciChapter3_Q4, HanoiTower) {
   for (size_t ii = 1; ii <= k_num_disks; ii++) {
     EXPECT_EQ(ii, towers[2].pop());
   }
+}
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q5
+//-----------------------------------------------------------------------------
+TEST(CciChapter3_Q5, queue_implemented_with_two_stacks) {
+  cci::MyQueue test_queue;
+  size_t k_num_elements = 10;
+
+  for (size_t ii = 0; ii < k_num_elements; ii++) {
+    test_queue.add(ii);
+  }
+
+  // Since this is a queue, checkc that MyQueue indeed implements a FIFO
+  for (size_t ii = 0; ii < k_num_elements; ii++) {
+    EXPECT_EQ(static_cast<int>(ii), test_queue.remove());
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q6
+//-----------------------------------------------------------------------------
+TEST(CciChapter3_Q6, sort_stack) {
+  std::vector<std::vector<int>> test_vectors = {
+    {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+    {1, 1, 1, 3, 34, 543, 44, 124, 13, 17, 10000}
+  };
+
+  for (auto &test_case : test_vectors) {
+    std::stack<int> test_stack;
+    for (auto item : test_case) {
+      test_stack.push(item);
+    }
+
+    // Sort so that the elements are in ascending order
+    std::stack<int> output_stack = cci::sort(&test_stack);
+    // Do the same with the test vector (making sure that the first elements is
+    // the largest, and the last is the smallest, hence the reverse iterators)
+    std::sort(test_case.rbegin(), test_case.rend());
+
+    // Since this is a queue, checkc that MyQueue indeed implements a FIFO
+    for (auto item : test_case) {
+      EXPECT_EQ(item, output_stack.top());
+      output_stack.pop();
+    }
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q7
+//-----------------------------------------------------------------------------
+TEST(CciChapter3_Q7, animal_queue) {
+  cci::AnimalQueue animal_shelter;
+
+  // Animals in the order in which they are admitted to the shelter
+  std::vector<std::string> animal_names_delivered = {
+    "dog", "dog", "cat", "cat", "dog", "cat", "dog"
+  };
+
+  // Animals in order which they are given away
+  std::vector<std::string> animal_names_given_away(animal_names_delivered.rbegin(), animal_names_delivered.rend());
+
+  for (auto animal_name : animal_names_delivered) {
+    cci::Animal a(animal_name);
+    animal_shelter.enquue(a);
+  }
+
+  for (auto animal_name : animal_names_given_away) {
+    cci::Animal a = animal_shelter.dequeuAny();
+    EXPECT_EQ(animal_name, a.getName());
+  }
+
 }

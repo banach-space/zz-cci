@@ -16,10 +16,11 @@
 #ifndef _CHAPTER_3_
 #define _CHAPTER_3_
 
+#include <climits>
 #include <iostream>
-#include <limits.h>
 #include <memory>
 #include <stack>
+#include <list>
 #include <vector>
 
 //------------------------------------------------------------------------
@@ -591,6 +592,140 @@ public:
 
 private:
   std::stack<unsigned> disks;
+};
+
+//------------------------------------------------------------------------
+// Solution to Q5
+//------------------------------------------------------------------------
+class MyQueue {
+  public:
+    size_t size() {
+      return stack_newest_.size() + stack_oldest_.size();
+    }
+
+    void add(int value) {
+      // Push onto stack_newest_, which always has the newest elements on top
+      stack_newest_.push(value);
+    }
+
+    int peek() {
+      shiftStacks_(); // Ensure stack_oldest_ has the current elements
+      return stack_oldest_.top(); // Retrieve the oldest item
+    }
+
+    int remove() {
+      shiftStacks_();
+      int ret_val = stack_oldest_.top();
+      stack_oldest_.pop();
+      return ret_val;
+    }
+
+  private:
+    // Move elements from stack_newest_ into stack_oldest_. This is usually
+    // done so that we can do operations on stack_oldest_
+    void shiftStacks_() {
+      if (stack_oldest_.empty()) {
+        while (!stack_newest_.empty()) {
+          stack_oldest_.push(stack_newest_.top());
+          stack_newest_.pop();
+        }
+      }
+    }
+  std::stack<int> stack_newest_, stack_oldest_;
+};
+
+//------------------------------------------------------------------------
+// Solution to Q6
+//------------------------------------------------------------------------
+std::stack<int> sort(std::stack<int> *stack_in);
+
+//------------------------------------------------------------------------
+// Solution to Q7
+//------------------------------------------------------------------------
+class Animal {
+  public:
+  Animal (std::string name) : name_(name) {}
+  Animal(cci::Animal const& other) {
+    order_ = other.order_;  
+    name_ = other.name_;
+  };
+
+  void setOrder(int ord) {order_ = ord;}
+
+  int getOrder() const { return order_;}
+
+  bool isOlderThanMe(const Animal &a) {
+    return (this->order_ < a.getOrder());
+  }
+
+  std::string getName() {return name_;}
+
+  private:
+  int order_;
+  std::string name_;
+};
+
+class AnimalQueue {
+  public:
+  void enquue(Animal a) {
+    // Order is used as a sort of timestamp, so that we can compare the
+    // insertation order of a dog to a cat */
+    a.setOrder(order_);
+    order_++;
+
+    if (a.getName() == "dog") {
+      dogs_.push_back(a);
+      return;
+    }
+
+    if (a.getName() == "cat") {
+      cats_.push_back(a);
+      return;
+    }
+
+    throw std::out_of_range("Unsupported Animal type");
+  }
+
+  Animal dequeuAny() {
+    // Look at tops of dog and cat queues, and pop the stack with the oldest
+    // value
+    if (dogs_.empty()) {
+      return dequeueCats();
+    }
+
+    if (cats_.empty()) {
+      return dequeueDogs();
+    }
+
+    Animal dog = dogs_.back();
+    Animal cat = cats_.back();
+
+    if (!dog.isOlderThanMe(cat)) {
+      dogs_.pop_back();
+      return dog;
+    } 
+
+    cats_.pop_back();
+    return cat;
+  }
+
+  Animal dequeueDogs() { 
+    Animal dog = dogs_.back();
+    dogs_.pop_back();
+    return dog;
+  }
+
+  Animal dequeueCats() { 
+    Animal cat = cats_.back();
+    cats_.pop_back();
+    return cat;
+  }
+
+  private:
+  std::list<Animal> dogs_;
+  std::list<Animal> cats_;
+
+  int order_ = 0; // acts as timestamp
 };
 
 } // namespace cci
