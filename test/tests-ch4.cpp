@@ -6,7 +6,7 @@
 //  banach-space@github
 //
 // DESCRIPTION:
-//    Unit tests for cci::Bst
+//    Unit tests for solutions to practice questions from Chapter 4 in [1]
 //
 //    [1] "Cracking the Coding Interview", Gayle Laakmann McDowell
 //
@@ -19,27 +19,26 @@
 #include <algorithm>
 
 #include <chapter_4_Bst.hpp>
+#include <chapter_4.hpp>
 
 //-----------------------------------------------------------------------------
-// Tests for cci::Bst
+// Tests for Solution to Q1
 //-----------------------------------------------------------------------------
-TEST(CciChapter4, Bst) {
-  std::vector<std::vector<int>> test_cases = {
-    {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
-    {10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
-    {13, 7, 1234, 777, 987, 84, 45, 18}
+TEST(CciChapter4_Q1, balanced) {
+  std::vector<std::tuple<std::vector<int>, bool>> test_cases = {
+    {std::vector<int>{}, true},
+    {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, false},
+    {{10, 9, 8, 7, 6, 5, 4, 3, 2, 1}, false},
+    {{5, 3, 8, 2, 4, 6, 9, 1, 7}, true},
   };
 
   for (auto &test_case : test_cases) {
     cci::Bst test_tree;
 
-    for (auto value : test_case) {
+    for (auto value : std::get<0>(test_case)) {
       test_tree.insert(value);
     }
 
-    std::sort(test_case.begin(), test_case.end());
-
-    std::vector<int> out_vect = test_tree.getVector();
-    EXPECT_EQ(out_vect, test_case);
+    EXPECT_EQ(test_tree.isBalanced(), std::get<1>(test_case));
   }
 }
