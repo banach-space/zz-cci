@@ -14,9 +14,9 @@
 //========================================================================
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <numeric>
 #include <vector>
-#include <algorithm>
 
 #include <chapter_3.hpp>
 
@@ -280,9 +280,8 @@ TEST(CciChapter3_Q5, queue_implemented_with_two_stacks) {
 //-----------------------------------------------------------------------------
 TEST(CciChapter3_Q6, sort_stack) {
   std::vector<std::vector<int>> test_vectors = {
-    {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
-    {1, 1, 1, 3, 34, 543, 44, 124, 13, 17, 10000}
-  };
+      {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+      {1, 1, 1, 3, 34, 543, 44, 124, 13, 17, 10000}};
 
   for (auto &test_case : test_vectors) {
     std::stack<int> test_stack;
@@ -311,12 +310,12 @@ TEST(CciChapter3_Q7, animal_queue) {
   cci::AnimalQueue animal_shelter;
 
   // Animals in the order in which they are admitted to the shelter
-  std::vector<std::string> animal_names_delivered = {
-    "dog", "dog", "cat", "cat", "dog", "cat", "dog"
-  };
+  std::vector<std::string> animal_names_delivered = {"dog", "dog", "cat", "cat",
+                                                     "dog", "cat", "dog"};
 
   // Animals in order which they are given away
-  std::vector<std::string> animal_names_given_away(animal_names_delivered.rbegin(), animal_names_delivered.rend());
+  std::vector<std::string> animal_names_given_away(
+      animal_names_delivered.rbegin(), animal_names_delivered.rend());
 
   for (auto animal_name : animal_names_delivered) {
     cci::Animal a(animal_name);
@@ -327,5 +326,4 @@ TEST(CciChapter3_Q7, animal_queue) {
     cci::Animal a = animal_shelter.dequeuAny();
     EXPECT_EQ(animal_name, a.getName());
   }
-
 }

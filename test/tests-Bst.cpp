@@ -14,9 +14,9 @@
 //========================================================================
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <numeric>
 #include <vector>
-#include <algorithm>
 
 #include <chapter_4_Bst.hpp>
 
@@ -25,10 +25,9 @@
 //-----------------------------------------------------------------------------
 TEST(CciChapter4, Bst) {
   std::vector<std::vector<int>> test_cases = {
-    {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
-    {10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
-    {13, 7, 1234, 777, 987, 84, 45, 18}
-  };
+      {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+      {10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+      {13, 7, 1234, 777, 987, 84, 45, 18}};
 
   for (auto &test_case : test_cases) {
     cci::Bst test_tree;

@@ -34,4 +34,4 @@ std::stack<int> sort(std::stack<int> *stack_in) {
 
   return sorted;
 }
-}
+} // namespace cci

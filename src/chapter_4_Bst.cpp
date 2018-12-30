@@ -10,9 +10,9 @@
 //
 // License: Apache License 2.0
 //========================================================================
+#include <algorithm>
 #include <chapter_4_Bst.hpp>
 #include <cmath>
-#include <algorithm>
 
 namespace cci {
 //------------------------------------------------------------------------
@@ -83,17 +83,17 @@ void Bst::insert(int key) {
   }
 }
 
-int Bst::isBalancedImpl(BstNode* subtree) {
+int Bst::isBalancedImpl(BstNode *subtree) {
   if (nullptr == subtree) {
     // Height is 0
     return 0;
   }
-  
+
   // Check if left sub-tree is balanced
   int left_height = isBalancedImpl(subtree->left_);
   if (-1 == left_height) {
     // Not balanced
-    return -1; 
+    return -1;
   }
 
   // Check if right sub-tree is balanced
@@ -117,4 +117,4 @@ bool Bst::isBalanced() {
   return (isBalancedImpl(this->root_) != -1 ? true : false);
 }
 
-}  // namespace cci
+} // namespace cci
