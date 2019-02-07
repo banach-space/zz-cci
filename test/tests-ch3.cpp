@@ -26,7 +26,7 @@
 template <typename T> class CciChapter3_Q1 : public ::testing::Test {};
 
 using StackTypes_Q1 = ::testing::Types<cci::SimpleMultiStack, cci::MultiStack>;
-TYPED_TEST_CASE(CciChapter3_Q1, StackTypes_Q1);
+TYPED_TEST_SUITE(CciChapter3_Q1, StackTypes_Q1);
 
 TYPED_TEST(CciChapter3_Q1, push_and_pop) {
   // These are arbitrary
@@ -195,7 +195,7 @@ template <typename T> class CciChapter3_Q3 : public ::testing::Test {};
 
 using StackTypes_Q3 =
     ::testing::Types<cci::StackOfPlatesBasic, cci::StackOfPlatesComplex>;
-TYPED_TEST_CASE(CciChapter3_Q3, StackTypes_Q3);
+TYPED_TEST_SUITE(CciChapter3_Q3, StackTypes_Q3);
 
 TYPED_TEST(CciChapter3_Q3, StackOfPlates) {
   size_t k_num_of_values = 10;

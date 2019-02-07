@@ -36,7 +36,7 @@
 template <typename T> class CciChapter2_Q1 : public ::testing::Test {};
 
 using ListValTypes_Q1 = ::testing::Types<cci::List<int>, std::list<int>>;
-TYPED_TEST_CASE(CciChapter2_Q1, ListValTypes_Q1);
+TYPED_TEST_SUITE(CciChapter2_Q1, ListValTypes_Q1);
 
 TYPED_TEST(CciChapter2_Q1, removeDuplicates) {
   std::vector<std::tuple<std::vector<int>, std::vector<int>>> test_cases = {
@@ -93,7 +93,7 @@ TEST(CciChapter2_Q2, findKthElementBasic) {
 template <typename T> class CciChapter2_Q2 : public ::testing::Test {};
 
 using ListValTypes_Q2 = ::testing::Types<cci::List<int>, std::list<int>>;
-TYPED_TEST_CASE(CciChapter2_Q2, ListValTypes_Q2);
+TYPED_TEST_SUITE(CciChapter2_Q2, ListValTypes_Q2);
 
 TYPED_TEST(CciChapter2_Q2, findKthElement3) {
   std::vector<int> test_case{};
@@ -156,7 +156,7 @@ TEST(CciChapter2_Q3, deleteNodePtr) {
 template <typename T> class CciChapter2_Q3 : public ::testing::Test {};
 
 using ListValTypes_Q3 = ::testing::Types<cci::List<int>, std::list<int>>;
-TYPED_TEST_CASE(CciChapter2_Q3, ListValTypes_Q3);
+TYPED_TEST_SUITE(CciChapter2_Q3, ListValTypes_Q3);
 
 TYPED_TEST(CciChapter2_Q3, eraseNodeIterator) {
   // The initial state of the list
@@ -193,7 +193,7 @@ TYPED_TEST(CciChapter2_Q3, eraseNodeIterator) {
 template <typename T> class CciChapter2_Q4 : public ::testing::Test {};
 
 using ListValTypes_Q4 = ::testing::Types<cci::List<int>, std::list<int>>;
-TYPED_TEST_CASE(CciChapter2_Q4, ListValTypes_Q4);
+TYPED_TEST_SUITE(CciChapter2_Q4, ListValTypes_Q4);
 
 TYPED_TEST(CciChapter2_Q4, partition) {
 
@@ -227,7 +227,7 @@ TYPED_TEST(CciChapter2_Q4, partition) {
 template <typename T> class CciChapter2_Q5 : public ::testing::Test {};
 
 using ListValTypes_Q5 = ::testing::Types<cci::List<int>, std::list<int>>;
-TYPED_TEST_CASE(CciChapter2_Q5, ListValTypes_Q5);
+TYPED_TEST_SUITE(CciChapter2_Q5, ListValTypes_Q5);
 
 TYPED_TEST(CciChapter2_Q5, sumNumbersAsAListReverse) {
   std::vector<std::tuple<std::vector<int>, std::vector<int>, std::vector<int>>>
@@ -296,7 +296,7 @@ TYPED_TEST(CciChapter2_Q5, sumNumbersAsAList) {
 template <typename T> class CciChapter2_Q6 : public ::testing::Test {};
 
 using ListValTypes_Q6 = ::testing::Types<cci::List<int>, std::list<int>>;
-TYPED_TEST_CASE(CciChapter2_Q6, ListValTypes_Q6);
+TYPED_TEST_SUITE(CciChapter2_Q6, ListValTypes_Q6);
 
 TYPED_TEST(CciChapter2_Q6, polindrone) {
   std::vector<std::tuple<std::vector<int>, bool>> test_cases = {

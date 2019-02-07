@@ -34,7 +34,7 @@
 template <typename T> class CciChapter2_list : public ::testing::Test {};
 
 using ListValTypes = ::testing::Types<int, unsigned int, float, double>;
-TYPED_TEST_CASE(CciChapter2_list, ListValTypes);
+TYPED_TEST_SUITE(CciChapter2_list, ListValTypes);
 
 TYPED_TEST(CciChapter2_list, push_back) {
   std::vector<std::vector<TypeParam>> test_cases = {
