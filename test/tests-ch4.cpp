@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <numeric>
 #include <vector>
+#include <climits>
 
 #include <chapter_4.hpp>
 #include <chapter_4_Bst.hpp>
@@ -67,5 +68,81 @@ TEST(CciChapter4_Q3, create_min_bst) {
 
     EXPECT_EQ(out_vect, test_case);
     EXPECT_TRUE(test_tree.isBalanced());
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q4
+//-----------------------------------------------------------------------------
+TEST(CciChapter4_Q4, create_level_linked_lists) {
+  std::vector<std::tuple<std::vector<int>, std::vector<std::list<int>>>>
+    test_cases = {
+    {{}, {}},
+    {{1}, {{1}}},
+    {{5, 3, 8, 2, 4, 6, 9, 1, 7}, {{5}, {3, 8}, {2, 4, 6, 9}, {1, 7}}}
+  };
+
+  for (auto &test_case : test_cases) {
+    cci::Bst test_tree;
+
+    for (auto value : std::get<0>(test_case)) {
+      test_tree.insert(value);
+    }
+
+    cci::arrayBstLevels out_vect =
+      createLevelLinkedList(test_tree.getRoot());
+
+    size_t num_expected_lists = std::get<1>(test_case).size();
+
+    EXPECT_EQ(num_expected_lists, out_vect.size());
+    // for (size_t ii = 0; ii < num_expected_lists; ii++) {
+      // EXPECT_EQ(std::get<1>(test_case)[ii], out_vect[ii]);
+    // }
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q5
+//-----------------------------------------------------------------------------
+TEST(CciChapter4_Q5, check_bst_true) {
+  std::vector<std::tuple<std::vector<int>, bool>> test_cases = {
+      {std::vector<int>{}, true},
+      {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, true},
+      {{10, 9, 8, 7, 6, 5, 4, 3, 2, 1}, true},
+      {{5, 3, 8, 2, 4, 6, 9, 1, 7}, true},
+  };
+
+  int last_printed = 0;
+  for (auto &test_case : test_cases) {
+    cci::Bst test_tree;
+
+    for (auto value : std::get<0>(test_case)) {
+      test_tree.insert(value);
+    }
+
+    last_printed = INT_MIN;
+    EXPECT_EQ(cci::checkBst(test_tree.getRoot(), &last_printed), std::get<1>(test_case));
+  }
+}
+
+TEST(CciChapter4_Q5, check_bst_false) {
+  std::vector<std::tuple<std::vector<int>, bool>> test_cases = {
+      {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, false},
+      {{5, 3, 8, 2, 4, 6, 9, 1, 7}, false},
+  };
+
+  int last_printed = 0;
+  for (auto &test_case : test_cases) {
+    cci::Bst test_tree;
+
+    for (auto value : std::get<0>(test_case)) {
+      test_tree.insert(value);
+    }
+
+    // "Break" the tree (make it non-bst tree)
+    test_tree.getRoot()->key_ = 100;
+
+    last_printed = INT_MIN;
+    EXPECT_EQ(cci::checkBst(test_tree.getRoot(), &last_printed), std::get<1>(test_case));
   }
 }

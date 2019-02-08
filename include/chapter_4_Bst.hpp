@@ -72,6 +72,8 @@ public:
   // Returns true if the tree is balanced, false otherwise
   bool isBalanced();
 
+  BstNode *getRoot() { return root_;};
+
 private:
   // Deletes (frees memory) for all nodes in the subtree pointed to by the
   // input argument.

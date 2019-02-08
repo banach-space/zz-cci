@@ -52,3 +52,64 @@ cci::createBstNodeForMinBst(const std::vector<int> &array,
 
   return new_node;
 }
+
+//-----------------------------------------------------------------------------
+// Solution to Q4
+//-----------------------------------------------------------------------------
+// This solution creates an array of lists of key values rather than nodes.
+// This makes managing the memory much much easier, yet the underlying
+// algorithim is almost identical.
+void cci::createLevelLinkedListImpl(BstNode *root, arrayBstLevels *array,
+                                    unsigned level) {
+  if (nullptr == root) {
+    // Base case
+    return;
+  }
+
+  if (array->size() == level) {
+    // Level not contained in list - need to create a new list
+    array->emplace_back();
+  }
+
+  auto *levelList = &array->at(level);
+
+  levelList->emplace_back(root->key_);
+  createLevelLinkedListImpl(root->left_, array, level + 1u);
+  createLevelLinkedListImpl(root->right_, array, level + 1u);
+}
+
+cci::arrayBstLevels cci::createLevelLinkedList(BstNode *root) {
+  cci::arrayBstLevels array;
+
+  createLevelLinkedListImpl(std::forward<cci::BstNode*>(root), &array, 0u);
+
+  return array;
+}
+
+//-----------------------------------------------------------------------------
+// Solution to Q5
+//-----------------------------------------------------------------------------
+// This solution can't handle duplicate values in the tree properly.
+bool cci::checkBst(BstNode *root, int *last_printed) {
+  if (nullptr == root) {
+    return true;
+  }
+
+  // Chech / recurse left
+  if (!checkBst(root->left_, last_printed)) {
+      return false;
+  }
+
+  // Check current
+  if (root->key_ <= *last_printed) {
+    return false;
+  }
+  *last_printed = root->key_;
+
+  // Check / recurse right
+  if (!checkBst(root->right_, last_printed)) {
+    return false;
+  }
+
+  return true;
+}

@@ -17,14 +17,31 @@
 
 #include <chapter_4_Bst.hpp>
 #include <vector>
+#include <list>
 
 namespace cci {
+//------------------------------------------------------------------------
+// Solution to Q3
+//------------------------------------------------------------------------
 Bst createMinBst(const std::vector<int> &);
 
 BstNode *createBstNodeForMinBst(const std::vector<int> &,
                                 std::vector<int>::const_iterator,
                                 std::vector<int>::const_iterator);
 
+//------------------------------------------------------------------------
+// Solution to Q4
+//------------------------------------------------------------------------
+using arrayBstLevels = std::vector<std::list<int>>;
+arrayBstLevels createLevelLinkedList(cci::BstNode *root);
+
+void createLevelLinkedListImpl(BstNode *root, arrayBstLevels *array,
+                               unsigned level);
+
+//------------------------------------------------------------------------
+// Solution to Q5
+//------------------------------------------------------------------------
+bool checkBst(BstNode *root, int *last_printed);
 } // namespace cci
 
 #endif
