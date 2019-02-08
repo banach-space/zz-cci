@@ -65,6 +65,7 @@ void Bst::insert(int key) {
   while (true) {
     // The node can be inserted on the right sub-tree. Do so and return.
     if (key >= current->key_ && (nullptr == current->right_)) {
+      new_node->parent_ = current;
       current->right_ = new_node;
       num_of_elements_++;
       return;
@@ -72,6 +73,7 @@ void Bst::insert(int key) {
 
     // The node can be inserted on the left sub-tree. Do so and return.
     if (key < current->key_ && (nullptr == current->left_)) {
+      new_node->parent_ = current;
       current->left_ = new_node;
       num_of_elements_++;
       return;
@@ -115,6 +117,39 @@ int Bst::isBalancedImpl(BstNode *subtree) {
 
 bool Bst::isBalanced() {
   return (isBalancedImpl(this->root_) != -1 ? true : false);
+}
+
+BstNode *Bst::getNode(int key) {
+  if (root_ == nullptr) {
+    return nullptr;
+  }
+
+  if (root_->key_ == key) {
+    return root_;
+  }
+
+  BstNode *candidate = root_;
+  while (nullptr != candidate) {
+    if (candidate->key_ == key) {
+      return candidate;
+    }
+
+    candidate = candidate->key_ > key ? candidate->left_ : candidate->right_;
+  }
+
+  return nullptr;
+}
+
+BstNode *leftMostChild(BstNode *node) {
+  if (nullptr == node) {
+    return nullptr;
+  }
+
+  while (nullptr != node->left_) {
+    node = node->left_;
+  }
+
+  return node;
 }
 
 } // namespace cci

@@ -42,6 +42,12 @@ void createLevelLinkedListImpl(BstNode *root, arrayBstLevels *array,
 // Solution to Q5
 //------------------------------------------------------------------------
 bool checkBst(BstNode *root, int *last_printed);
+
+//------------------------------------------------------------------------
+// Solution to Q6
+//------------------------------------------------------------------------
+BstNode *inorderSucc(BstNode *node);
 } // namespace cci
+
 
 #endif

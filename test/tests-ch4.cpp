@@ -146,3 +146,49 @@ TEST(CciChapter4_Q5, check_bst_false) {
     EXPECT_EQ(cci::checkBst(test_tree.getRoot(), &last_printed), std::get<1>(test_case));
   }
 }
+
+TEST(CciChapter4_Q6, successor_exists) {
+  // Best, node to find the successor for, the successor (key values)
+  std::vector<std::tuple<std::vector<int>, int, int>> test_cases = {
+      {{1, 2}, 1, 2},
+      {{2, 1}, 1, 2},
+      {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 9, 10},
+      {{5, 3, 8, 2, 4, 6, 9, 1, 7}, 4, 5},
+  };
+
+  for (auto &test_case : test_cases) {
+    cci::Bst test_tree;
+
+    for (auto value : std::get<0>(test_case)) {
+          test_tree.insert(value);
+    }
+
+    cci::BstNode *succ_for = test_tree.getNode(std::get<1>(test_case));
+    cci::BstNode *succ = inorderSucc(succ_for);
+
+    EXPECT_EQ(succ->key_, std::get<2>(test_case)); 
+  }
+}
+
+TEST(CciChapter4_Q6, no_successor) {
+  // Best, node to find the successor for (there's no successor though)
+  std::vector<std::tuple<std::vector<int>, int>> test_cases = {
+      {{1, 2}, 2},
+      {{2, 1}, 2},
+      {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 10},
+      {{5, 3, 8, 2, 4, 6, 9, 1, 7}, 9},
+  };
+
+  for (auto &test_case : test_cases) {
+    cci::Bst test_tree;
+
+    for (auto value : std::get<0>(test_case)) {
+          test_tree.insert(value);
+    }
+
+    cci::BstNode *succ_for = test_tree.getNode(std::get<1>(test_case));
+    cci::BstNode *succ = inorderSucc(succ_for);
+
+    EXPECT_EQ(nullptr, succ); 
+  }
+}

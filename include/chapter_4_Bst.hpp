@@ -30,9 +30,9 @@ namespace cci {
 //------------------------------------------------------------------------
 struct BstNode {
   explicit BstNode(int key_val)
-      : key_(key_val), left_(nullptr), right_(nullptr) {}
+      : key_(key_val), left_(nullptr), right_(nullptr), parent_(nullptr) {}
   int key_;
-  struct BstNode *left_, *right_;
+  struct BstNode *left_, *right_, *parent_;
 };
 
 //------------------------------------------------------------------------
@@ -74,6 +74,9 @@ public:
 
   BstNode *getRoot() { return root_;};
 
+  // Returns a pointer to the node that contains value key
+  BstNode *getNode(int key);
+
 private:
   // Deletes (frees memory) for all nodes in the subtree pointed to by the
   // input argument.
@@ -90,6 +93,9 @@ private:
   BstNode *root_{};
   size_t num_of_elements_{};
 };
+
+// Returns the left most child of node
+BstNode *leftMostChild(BstNode *node);
 
 } // namespace cci
 

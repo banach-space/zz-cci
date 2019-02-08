@@ -16,6 +16,11 @@
 #include <vector>
 
 //-----------------------------------------------------------------------------
+// Solution to Q1
+//-----------------------------------------------------------------------------
+// See Bst::isBalanced
+
+//-----------------------------------------------------------------------------
 // Solution to Q2
 //-----------------------------------------------------------------------------
 // TODO
@@ -112,4 +117,29 @@ bool cci::checkBst(BstNode *root, int *last_printed) {
   }
 
   return true;
+}
+
+//-----------------------------------------------------------------------------
+// Solution to Q6
+//-----------------------------------------------------------------------------
+cci::BstNode *cci::inorderSucc(cci::BstNode *node) {
+  if (nullptr == node) {
+    return nullptr;
+  }
+
+  // Found right children -> return leftmost node of right subtree
+  if (nullptr != node->right_) {
+    return cci::leftMostChild(node->right_);
+  } else {
+    BstNode *q = node;
+    BstNode *x = q->parent_;
+    // Go up until we're on left instead of rigt
+    while (nullptr != x && x->left_ != q) {
+      q = x;
+      x = x->parent_;
+    }
+    return x;
+  }
+
+  return nullptr;
 }
