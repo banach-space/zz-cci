@@ -15,7 +15,7 @@
 #ifndef _CHAPTER_4_
 #define _CHAPTER_4_
 
-#include <chapter_4_Bst.hpp>
+#include <chapter_4_binary_tree.hpp>
 #include <vector>
 #include <list>
 
@@ -25,7 +25,7 @@ namespace cci {
 //------------------------------------------------------------------------
 Bst createMinBst(const std::vector<int> &);
 
-BstNode *createBstNodeForMinBst(const std::vector<int> &,
+BinaryTreeNode *createBinaryTreeNodeForMinBst(const std::vector<int> &,
                                 std::vector<int>::const_iterator,
                                 std::vector<int>::const_iterator);
 
@@ -33,20 +33,20 @@ BstNode *createBstNodeForMinBst(const std::vector<int> &,
 // Solution to Q4
 //------------------------------------------------------------------------
 using arrayBstLevels = std::vector<std::list<int>>;
-arrayBstLevels createLevelLinkedList(cci::BstNode *root);
+arrayBstLevels createLevelLinkedList(cci::BinaryTreeNode *root);
 
-void createLevelLinkedListImpl(BstNode *root, arrayBstLevels *array,
+void createLevelLinkedListImpl(BinaryTreeNode *root, arrayBstLevels *array,
                                unsigned level);
 
 //------------------------------------------------------------------------
 // Solution to Q5
 //------------------------------------------------------------------------
-bool checkBst(BstNode *root, int *last_printed);
+bool isBst(BinaryTreeNode *root, int *last_printed);
 
 //------------------------------------------------------------------------
 // Solution to Q6
 //------------------------------------------------------------------------
-BstNode *inorderSucc(BstNode *node);
+BinaryTreeNode *inorderSucc(BinaryTreeNode *node);
 } // namespace cci
 
 

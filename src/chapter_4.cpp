@@ -34,11 +34,11 @@ cci::Bst cci::createMinBst(const std::vector<int> &array) {
   }
 
   return cci::Bst(
-      createBstNodeForMinBst(array, array.begin(), array.end() - 1));
+      createBinaryTreeNodeForMinBst(array, array.begin(), array.end() - 1));
 }
 
-cci::BstNode *
-cci::createBstNodeForMinBst(const std::vector<int> &array,
+cci::BinaryTreeNode *
+cci::createBinaryTreeNodeForMinBst(const std::vector<int> &array,
                             std::vector<int>::const_iterator start,
                             std::vector<int>::const_iterator end) {
   if (end < start) {
@@ -47,13 +47,13 @@ cci::createBstNodeForMinBst(const std::vector<int> &array,
 
   int dist = std::distance(start, end);
   std::vector<int>::const_iterator middle = start + dist / 2;
-  BstNode *new_node = new BstNode(*middle);
+  BinaryTreeNode *new_node = new BinaryTreeNode(*middle);
 
   std::vector<int>::const_iterator new_end = middle - 1;
-  new_node->left_ = createBstNodeForMinBst(array, start, new_end);
+  new_node->left_ = createBinaryTreeNodeForMinBst(array, start, new_end);
 
   std::vector<int>::const_iterator new_start = middle + 1;
-  new_node->right_ = createBstNodeForMinBst(array, new_start, end);
+  new_node->right_ = createBinaryTreeNodeForMinBst(array, new_start, end);
 
   return new_node;
 }
@@ -64,7 +64,7 @@ cci::createBstNodeForMinBst(const std::vector<int> &array,
 // This solution creates an array of lists of key values rather than nodes.
 // This makes managing the memory much much easier, yet the underlying
 // algorithim is almost identical.
-void cci::createLevelLinkedListImpl(BstNode *root, arrayBstLevels *array,
+void cci::createLevelLinkedListImpl(BinaryTreeNode *root, arrayBstLevels *array,
                                     unsigned level) {
   if (nullptr == root) {
     // Base case
@@ -83,10 +83,10 @@ void cci::createLevelLinkedListImpl(BstNode *root, arrayBstLevels *array,
   createLevelLinkedListImpl(root->right_, array, level + 1u);
 }
 
-cci::arrayBstLevels cci::createLevelLinkedList(BstNode *root) {
+cci::arrayBstLevels cci::createLevelLinkedList(BinaryTreeNode *root) {
   cci::arrayBstLevels array;
 
-  createLevelLinkedListImpl(std::forward<cci::BstNode*>(root), &array, 0u);
+  createLevelLinkedListImpl(std::forward<cci::BinaryTreeNode*>(root), &array, 0u);
 
   return array;
 }
@@ -95,13 +95,13 @@ cci::arrayBstLevels cci::createLevelLinkedList(BstNode *root) {
 // Solution to Q5
 //-----------------------------------------------------------------------------
 // This solution can't handle duplicate values in the tree properly.
-bool cci::checkBst(BstNode *root, int *last_printed) {
+bool cci::isBst(BinaryTreeNode *root, int *last_printed) {
   if (nullptr == root) {
     return true;
   }
 
   // Chech / recurse left
-  if (!checkBst(root->left_, last_printed)) {
+  if (!isBst(root->left_, last_printed)) {
       return false;
   }
 
@@ -112,7 +112,7 @@ bool cci::checkBst(BstNode *root, int *last_printed) {
   *last_printed = root->key_;
 
   // Check / recurse right
-  if (!checkBst(root->right_, last_printed)) {
+  if (!isBst(root->right_, last_printed)) {
     return false;
   }
 
@@ -122,7 +122,7 @@ bool cci::checkBst(BstNode *root, int *last_printed) {
 //-----------------------------------------------------------------------------
 // Solution to Q6
 //-----------------------------------------------------------------------------
-cci::BstNode *cci::inorderSucc(cci::BstNode *node) {
+cci::BinaryTreeNode *cci::inorderSucc(cci::BinaryTreeNode *node) {
   if (nullptr == node) {
     return nullptr;
   }
@@ -131,8 +131,8 @@ cci::BstNode *cci::inorderSucc(cci::BstNode *node) {
   if (nullptr != node->right_) {
     return cci::leftMostChild(node->right_);
   } else {
-    BstNode *q = node;
-    BstNode *x = q->parent_;
+    BinaryTreeNode *q = node;
+    BinaryTreeNode *x = q->parent_;
     // Go up until we're on left instead of rigt
     while (nullptr != x && x->left_ != q) {
       q = x;
