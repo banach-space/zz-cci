@@ -20,7 +20,7 @@
 #include <climits>
 
 #include <chapter_4.hpp>
-#include <chapter_4_Bst.hpp>
+#include <chapter_4_binary_tree.hpp>
 
 //-----------------------------------------------------------------------------
 // Tests for Solution to Q1
@@ -104,38 +104,80 @@ TEST(CciChapter4_Q4, create_level_linked_lists) {
 //-----------------------------------------------------------------------------
 // Tests for Solution to Q5
 //-----------------------------------------------------------------------------
-TEST(CciChapter4_Q5, check_bst_true) {
-  std::vector<std::tuple<std::vector<int>, bool>> test_cases = {
-      {std::vector<int>{}, true},
-      {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, true},
-      {{10, 9, 8, 7, 6, 5, 4, 3, 2, 1}, true},
-      {{5, 3, 8, 2, 4, 6, 9, 1, 7}, true},
+TEST(CciChapter4_Q5, check_bt_false) {
+  std::vector<std::vector<int>> test_cases = {
+      {1, 2},
+      {1, 2, 3, 4, 5, 6, 7, 8},
   };
 
   int last_printed = 0;
   for (auto &test_case : test_cases) {
-    cci::Bst test_tree;
+    cci::BinaryTree test_tree;
 
-    for (auto value : std::get<0>(test_case)) {
+    for (auto value : test_case) {
       test_tree.insert(value);
     }
 
     last_printed = INT_MIN;
-    EXPECT_EQ(cci::checkBst(test_tree.getRoot(), &last_printed), std::get<1>(test_case));
+    EXPECT_EQ(cci::isBst(test_tree.getRoot(), &last_printed), false);
   }
 }
 
-TEST(CciChapter4_Q5, check_bst_false) {
-  std::vector<std::tuple<std::vector<int>, bool>> test_cases = {
-      {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, false},
-      {{5, 3, 8, 2, 4, 6, 9, 1, 7}, false},
+TEST(CciChapter4_Q5, check_bt_true) {
+  std::vector<std::vector<int>> test_cases = {
+      std::vector<int>{},
+      {1},
+      {2, 1},
+      {5, 3, 8, 2, 4, 6, 9, 1}
   };
+
+  int last_printed = 0;
+  for (auto &test_case : test_cases) {
+    cci::BinaryTree test_tree;
+
+    for (auto value : test_case) {
+      test_tree.insert(value);
+    }
+
+    last_printed = INT_MIN;
+    EXPECT_EQ(cci::isBst(test_tree.getRoot(), &last_printed), true);
+  }
+}
+
+TEST(CciChapter4_Q5, check_bst_true){
+  std::vector<std::vector<int>> test_cases = {
+      std::vector<int>{},
+      {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+      {10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+      {5, 3, 8, 2, 4, 6, 9, 1, 7},
+  };
+  const bool is_bst = true;
 
   int last_printed = 0;
   for (auto &test_case : test_cases) {
     cci::Bst test_tree;
 
-    for (auto value : std::get<0>(test_case)) {
+    for (auto value : test_case) {
+      test_tree.insert(value);
+    }
+
+    last_printed = INT_MIN;
+    EXPECT_EQ(cci::isBst(test_tree.getRoot(), &last_printed), is_bst);
+  }
+}
+
+TEST(CciChapter4_Q5, check_bst_false) {
+  std::vector<std::vector<int>> test_cases = {
+      {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+      {5, 3, 8, 2, 4, 6, 9, 1, 7}
+  };
+  const bool is_bst = false;
+
+  int last_printed = 0;
+  for (auto &test_case : test_cases) {
+    cci::Bst test_tree;
+
+    for (auto value : test_case) {
       test_tree.insert(value);
     }
 
@@ -143,7 +185,7 @@ TEST(CciChapter4_Q5, check_bst_false) {
     test_tree.getRoot()->key_ = 100;
 
     last_printed = INT_MIN;
-    EXPECT_EQ(cci::checkBst(test_tree.getRoot(), &last_printed), std::get<1>(test_case));
+    EXPECT_EQ(cci::isBst(test_tree.getRoot(), &last_printed), is_bst);
   }
 }
 
@@ -163,8 +205,8 @@ TEST(CciChapter4_Q6, successor_exists) {
           test_tree.insert(value);
     }
 
-    cci::BstNode *succ_for = test_tree.getNode(std::get<1>(test_case));
-    cci::BstNode *succ = inorderSucc(succ_for);
+    cci::BinaryTreeNode *succ_for = test_tree.getNode(std::get<1>(test_case));
+    cci::BinaryTreeNode *succ = inorderSucc(succ_for);
 
     EXPECT_EQ(succ->key_, std::get<2>(test_case)); 
   }
@@ -186,8 +228,8 @@ TEST(CciChapter4_Q6, no_successor) {
           test_tree.insert(value);
     }
 
-    cci::BstNode *succ_for = test_tree.getNode(std::get<1>(test_case));
-    cci::BstNode *succ = inorderSucc(succ_for);
+    cci::BinaryTreeNode *succ_for = test_tree.getNode(std::get<1>(test_case));
+    cci::BinaryTreeNode *succ = inorderSucc(succ_for);
 
     EXPECT_EQ(nullptr, succ); 
   }
