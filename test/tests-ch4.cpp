@@ -193,7 +193,7 @@ TEST(CciChapter4_Q5, check_bst_false) {
 // Tests for Solution to Q6
 //-----------------------------------------------------------------------------
 TEST(CciChapter4_Q6, successor_exists) {
-  // Best, node to find the successor for, the successor (key values)
+  // Bst, node to find the successor for, the successor (key values)
   std::vector<std::tuple<std::vector<int>, int, int>> test_cases = {
       {{1, 2}, 1, 2},
       {{2, 1}, 1, 2},
@@ -211,12 +211,12 @@ TEST(CciChapter4_Q6, successor_exists) {
     cci::BinaryTreeNode *succ_for = test_tree.getNode(std::get<1>(test_case));
     cci::BinaryTreeNode *succ = inorderSucc(succ_for);
 
-    EXPECT_EQ(succ->key_, std::get<2>(test_case)); 
+    EXPECT_EQ(succ->key_, std::get<2>(test_case));
   }
 }
 
 TEST(CciChapter4_Q6, no_successor) {
-  // Best, node to find the successor for (there's no successor though)
+  // Bst, node to find the successor for (there's no successor though)
   std::vector<std::tuple<std::vector<int>, int>> test_cases = {
       {{1, 2}, 2},
       {{2, 1}, 2},
@@ -234,7 +234,7 @@ TEST(CciChapter4_Q6, no_successor) {
     cci::BinaryTreeNode *succ_for = test_tree.getNode(std::get<1>(test_case));
     cci::BinaryTreeNode *succ = inorderSucc(succ_for);
 
-    EXPECT_EQ(nullptr, succ); 
+    EXPECT_EQ(nullptr, succ);
   }
 }
 
@@ -242,7 +242,7 @@ TEST(CciChapter4_Q6, no_successor) {
 // Tests for Solution to Q7
 //-----------------------------------------------------------------------------
 TEST(CciChapter4_Q7, ancestor_exists) {
-  // Best, node to find the successor for, the successor (key values)
+  // Bst, nodes to find common ancestor for, the common ancestor (key values)
   std::vector<std::tuple<std::vector<int>, int, int, int>> test_cases = {
       {{1, 2}, 1, 2, 1},
       {{2, 1}, 1, 2, 2},
@@ -262,6 +262,6 @@ TEST(CciChapter4_Q7, ancestor_exists) {
         test_tree.getRoot(), test_tree.getNode(std::get<1>(test_case)),
         test_tree.getNode(std::get<2>(test_case)));
 
-    EXPECT_EQ(ancestor->key_, std::get<3>(test_case)); 
+    EXPECT_EQ(ancestor->key_, std::get<3>(test_case));
   }
 }

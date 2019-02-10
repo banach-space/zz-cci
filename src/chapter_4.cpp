@@ -93,7 +93,7 @@ static void createLevelLinkedListImpl(BinaryTreeNode *root,
 arrayBstLevels cci::createLevelLinkedList(BinaryTreeNode *root) {
   arrayBstLevels array;
 
-  createLevelLinkedListImpl(std::forward<BinaryTreeNode*>(root), &array, 0u);
+  createLevelLinkedListImpl(std::forward<BinaryTreeNode *>(root), &array, 0u);
 
   return array;
 }
@@ -109,7 +109,7 @@ bool cci::isBst(BinaryTreeNode *root, int *last_printed) {
 
   // Check / recurse left
   if (!isBst(root->left_, last_printed)) {
-      return false;
+    return false;
   }
 
   // Check current
@@ -156,8 +156,12 @@ BinaryTreeNode *cci::inorderSucc(BinaryTreeNode *node) {
 //------------------------------------------------------------------------
 // Returns true if p is a descendant of root
 static bool covers(BinaryTreeNode *root, BinaryTreeNode *p) {
-  if (nullptr == root ) {return false;}
-  if (root == p) { return true;}
+  if (nullptr == root) {
+    return false;
+  }
+  if (root == p) {
+    return true;
+  }
 
   return covers(root->left_, p) || covers(root->right_, p);
 }
@@ -165,14 +169,20 @@ static bool covers(BinaryTreeNode *root, BinaryTreeNode *p) {
 static BinaryTreeNode *commonAncestorHelper(BinaryTreeNode *root,
                                             BinaryTreeNode *p,
                                             BinaryTreeNode *q) {
-  if (nullptr == root) {return nullptr;}
-  if (root == p || root == q) {return root;}
+  if (nullptr == root) {
+    return nullptr;
+  }
+  if (root == p || root == q) {
+    return root;
+  }
 
   bool is_p_on_left = covers(root->left_, p);
   bool is_q_on_left = covers(root->left_, q);
 
   // If p and q are on different sides, return root.
-  if (is_p_on_left != is_q_on_left) { return root;}
+  if (is_p_on_left != is_q_on_left) {
+    return root;
+  }
 
   // Else, they are on the same side. Traverse this side.
   BinaryTreeNode *child_side = is_p_on_left ? root->left_ : root->right_;
@@ -180,7 +190,7 @@ static BinaryTreeNode *commonAncestorHelper(BinaryTreeNode *root,
 }
 
 BinaryTreeNode *cci::commonAncestor(BinaryTreeNode *root, BinaryTreeNode *p,
-    BinaryTreeNode *q) {
+                                    BinaryTreeNode *q) {
   if (!covers(root, p) || !covers(root, q)) {
     return nullptr;
   }
