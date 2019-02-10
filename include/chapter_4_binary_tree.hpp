@@ -74,6 +74,9 @@ public:
 
   void incNumofElements() {num_of_elements_++;}
 
+  // Returns a pointer to the node that contains value key.
+  virtual BinaryTreeNode *getNode(int key);
+
 private:
   // Deletes (frees memory) for all nodes in the subtree pointed to by the
   // input argument.
@@ -114,7 +117,7 @@ public:
   void insert(int key) override;
 
   // Returns a pointer to the node that contains value key
-  BinaryTreeNode *getNode(int key);
+  BinaryTreeNode *getNode(int key) override;
 };
 
 // Returns the left most child of node

@@ -29,7 +29,7 @@ BinaryTree::BinaryTree(int root_key) {
 
 BinaryTree::BinaryTree(BinaryTreeNode *root) : root_(root) { num_of_elements_++; }
 
-BinaryTree::BinaryTree(BinaryTree &&other) {
+BinaryTree::BinaryTree(BinaryTree &&other) noexcept {
   root_ = other.root_;
   num_of_elements_ = other.num_of_elements_;
 
@@ -67,6 +67,33 @@ std::vector<int> BinaryTree::getVector() {
   getValuesLeftToRight(root_, &key_values_left_to_right);
 
   return key_values_left_to_right;
+}
+
+static BinaryTreeNode *getNodeImpl(BinaryTreeNode *current, int key) {
+  // The case when the tree is empty
+  if (nullptr == current) {
+    return nullptr;
+  }
+
+  if (current->key_ == key) {
+    return current;
+  }
+
+  auto find_left = getNodeImpl(current->left_, key);
+  if (nullptr != find_left) {
+    return find_left;
+  }
+
+  auto find_right = getNodeImpl(current->right_, key);
+  if (nullptr != find_right) {
+    return find_right;
+  }
+
+  return nullptr;
+}
+
+BinaryTreeNode *BinaryTree::getNode(int key) {
+  return getNodeImpl(root_, key);
 }
 
 // Do iterative level order traversal of the given tree using queue. If a node
@@ -156,7 +183,7 @@ Bst::Bst(int root_key) : BinaryTree(root_key) {}
 
 Bst::Bst(BinaryTreeNode *root) : BinaryTree(root) {}
 
-Bst::Bst(Bst &&other) : BinaryTree(std::move(other)) { }
+Bst::Bst(Bst &&other) noexcept : BinaryTree(std::move(other)) { }
 
 Bst::~Bst() { }
 

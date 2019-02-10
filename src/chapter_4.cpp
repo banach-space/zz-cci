@@ -15,6 +15,8 @@
 #include <chapter_4.hpp>
 #include <vector>
 
+using namespace cci;
+
 //-----------------------------------------------------------------------------
 // Solution to Q1
 //-----------------------------------------------------------------------------
@@ -28,19 +30,21 @@
 //-----------------------------------------------------------------------------
 // Solution to Q3
 //-----------------------------------------------------------------------------
-cci::Bst cci::createMinBst(const std::vector<int> &array) {
+static BinaryTreeNode *
+createBinaryTreeNodeForMinBst(std::vector<int>::const_iterator,
+                              std::vector<int>::const_iterator);
+
+Bst cci::createMinBst(const std::vector<int> &array) {
   if (array.empty()) {
     return Bst();
   }
 
-  return cci::Bst(
-      createBinaryTreeNodeForMinBst(array, array.begin(), array.end() - 1));
+  return Bst(createBinaryTreeNodeForMinBst(array.begin(), array.end() - 1));
 }
 
-cci::BinaryTreeNode *
-cci::createBinaryTreeNodeForMinBst(const std::vector<int> &array,
-                            std::vector<int>::const_iterator start,
-                            std::vector<int>::const_iterator end) {
+BinaryTreeNode *
+createBinaryTreeNodeForMinBst(std::vector<int>::const_iterator start,
+                              std::vector<int>::const_iterator end) {
   if (end < start) {
     return nullptr;
   }
@@ -50,10 +54,10 @@ cci::createBinaryTreeNodeForMinBst(const std::vector<int> &array,
   BinaryTreeNode *new_node = new BinaryTreeNode(*middle);
 
   std::vector<int>::const_iterator new_end = middle - 1;
-  new_node->left_ = createBinaryTreeNodeForMinBst(array, start, new_end);
+  new_node->left_ = createBinaryTreeNodeForMinBst(start, new_end);
 
   std::vector<int>::const_iterator new_start = middle + 1;
-  new_node->right_ = createBinaryTreeNodeForMinBst(array, new_start, end);
+  new_node->right_ = createBinaryTreeNodeForMinBst(new_start, end);
 
   return new_node;
 }
@@ -64,8 +68,11 @@ cci::createBinaryTreeNodeForMinBst(const std::vector<int> &array,
 // This solution creates an array of lists of key values rather than nodes.
 // This makes managing the memory much much easier, yet the underlying
 // algorithim is almost identical.
-void cci::createLevelLinkedListImpl(BinaryTreeNode *root, arrayBstLevels *array,
-                                    unsigned level) {
+static void createLevelLinkedListImpl(BinaryTreeNode *root,
+                                      arrayBstLevels *array, unsigned level);
+
+static void createLevelLinkedListImpl(BinaryTreeNode *root,
+                                      arrayBstLevels *array, unsigned level) {
   if (nullptr == root) {
     // Base case
     return;
@@ -83,10 +90,10 @@ void cci::createLevelLinkedListImpl(BinaryTreeNode *root, arrayBstLevels *array,
   createLevelLinkedListImpl(root->right_, array, level + 1u);
 }
 
-cci::arrayBstLevels cci::createLevelLinkedList(BinaryTreeNode *root) {
-  cci::arrayBstLevels array;
+arrayBstLevels cci::createLevelLinkedList(BinaryTreeNode *root) {
+  arrayBstLevels array;
 
-  createLevelLinkedListImpl(std::forward<cci::BinaryTreeNode*>(root), &array, 0u);
+  createLevelLinkedListImpl(std::forward<BinaryTreeNode*>(root), &array, 0u);
 
   return array;
 }
@@ -100,7 +107,7 @@ bool cci::isBst(BinaryTreeNode *root, int *last_printed) {
     return true;
   }
 
-  // Chech / recurse left
+  // Check / recurse left
   if (!isBst(root->left_, last_printed)) {
       return false;
   }
@@ -122,14 +129,14 @@ bool cci::isBst(BinaryTreeNode *root, int *last_printed) {
 //-----------------------------------------------------------------------------
 // Solution to Q6
 //-----------------------------------------------------------------------------
-cci::BinaryTreeNode *cci::inorderSucc(cci::BinaryTreeNode *node) {
+BinaryTreeNode *cci::inorderSucc(BinaryTreeNode *node) {
   if (nullptr == node) {
     return nullptr;
   }
 
   // Found right children -> return leftmost node of right subtree
   if (nullptr != node->right_) {
-    return cci::leftMostChild(node->right_);
+    return leftMostChild(node->right_);
   } else {
     BinaryTreeNode *q = node;
     BinaryTreeNode *x = q->parent_;
@@ -142,4 +149,41 @@ cci::BinaryTreeNode *cci::inorderSucc(cci::BinaryTreeNode *node) {
   }
 
   return nullptr;
+}
+
+//------------------------------------------------------------------------
+// Solution to Q7
+//------------------------------------------------------------------------
+// Returns true if p is a descendant of root
+static bool covers(BinaryTreeNode *root, BinaryTreeNode *p) {
+  if (nullptr == root ) {return false;}
+  if (root == p) { return true;}
+
+  return covers(root->left_, p) || covers(root->right_, p);
+}
+
+static BinaryTreeNode *commonAncestorHelper(BinaryTreeNode *root,
+                                            BinaryTreeNode *p,
+                                            BinaryTreeNode *q) {
+  if (nullptr == root) {return nullptr;}
+  if (root == p || root == q) {return root;}
+
+  bool is_p_on_left = covers(root->left_, p);
+  bool is_q_on_left = covers(root->left_, q);
+
+  // If p and q are on different sides, return root.
+  if (is_p_on_left != is_q_on_left) { return root;}
+
+  // Else, they are on the same side. Traverse this side.
+  BinaryTreeNode *child_side = is_p_on_left ? root->left_ : root->right_;
+  return commonAncestorHelper(child_side, p, q);
+}
+
+BinaryTreeNode *cci::commonAncestor(BinaryTreeNode *root, BinaryTreeNode *p,
+    BinaryTreeNode *q) {
+  if (!covers(root, p) || !covers(root, q)) {
+    return nullptr;
+  }
+
+  return commonAncestorHelper(root, p, q);
 }
