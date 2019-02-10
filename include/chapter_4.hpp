@@ -25,18 +25,11 @@ namespace cci {
 //------------------------------------------------------------------------
 Bst createMinBst(const std::vector<int> &);
 
-BinaryTreeNode *createBinaryTreeNodeForMinBst(const std::vector<int> &,
-                                std::vector<int>::const_iterator,
-                                std::vector<int>::const_iterator);
-
 //------------------------------------------------------------------------
 // Solution to Q4
 //------------------------------------------------------------------------
 using arrayBstLevels = std::vector<std::list<int>>;
-arrayBstLevels createLevelLinkedList(cci::BinaryTreeNode *root);
-
-void createLevelLinkedListImpl(BinaryTreeNode *root, arrayBstLevels *array,
-                               unsigned level);
+arrayBstLevels createLevelLinkedList(BinaryTreeNode *root);
 
 //------------------------------------------------------------------------
 // Solution to Q5
@@ -45,8 +38,21 @@ bool isBst(BinaryTreeNode *root, int *last_printed);
 
 //------------------------------------------------------------------------
 // Solution to Q6
+//
+// Given a node in a binary search tree (i.e. it is assumed that the input node
+// is a binary search tree node), find and return it's successor (or nullptr if
+// there's no successor in the tree).
 //------------------------------------------------------------------------
 BinaryTreeNode *inorderSucc(BinaryTreeNode *node);
+
+//------------------------------------------------------------------------
+// Solution to Q7
+//
+// Given two nodes in a binary tree, return their first common ancestor (or
+// null if there's no such).
+//------------------------------------------------------------------------
+BinaryTreeNode *commonAncestor(BinaryTreeNode *root, BinaryTreeNode *p,
+    BinaryTreeNode *q);
 } // namespace cci
 
 

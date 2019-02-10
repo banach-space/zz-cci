@@ -14,9 +14,9 @@
 #include <chapter_4_binary_tree.hpp>
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <queue>
-#include <cassert>
 
 namespace cci {
 //------------------------------------------------------------------------
@@ -27,9 +27,11 @@ BinaryTree::BinaryTree(int root_key) {
   num_of_elements_++;
 }
 
-BinaryTree::BinaryTree(BinaryTreeNode *root) : root_(root) { num_of_elements_++; }
+BinaryTree::BinaryTree(BinaryTreeNode *root) : root_(root) {
+  num_of_elements_++;
+}
 
-BinaryTree::BinaryTree(BinaryTree &&other) {
+BinaryTree::BinaryTree(BinaryTree &&other) noexcept {
   root_ = other.root_;
   num_of_elements_ = other.num_of_elements_;
 
@@ -50,7 +52,8 @@ void BinaryTree::deleteSubtree(BinaryTreeNode *node_to_delete) {
   delete node_to_delete;
 }
 
-void BinaryTree::getValuesLeftToRight(BinaryTreeNode *t, std::vector<int> *values) {
+void BinaryTree::getValuesLeftToRight(BinaryTreeNode *t,
+                                      std::vector<int> *values) {
   if (nullptr == t) {
     return;
   }
@@ -68,6 +71,31 @@ std::vector<int> BinaryTree::getVector() {
 
   return key_values_left_to_right;
 }
+
+static BinaryTreeNode *getNodeImpl(BinaryTreeNode *current, int key) {
+  // The case when the tree is empty
+  if (nullptr == current) {
+    return nullptr;
+  }
+
+  if (current->key_ == key) {
+    return current;
+  }
+
+  auto find_left = getNodeImpl(current->left_, key);
+  if (nullptr != find_left) {
+    return find_left;
+  }
+
+  auto find_right = getNodeImpl(current->right_, key);
+  if (nullptr != find_right) {
+    return find_right;
+  }
+
+  return nullptr;
+}
+
+BinaryTreeNode *BinaryTree::getNode(int key) { return getNodeImpl(root_, key); }
 
 // Do iterative level order traversal of the given tree using queue. If a node
 // whose left child is empty is found, make new key as left child of the node.
@@ -156,9 +184,9 @@ Bst::Bst(int root_key) : BinaryTree(root_key) {}
 
 Bst::Bst(BinaryTreeNode *root) : BinaryTree(root) {}
 
-Bst::Bst(Bst &&other) : BinaryTree(std::move(other)) { }
+Bst::Bst(Bst &&other) noexcept : BinaryTree(std::move(other)) {}
 
-Bst::~Bst() { }
+Bst::~Bst() {}
 
 void Bst::insert(int key) {
   // If the tree is empty then we need new root
@@ -171,7 +199,8 @@ void Bst::insert(int key) {
   BinaryTreeNode *new_node = new BinaryTreeNode(key);
 
   // Temp iterator used for traversing the tree
-  BinaryTreeNode *current = getRoot();;
+  BinaryTreeNode *current = getRoot();
+  ;
 
   // Find the right location to insert the node
   while (true) {
