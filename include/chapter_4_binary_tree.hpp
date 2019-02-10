@@ -48,7 +48,7 @@ public:
   explicit BinaryTree() = default;
   explicit BinaryTree(BinaryTreeNode *root);
 
-  BinaryTree(BinaryTree &&other);
+  BinaryTree(BinaryTree &&other) noexcept;
 
   BinaryTree(BinaryTree &other) = delete;
   BinaryTree operator=(BinaryTree &&) = delete;
@@ -103,7 +103,7 @@ public:
   explicit Bst() = default;
   explicit Bst(BinaryTreeNode *root);
 
-  Bst(Bst &&other);
+  Bst(Bst &&other) noexcept;
 
   Bst(const Bst &other) = delete;
   Bst operator=(Bst &&) = delete;
