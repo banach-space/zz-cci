@@ -1,6 +1,8 @@
  zz-cci
 ==========
 [![Build Status](https://travis-ci.org/banach-space/zz-cci.svg?branch=master)](https://travis-ci.org/banach-space/zz-cci)
+[![Build status](https://ci.appveyor.com/api/projects/status/f5d0f2hqc9jxa5ny/branch/master?svg=true)](https://ci.appveyor.com/project/banach-space/zz-cci/branch/master)
+
 
 My solutions to the problems from this
 [book](https://www.amazon.co.uk/Cracking-Coding-Interview-Programming-Questions/dp/098478280X)

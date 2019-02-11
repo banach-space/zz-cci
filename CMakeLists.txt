@@ -2,8 +2,11 @@ cmake_minimum_required(VERSION 3.4.3 FATAL_ERROR)
 
 project(cci)
 
+set(CMAKE_CXX_STANDARD 17)
+
 set(cci_COMPILER_OPTIONS_CLANG -fcolor-diagnostics -Wall -Werror -std=c++17)
 set(cci_COMPILER_OPTIONS_GNU -Wall -fdiagnostics-color=always -Werror -std=c++17)
+
 
 add_executable(cciUT
   ${CMAKE_CURRENT_SOURCE_DIR}/src/chapter_1.cpp
