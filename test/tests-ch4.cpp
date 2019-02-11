@@ -94,10 +94,13 @@ TEST(CciChapter4_Q4, create_level_linked_lists) {
 
     size_t num_expected_lists = std::get<1>(test_case).size();
 
+    // Verify that the number of lists is correct
     EXPECT_EQ(num_expected_lists, out_vect.size());
-    // for (size_t ii = 0; ii < num_expected_lists; ii++) {
-      // EXPECT_EQ(std::get<1>(test_case)[ii], out_vect[ii]);
-    // }
+
+    // Now verify the contentx of the lists
+    for (size_t ii = 0; ii < num_expected_lists; ii++) {
+      EXPECT_EQ(std::get<1>(test_case)[ii], out_vect[ii]);
+    }
   }
 }
 
@@ -263,5 +266,65 @@ TEST(CciChapter4_Q7, ancestor_exists) {
         test_tree.getNode(std::get<2>(test_case)));
 
     EXPECT_EQ(ancestor->key_, std::get<3>(test_case));
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q8
+//-----------------------------------------------------------------------------
+TEST(CciChapter4_Q8, ancestor_exists) {
+  // T1, T2, is T2 a subtree of T1
+  std::vector<std::tuple<std::vector<int>, std::vector<int>, bool>> test_cases =
+      {
+          {{1, 2}, {1, 2}, true},
+          {{1, 2}, {2, 1}, false},
+          {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {2, 4, 5, 8, 9, 10}, true},
+          {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {10}, true},
+          {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {1, 2, 3}, false},
+          {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, {2, 4, 5, 8, 9, 10}, true},
+      };
+
+  for (auto &test_case : test_cases) {
+    cci::BinaryTree test_tree_t1;
+    cci::BinaryTree test_tree_t2;
+
+    for (auto value : std::get<0>(test_case)) {
+      test_tree_t1.insert(value);
+    }
+
+    for (auto value : std::get<1>(test_case)) {
+      test_tree_t2.insert(value);
+    }
+
+    bool is_t2_subtree_of_t1 =
+        cci::containsTree(test_tree_t1.getRoot(), test_tree_t2.getRoot());
+    EXPECT_EQ(is_t2_subtree_of_t1, std::get<2>(test_case));
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q9
+//-----------------------------------------------------------------------------
+TEST(CciChapter4_Q9, ancestor_exists) {
+  // tree, sum, expected paths
+  std::vector<std::tuple<std::vector<int>, int, std::vector<std::vector<int>>>> test_cases =
+      {
+          {{1, 2}, 1, {{1}}},
+          {{1, 2}, 2, {{2}}},
+          {{1, 2, 3}, 3, {{1, 2}, {3}}},
+          {{1, 2, 5, 4, 3, 6, 7, 8, 9}, 6, {{6}, {2, 4}, {1, 5}, {1, 2, 3}}},
+      };
+
+  for (auto &test_case : test_cases) {
+    cci::BinaryTree test_tree;
+
+    for (auto value : std::get<0>(test_case)) {
+      test_tree.insert(value);
+    }
+
+    auto solutions =
+        cci::findSum(test_tree.getRoot(), std::get<1>(test_case));
+
+    ASSERT_EQ(solutions.size(), (std::get<2>(test_case)).size());
   }
 }

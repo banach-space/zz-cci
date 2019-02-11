@@ -53,6 +53,22 @@ BinaryTreeNode *inorderSucc(BinaryTreeNode *node);
 //------------------------------------------------------------------------
 BinaryTreeNode *commonAncestor(BinaryTreeNode *root, BinaryTreeNode *p,
     BinaryTreeNode *q);
+
+//------------------------------------------------------------------------
+// Solution to Q8
+//
+//  Given 2 binary treens, decide whether T2 is a subtree of T1
+//------------------------------------------------------------------------
+bool containsTree(BinaryTreeNode *root_t1, BinaryTreeNode *root_t2);
+
+//------------------------------------------------------------------------
+// Solution to Q9
+//
+//  Find all paths int the input tree which sum to a given value. Return the
+//  solution as a vector of solutions where each solution is represented as
+//  a vector of nodes (more precisely, a vector nodes' keys).
+//------------------------------------------------------------------------
+std::vector<std::vector<int>> findSum(BinaryTreeNode *root, int sum);
 } // namespace cci
 
 
