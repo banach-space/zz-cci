@@ -21,6 +21,7 @@
 #include <list>
 #include <memory>
 #include <stack>
+#include <string>
 #include <vector>
 
 //------------------------------------------------------------------------
