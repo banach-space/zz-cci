@@ -70,20 +70,106 @@ TEST(CciChapter5_Q1, basic_test) {
 //-----------------------------------------------------------------------------
 TEST(CciChapter5_Q2, basic_test){
     // number, binary representation
-    std::vector<std::tuple<double, std::vector<int>>> test_cases =
-        {{0.625, {1, 0, 1}},
-         {0.5, {1}},
-         {0.25, {0, 1}},
-         // The following ones were calculated in python
-         {0.9999847412109375,
-         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}},
-         {0.9999999997671694,
-         {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}},
-};
+    std::vector<std::tuple<double, std::vector<int>>> test_cases = {
+        {0.625, {1, 0, 1}},
+        {0.5, {1}},
+        {0.25, {0, 1}},
+        // The following ones were calculated in python
+        {0.9999847412109375, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}},
+        {0.9999999997671694, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                              1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}},
+    };
 
-for (auto &test_case : test_cases) {
-  auto result = cci::printBinary(std::get<0>(test_case));
-  EXPECT_EQ(result, std::get<1>(test_case));
+    for (auto &test_case : test_cases) {
+      auto result = cci::printBinary(std::get<0>(test_case));
+      EXPECT_EQ(result, std::get<1>(test_case));
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q3
+//-----------------------------------------------------------------------------
+TEST(CciChapter5_Q3, getNext) {
+  uint32_t init_val = 1u;
+
+  for (size_t ii = 0; ii < 30; ii++) {
+    uint32_t n = init_val;
+    uint32_t smallest_larger_expected = (init_val << 1u);
+    auto smallest_larger = cci::getNext(n);
+    EXPECT_EQ(smallest_larger_expected, smallest_larger);
+  }
+}
+
+TEST(CciChapter5_Q3, getPrev) {
+  uint32_t init_val = 2u;
+
+  for (size_t ii = 0; ii < 30; ii++) {
+    uint32_t n = init_val;
+    uint32_t largest_smaller_expected = (init_val >> 1u);
+    auto largest_smaller = cci::getPrev(n);
+    EXPECT_EQ(largest_smaller_expected, largest_smaller);
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q4
+//-----------------------------------------------------------------------------
+TEST(CciChapter5_Q4, isPowerofTwo_true) {
+  uint32_t init_val = 1u;
+
+  for (size_t ii = 0; ii < 30; ii++) {
+    uint32_t n = (init_val >> 1u);
+    auto isPow = cci::isPowerOfTwo(n);
+    EXPECT_EQ(isPow, true);
+  }
+}
+
+TEST(CciChapter5_Q4, isPowerofTwo_false) {
+  uint32_t init_val = 1u;
+
+  for (size_t ii = 0; ii < 30; ii++) {
+    init_val += 2;
+    auto isPow = cci::isPowerOfTwo(init_val);
+    EXPECT_EQ(isPow, false);
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q5
+//-----------------------------------------------------------------------------
+TEST(CciChapter5_Q5, numberOfBitsToConvert) {
+  uint32_t init_a = 1u;
+  uint32_t init_b = 2u;
+  size_t expected_count = 2;
+
+  for (size_t ii = 0; ii < 30; ii++) {
+    uint32_t a = (init_a << ii);
+    uint32_t b = (init_b << ii);
+
+    auto count = cci::numOfBitsToConvert(a, b);
+    EXPECT_EQ(count, expected_count);
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q6
+//-----------------------------------------------------------------------------
+TEST(CciChapter5_Q6, numberOfBitsToConvert) {
+  uint32_t init_n = 1u;
+
+  for (size_t ii = 0; ii < 30; ii+=2) {
+    uint32_t n = (init_n << ii);
+
+    uint32_t swapped = cci::swapOddAndEvenBits(n);
+    uint32_t swapped_expected = (n << 1);
+    EXPECT_EQ(swapped_expected, swapped);
+  }
+
+  for (size_t ii = 1; ii < 30; ii+=2) {
+    uint32_t n = (init_n << ii);
+
+    uint32_t swapped = cci::swapOddAndEvenBits(n);
+    uint32_t swapped_expected = (n >> 1);
+    EXPECT_EQ(swapped_expected, swapped);
   }
 }

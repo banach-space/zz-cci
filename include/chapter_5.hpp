@@ -34,6 +34,43 @@ uint32_t updateBits(uint32_t n, uint32_t m, std::size_t i, std::size_t j);
 // requires more than 32 binary digits). The input number lies between 0 and 1.
 //-----------------------------------------------------------------------------
 std::vector<int> printBinary(double num);
-}
+
+//-----------------------------------------------------------------------------
+// Solutions to Q3
+//-----------------------------------------------------------------------------
+// Returns the smallest number that is larger than n (n > 0) and has the same
+// number of 0s and 1s. Returns 0 on failure.
+//-----------------------------------------------------------------------------
+uint32_t getNext(uint32_t n);
+
+//-----------------------------------------------------------------------------
+// Returns the largest number that is smaller than n (n > 0) and has the same
+// number of 0s and 1s. Returns 0 on failure.
+//-----------------------------------------------------------------------------
+uint32_t getPrev(uint32_t n);
+
+//-----------------------------------------------------------------------------
+// Solutions to Q4
+//-----------------------------------------------------------------------------
+// Check if n is a power of two
+//-----------------------------------------------------------------------------
+bool isPowerOfTwo(uint32_t n);
+
+//-----------------------------------------------------------------------------
+// Solutions to Q5
+//-----------------------------------------------------------------------------
+// Returns the number of bits that need to be flipped in order to convert a to
+// b (or vice versa)
+//-----------------------------------------------------------------------------
+size_t numOfBitsToConvert(uint32_t a, uint32_t b);
+
+//-----------------------------------------------------------------------------
+// Solutions to Q6
+//-----------------------------------------------------------------------------
+// Swap odd and even bits in n
+//-----------------------------------------------------------------------------
+uint32_t swapOddAndEvenBits(uint32_t n);
+
+} // namespace cci
 
 # endif

@@ -14,11 +14,13 @@ add_executable(cciUT
   ${CMAKE_CURRENT_SOURCE_DIR}/src/chapter_3.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/chapter_4.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/chapter_4_binary_tree.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/chapter_5.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/test/test-main.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/test/tests-ch1.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/test/tests-ch2.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/test/tests-ch3.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/test/tests-ch4.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/test/tests-ch5.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/test/tests-binary_tree.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/test/tests-List.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/googletest/googletest/src/gtest-all.cc)
