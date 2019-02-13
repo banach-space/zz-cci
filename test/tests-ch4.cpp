@@ -15,9 +15,9 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
+#include <climits>
 #include <numeric>
 #include <vector>
-#include <climits>
 
 #include <chapter_4.hpp>
 #include <chapter_4_binary_tree.hpp>
@@ -76,11 +76,10 @@ TEST(CciChapter4_Q3, create_min_bst) {
 //-----------------------------------------------------------------------------
 TEST(CciChapter4_Q4, create_level_linked_lists) {
   std::vector<std::tuple<std::vector<int>, std::vector<std::list<int>>>>
-    test_cases = {
-    {{}, {}},
-    {{1}, {{1}}},
-    {{5, 3, 8, 2, 4, 6, 9, 1, 7}, {{5}, {3, 8}, {2, 4, 6, 9}, {1, 7}}}
-  };
+      test_cases = {
+          {{}, {}},
+          {{1}, {{1}}},
+          {{5, 3, 8, 2, 4, 6, 9, 1, 7}, {{5}, {3, 8}, {2, 4, 6, 9}, {1, 7}}}};
 
   for (auto &test_case : test_cases) {
     cci::Bst test_tree;
@@ -89,8 +88,7 @@ TEST(CciChapter4_Q4, create_level_linked_lists) {
       test_tree.insert(value);
     }
 
-    cci::arrayBstLevels out_vect =
-      createLevelLinkedList(test_tree.getRoot());
+    cci::arrayBstLevels out_vect = createLevelLinkedList(test_tree.getRoot());
 
     size_t num_expected_lists = std::get<1>(test_case).size();
 
@@ -128,11 +126,7 @@ TEST(CciChapter4_Q5, check_bt_false) {
 
 TEST(CciChapter4_Q5, check_bt_true) {
   std::vector<std::vector<int>> test_cases = {
-      std::vector<int>{},
-      {1},
-      {2, 1},
-      {5, 3, 8, 2, 4, 6, 9, 1}
-  };
+      std::vector<int>{}, {1}, {2, 1}, {5, 3, 8, 2, 4, 6, 9, 1}};
 
   int last_printed = 0;
   for (auto &test_case : test_cases) {
@@ -147,7 +141,7 @@ TEST(CciChapter4_Q5, check_bt_true) {
   }
 }
 
-TEST(CciChapter4_Q5, check_bst_true){
+TEST(CciChapter4_Q5, check_bst_true) {
   std::vector<std::vector<int>> test_cases = {
       std::vector<int>{},
       {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
@@ -170,10 +164,8 @@ TEST(CciChapter4_Q5, check_bst_true){
 }
 
 TEST(CciChapter4_Q5, check_bst_false) {
-  std::vector<std::vector<int>> test_cases = {
-      {1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
-      {5, 3, 8, 2, 4, 6, 9, 1, 7}
-  };
+  std::vector<std::vector<int>> test_cases = {{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+                                              {5, 3, 8, 2, 4, 6, 9, 1, 7}};
   const bool is_bst = false;
 
   int last_printed = 0;
@@ -208,7 +200,7 @@ TEST(CciChapter4_Q6, successor_exists) {
     cci::Bst test_tree;
 
     for (auto value : std::get<0>(test_case)) {
-          test_tree.insert(value);
+      test_tree.insert(value);
     }
 
     cci::BinaryTreeNode *succ_for = test_tree.getNode(std::get<1>(test_case));
@@ -231,7 +223,7 @@ TEST(CciChapter4_Q6, no_successor) {
     cci::Bst test_tree;
 
     for (auto value : std::get<0>(test_case)) {
-          test_tree.insert(value);
+      test_tree.insert(value);
     }
 
     cci::BinaryTreeNode *succ_for = test_tree.getNode(std::get<1>(test_case));
@@ -258,7 +250,7 @@ TEST(CciChapter4_Q7, ancestor_exists) {
     cci::BinaryTree test_tree;
 
     for (auto value : std::get<0>(test_case)) {
-          test_tree.insert(value);
+      test_tree.insert(value);
     }
 
     cci::BinaryTreeNode *ancestor = cci::commonAncestor(
@@ -307,8 +299,8 @@ TEST(CciChapter4_Q8, ancestor_exists) {
 //-----------------------------------------------------------------------------
 TEST(CciChapter4_Q9, ancestor_exists) {
   // tree, sum, expected paths
-  std::vector<std::tuple<std::vector<int>, int, std::vector<std::vector<int>>>> test_cases =
-      {
+  std::vector<std::tuple<std::vector<int>, int, std::vector<std::vector<int>>>>
+      test_cases = {
           {{1, 2}, 1, {{1}}},
           {{1, 2}, 2, {{2}}},
           {{1, 2, 3}, 3, {{1, 2}, {3}}},
@@ -322,8 +314,7 @@ TEST(CciChapter4_Q9, ancestor_exists) {
       test_tree.insert(value);
     }
 
-    auto solutions =
-        cci::findSum(test_tree.getRoot(), std::get<1>(test_case));
+    auto solutions = cci::findSum(test_tree.getRoot(), std::get<1>(test_case));
 
     ASSERT_EQ(solutions.size(), (std::get<2>(test_case)).size());
   }

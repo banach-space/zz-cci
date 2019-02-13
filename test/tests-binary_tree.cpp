@@ -27,7 +27,7 @@ TYPED_TEST_SUITE(CciChapter4_BinaryTrees, TreeTypes);
 
 TYPED_TEST(CciChapter4_BinaryTrees, empty_tree) {
 
-  std::vector<int> test_case {};
+  std::vector<int> test_case{};
   TypeParam test_tree;
 
   for (auto value : test_case) {

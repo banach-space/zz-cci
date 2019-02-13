@@ -16,8 +16,8 @@
 #define _CHAPTER_4_
 
 #include <chapter_4_binary_tree.hpp>
-#include <vector>
 #include <list>
+#include <vector>
 
 namespace cci {
 //------------------------------------------------------------------------
@@ -52,7 +52,7 @@ BinaryTreeNode *inorderSucc(BinaryTreeNode *node);
 // null if there's no such).
 //------------------------------------------------------------------------
 BinaryTreeNode *commonAncestor(BinaryTreeNode *root, BinaryTreeNode *p,
-    BinaryTreeNode *q);
+                               BinaryTreeNode *q);
 
 //------------------------------------------------------------------------
 // Solution to Q8
@@ -70,6 +70,5 @@ bool containsTree(BinaryTreeNode *root_t1, BinaryTreeNode *root_t2);
 //------------------------------------------------------------------------
 std::vector<std::vector<int>> findSum(BinaryTreeNode *root, int sum);
 } // namespace cci
-
 
 #endif

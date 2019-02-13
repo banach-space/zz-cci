@@ -14,9 +14,9 @@
 #include <chapter_4_binary_tree.hpp>
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <queue>
-#include <cassert>
 
 namespace cci {
 //------------------------------------------------------------------------
@@ -27,7 +27,9 @@ BinaryTree::BinaryTree(int root_key) {
   num_of_elements_++;
 }
 
-BinaryTree::BinaryTree(BinaryTreeNode *root) : root_(root) { num_of_elements_++; }
+BinaryTree::BinaryTree(BinaryTreeNode *root) : root_(root) {
+  num_of_elements_++;
+}
 
 BinaryTree::BinaryTree(BinaryTree &&other) {
   root_ = other.root_;
@@ -156,9 +158,9 @@ Bst::Bst(int root_key) : BinaryTree(root_key) {}
 
 Bst::Bst(BinaryTreeNode *root) : BinaryTree(root) {}
 
-Bst::Bst(Bst &&other) : BinaryTree(std::move(other)) { }
+Bst::Bst(Bst &&other) : BinaryTree(std::move(other)) {}
 
-Bst::~Bst() { }
+Bst::~Bst() {}
 
 void Bst::insert(int key) {
   // If the tree is empty then we need new root
@@ -171,7 +173,8 @@ void Bst::insert(int key) {
   BinaryTreeNode *new_node = new BinaryTreeNode(key);
 
   // Temp iterator used for traversing the tree
-  BinaryTreeNode *current = getRoot();;
+  BinaryTreeNode *current = getRoot();
+  ;
 
   // Find the right location to insert the node
   while (true) {

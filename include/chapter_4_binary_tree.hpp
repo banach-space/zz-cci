@@ -67,12 +67,12 @@ public:
   // Returns true if the tree is balanced, false otherwise
   bool isBalanced();
 
-  BinaryTreeNode *getRoot() { return root_;};
+  BinaryTreeNode *getRoot() { return root_; };
   void createRootNode(int key);
 
-  bool isEmpty() { return nullptr == root_;}
+  bool isEmpty() { return nullptr == root_; }
 
-  void incNumofElements() {num_of_elements_++;}
+  void incNumofElements() { num_of_elements_++; }
 
   // Returns a pointer to the node that contains value key.
   virtual BinaryTreeNode *getNode(int key);

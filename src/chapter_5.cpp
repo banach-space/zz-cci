@@ -22,12 +22,12 @@ using namespace cci;
 // from right to left.
 //-----------------------------------------------------------------------------
 uint32_t cci::updateBits(uint32_t n, uint32_t m, std::size_t i, std::size_t j) {
-  uint32_t all_ones = ~0; 
+  uint32_t all_ones = ~0;
 
   // The mask that corresponds to the [31, j + 1]
   uint32_t left_mask = all_ones << (j + 1);
-  // Edge case ... Otherwise left_mask would be 0 "[...] reduced modulo one more than
-  // the maximum value representable in the result type".
+  // Edge case ... Otherwise left_mask would be 0 "[...] reduced modulo one more
+  // than the maximum value representable in the result type".
   if (j == 31) {
     left_mask = 0u;
   }
@@ -38,7 +38,6 @@ uint32_t cci::updateBits(uint32_t n, uint32_t m, std::size_t i, std::size_t j) {
 
   uint32_t n_cleared = n & mask;
   uint32_t m_shifted = m << i;
-
 
   return n_cleared | m_shifted;
 }
@@ -126,7 +125,8 @@ uint32_t cci::getPrev(uint32_t n) {
 
   // Error: n == 0...0111, there is no smaller number than n with the same
   // number of 1s
-  if (0 == temp) return 0;
+  if (0 == temp)
+    return 0;
 
   while (((temp & 1u) == 0) && (temp != 0)) {
     c0++;
@@ -147,9 +147,7 @@ uint32_t cci::getPrev(uint32_t n) {
 //-----------------------------------------------------------------------------
 // Solutions to Q4
 //-----------------------------------------------------------------------------
-bool cci::isPowerOfTwo(uint32_t n) {
-  return ((n & (n - 1)) == 0);
-}
+bool cci::isPowerOfTwo(uint32_t n) { return ((n & (n - 1)) == 0); }
 
 //-----------------------------------------------------------------------------
 // Solutions to Q5
@@ -157,7 +155,7 @@ bool cci::isPowerOfTwo(uint32_t n) {
 size_t cci::numOfBitsToConvert(uint32_t a, uint32_t b) {
   size_t count = 0;
 
-  for (uint32_t c = a ^ b; c != 0; c = c & (c-1)) {
+  for (uint32_t c = a ^ b; c != 0; c = c & (c - 1)) {
     count++;
   }
 
@@ -168,5 +166,5 @@ size_t cci::numOfBitsToConvert(uint32_t a, uint32_t b) {
 // Solutions to Q6
 //-----------------------------------------------------------------------------
 uint32_t cci::swapOddAndEvenBits(uint32_t n) {
-  return ( ((n & 0xaaaaaaaau) >> 1u) | ((n & 0x55555555u) << 1u) );
+  return (((n & 0xaaaaaaaau) >> 1u) | ((n & 0x55555555u) << 1u));
 }

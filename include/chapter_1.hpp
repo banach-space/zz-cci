@@ -17,8 +17,8 @@
 #define _CHAPTER_1_
 
 #include <string>
-#include <vector>
 #include <string_view>
+#include <vector>
 
 // Generic data types used across multiple solutions
 enum impl_ver { ver_1 = 0, ver_2 = 1 };

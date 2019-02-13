@@ -73,4 +73,4 @@ uint32_t swapOddAndEvenBits(uint32_t n);
 
 } // namespace cci
 
-# endif
+#endif

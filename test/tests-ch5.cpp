@@ -68,21 +68,21 @@ TEST(CciChapter5_Q1, basic_test) {
 //-----------------------------------------------------------------------------
 // Tests for Solution to Q2
 //-----------------------------------------------------------------------------
-TEST(CciChapter5_Q2, basic_test){
-    // number, binary representation
-    std::vector<std::tuple<double, std::vector<int>>> test_cases = {
-        {0.625, {1, 0, 1}},
-        {0.5, {1}},
-        {0.25, {0, 1}},
-        // The following ones were calculated in python
-        {0.9999847412109375, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}},
-        {0.9999999997671694, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                              1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}},
-    };
+TEST(CciChapter5_Q2, basic_test) {
+  // number, binary representation
+  std::vector<std::tuple<double, std::vector<int>>> test_cases = {
+      {0.625, {1, 0, 1}},
+      {0.5, {1}},
+      {0.25, {0, 1}},
+      // The following ones were calculated in python
+      {0.9999847412109375, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}},
+      {0.9999999997671694, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}},
+  };
 
-    for (auto &test_case : test_cases) {
-      auto result = cci::printBinary(std::get<0>(test_case));
-      EXPECT_EQ(result, std::get<1>(test_case));
+  for (auto &test_case : test_cases) {
+    auto result = cci::printBinary(std::get<0>(test_case));
+    EXPECT_EQ(result, std::get<1>(test_case));
   }
 }
 
@@ -157,7 +157,7 @@ TEST(CciChapter5_Q5, numberOfBitsToConvert) {
 TEST(CciChapter5_Q6, numberOfBitsToConvert) {
   uint32_t init_n = 1u;
 
-  for (size_t ii = 0; ii < 30; ii+=2) {
+  for (size_t ii = 0; ii < 30; ii += 2) {
     uint32_t n = (init_n << ii);
 
     uint32_t swapped = cci::swapOddAndEvenBits(n);
@@ -165,7 +165,7 @@ TEST(CciChapter5_Q6, numberOfBitsToConvert) {
     EXPECT_EQ(swapped_expected, swapped);
   }
 
-  for (size_t ii = 1; ii < 30; ii+=2) {
+  for (size_t ii = 1; ii < 30; ii += 2) {
     uint32_t n = (init_n << ii);
 
     uint32_t swapped = cci::swapOddAndEvenBits(n);

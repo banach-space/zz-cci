@@ -12,9 +12,9 @@
 //
 // License: Apache License 2.0
 //========================================================================
+#include <algorithm>
 #include <chapter_4.hpp>
 #include <vector>
-#include <algorithm>
 
 using namespace cci;
 
@@ -219,7 +219,7 @@ static bool matchTree(BinaryTreeNode *node_t1, BinaryTreeNode *node_t2) {
   }
 
   return (matchTree(node_t1->left_, node_t2->left_) &&
-      matchTree(node_t1->right_, node_t2->right_));
+          matchTree(node_t1->right_, node_t2->right_));
 }
 
 static bool subTree(BinaryTreeNode *node_t1, BinaryTreeNode *node_t2) {
@@ -276,14 +276,13 @@ static void findSumImpl(BinaryTreeNode *node, int sum,
     if (temp_sum == sum) {
       // There's a path within the path v
       solutions->emplace_back(std::vector<int>(current_path.begin() + ii,
-                                              current_path.begin() + level));
+                                               current_path.begin() + level));
     }
   }
 
   // Search nodes beneath this one
   findSumImpl(node->left_, sum, current_path, level + 1, solutions);
   findSumImpl(node->right_, sum, current_path, level + 1, solutions);
-
 
   // Remove current node from path
   current_path[level] = 0;
