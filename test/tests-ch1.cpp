@@ -74,7 +74,7 @@ struct CciChapter1_Q2 : public ::testing::Test {
                     {{"xxxxxxxxxxyyyyyyyyyy"}, {"yyyyyyyyyyxxxxxxxxxx"}}};
   }
 
-protected:
+ protected:
   void SetUp() override {}
   void TearDown() override {}
 };
@@ -98,7 +98,7 @@ struct CciChapter1_Q3 : public ::testing::Test {
     };
   }
 
-protected:
+ protected:
   void SetUp() override {}
   void TearDown() override {}
 };
@@ -106,11 +106,14 @@ protected:
 //========================================================================
 // Tests
 //========================================================================
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q1
+//-----------------------------------------------------------------------------
 TEST_F(CciChapter1_Q1, unique_chars_cpp_string) {
   bool ret_val = false;
 
   for (auto pair : test_strings) {
-    ret_val = unique_chars(std::get<0>(pair));
+    ret_val = cci::unique_chars(std::get<0>(pair));
     EXPECT_EQ(std::get<1>(pair), ret_val);
   }
 }
@@ -119,7 +122,7 @@ TEST_F(CciChapter1_Q1, unique_chars_c_string) {
   bool ret_val = false;
 
   for (auto pair : test_strings) {
-    ret_val = unique_chars(std::get<0>(pair).c_str());
+    ret_val = cci::unique_chars(std::get<0>(pair).c_str());
     EXPECT_EQ(std::get<1>(pair), ret_val);
   }
 }
@@ -128,11 +131,14 @@ TEST_F(CciChapter1_Q1, unique_chars_string_view) {
   bool ret_val = false;
 
   for (auto pair : test_strings) {
-    ret_val = unique_chars(std::string_view(std::get<0>(pair)));
+    ret_val = cci::unique_chars(std::string_view(std::get<0>(pair)));
     EXPECT_EQ(std::get<1>(pair), ret_val);
   }
 }
 
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q2
+//-----------------------------------------------------------------------------
 TEST_F(CciChapter1_Q2, reverse_c_string) {
   for (auto pair : test_strings) {
     // The original question requires a modifiable C-string to be passed. What
@@ -145,51 +151,63 @@ TEST_F(CciChapter1_Q2, reverse_c_string) {
     current_str = new char[length];
     strncpy(current_str, std::get<0>(pair).c_str(), length);
 
-    reverse(current_str);
+    cci::reverse(current_str);
     ASSERT_STREQ(current_str, std::get<1>(pair).c_str());
 
     delete[](current_str);
   }
 }
 
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q2
+//-----------------------------------------------------------------------------
 TEST_F(CciChapter1_Q2, reverse_cpp_string_ver1) {
   for (auto pair : test_strings) {
     std::string current_str(std::get<0>(pair));
 
-    reverse<ver_1>(current_str);
+    cci::reverse<cci::ver_1>(current_str);
     ASSERT_EQ(current_str, std::get<1>(pair).c_str());
   }
 }
 
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q2
+//-----------------------------------------------------------------------------
 TEST_F(CciChapter1_Q2, reverse_cpp_string_ver2) {
   for (auto pair : test_strings) {
     std::string current_str(std::get<0>(pair));
 
-    reverse<ver_2>(current_str);
+    cci::reverse<cci::ver_2>(current_str);
     ASSERT_EQ(current_str, std::get<1>(pair).c_str());
   }
 }
 
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q3
+//-----------------------------------------------------------------------------
 TEST_F(CciChapter1_Q3, permutation_ver1) {
   for (auto pair : anagrams) {
-    ASSERT_TRUE(permutation<ver_1>(std::get<0>(pair), std::get<1>(pair)));
+    ASSERT_TRUE(cci::permutation<cci::ver_1>(std::get<0>(pair), std::get<1>(pair)));
   }
 
   for (auto pair : antigrams) {
-    ASSERT_FALSE(permutation<ver_1>(std::get<0>(pair), std::get<1>(pair)));
+    ASSERT_FALSE(cci::permutation<cci::ver_1>(std::get<0>(pair), std::get<1>(pair)));
   }
 }
 
 TEST_F(CciChapter1_Q3, permutation_ver2) {
   for (auto pair : anagrams) {
-    ASSERT_TRUE(permutation<ver_2>(std::get<0>(pair), std::get<1>(pair)));
+    ASSERT_TRUE(cci::permutation<cci::ver_2>(std::get<0>(pair), std::get<1>(pair)));
   }
 
   for (auto pair : antigrams) {
-    ASSERT_FALSE(permutation<ver_2>(std::get<0>(pair), std::get<1>(pair)));
+    ASSERT_FALSE(cci::permutation<cci::ver_2>(std::get<0>(pair), std::get<1>(pair)));
   }
 }
 
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q4
+//-----------------------------------------------------------------------------
 TEST(CciChapter1_Q4, replace_space_with_code) {
   std::vector<std::tuple<std::string, std::string, size_t>> test_strings = {
       {{"Mr John Smith    "}, {"Mr%20John%20Smith"}, 13},
@@ -198,12 +216,15 @@ TEST(CciChapter1_Q4, replace_space_with_code) {
   };
 
   for (auto test_case : test_strings) {
-    replace_space_with_code(std::get<0>(test_case), std::get<2>(test_case));
+    cci::replace_space_with_code(std::get<0>(test_case), std::get<2>(test_case));
 
     ASSERT_EQ(std::get<0>(test_case), std::get<1>(test_case));
   }
 }
 
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q5
+//-----------------------------------------------------------------------------
 TEST(CciChapter1_Q5, string_compress) {
   std::vector<std::tuple<std::string, std::string>> test_strings = {
       {{"aabcccccaaa"}, {"a2b1c5a3"}},
@@ -214,14 +235,17 @@ TEST(CciChapter1_Q5, string_compress) {
   };
 
   for (auto test_case : test_strings) {
-    std::string compressed_str = string_compress(std::get<0>(test_case));
+    std::string compressed_str = cci::string_compress(std::get<0>(test_case));
 
     ASSERT_EQ(compressed_str, std::get<1>(test_case));
   }
 }
 
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q6
+//-----------------------------------------------------------------------------
 TEST(CciChapter1_Q6, reverse) {
-  std::vector<std::tuple<image, image>> test_images = {
+  std::vector<std::tuple<cci::image, cci::image>> test_images = {
       {{}, {}},
       {{{'a', 'b'}, {'c', 'd'}}, {{'c', 'a'}, {'d', 'b'}}},
       {{{'a', 'b', 'c'}, {'d', 'e', 'f'}, {'g', 'h', 'i'}},
@@ -236,14 +260,17 @@ TEST(CciChapter1_Q6, reverse) {
         {'p', 'l', 'h', 'd'}}}};
 
   for (auto test_image : test_images) {
-    rotate(std::get<0>(test_image));
+    cci::rotate(std::get<0>(test_image));
 
     ASSERT_EQ(std::get<0>(test_image), std::get<1>(test_image));
   }
 }
 
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q7
+//-----------------------------------------------------------------------------
 TEST(CciChapter1_Q7, setZero) {
-  std::vector<std::tuple<matrix, matrix>> test_matrices = {
+  std::vector<std::tuple<cci::matrix, cci::matrix>> test_matrices = {
       {{}, {}},
       {{{1, 1}, {0, 1}}, {{0, 1}, {0, 0}}},
       {{{1, 1, 1}, {0, 0, 1}, {1, 1, 1}}, {{0, 0, 1}, {0, 0, 0}, {0, 0, 1}}},
@@ -260,12 +287,15 @@ TEST(CciChapter1_Q7, setZero) {
   };
 
   for (auto test_matrix : test_matrices) {
-    setZeros(std::get<0>(test_matrix));
+    cci::setZeros(std::get<0>(test_matrix));
 
     ASSERT_EQ(std::get<0>(test_matrix), std::get<1>(test_matrix));
   }
 }
 
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q8
+//-----------------------------------------------------------------------------
 TEST(CciChapter1_Q8, isRotation) {
   std::vector<std::tuple<std::string, std::string, bool>> test_strings = {
       {{}, {}, false},
@@ -275,7 +305,7 @@ TEST(CciChapter1_Q8, isRotation) {
   };
 
   for (auto &test_case : test_strings) {
-    ASSERT_EQ(isRotation(std::get<0>(test_case), std::get<1>(test_case)),
+    ASSERT_EQ(cci::isRotation(std::get<0>(test_case), std::get<1>(test_case)),
               std::get<2>(test_case));
   }
 }

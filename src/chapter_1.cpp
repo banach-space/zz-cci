@@ -20,12 +20,15 @@
 #include <string>
 #include <string_view>
 
-bool unique_chars(const std::string &input_str) {
+//-----------------------------------------------------------------------------
+// Solutions to Q1
+//-----------------------------------------------------------------------------
+bool cci::unique_chars(const std::string &input_str) {
   if (input_str.empty()) {
     return true;
   }
 
-  uint32_t present[k_num_ascii_chars] = {};
+  uint32_t present[cci::k_num_ascii_chars] = {};
 
   for (auto &item : input_str) {
     present[(static_cast<uint8_t>(item))]++;
@@ -40,12 +43,12 @@ bool unique_chars(const std::string &input_str) {
   return true;
 }
 
-bool unique_chars(const std::string_view input_str) {
+bool cci::unique_chars(const std::string_view input_str) {
   if (input_str.empty()) {
     return true;
   }
 
-  uint32_t present[k_num_ascii_chars] = {};
+  uint32_t present[cci::k_num_ascii_chars] = {};
 
   for (auto &item : input_str) {
     present[(static_cast<uint8_t>(item))]++;
@@ -60,12 +63,12 @@ bool unique_chars(const std::string_view input_str) {
   return true;
 }
 
-bool unique_chars(const char *input_str) {
+bool cci::unique_chars(const char *input_str) {
   if ('\0' == *input_str) {
     return true;
   }
 
-  uint32_t present[k_num_ascii_chars] = {};
+  uint32_t present[cci::k_num_ascii_chars] = {};
 
   auto current_char = '\0';
   while ('\0' != (current_char = *input_str++)) {
@@ -81,7 +84,10 @@ bool unique_chars(const char *input_str) {
   return true;
 }
 
-void reverse(char *input_str) {
+//-----------------------------------------------------------------------------
+// Solutions to Q2
+//-----------------------------------------------------------------------------
+void cci::reverse(char *input_str) {
   if ('\0' == *input_str) {
     return;
   }
@@ -102,7 +108,7 @@ void reverse(char *input_str) {
   }
 }
 
-template <> void reverse<ver_1>(std::string &input_str) {
+template <> void cci::reverse<cci::ver_1>(std::string &input_str) {
   size_t length = input_str.length();
 
   // Swap character starting from two corners
@@ -111,12 +117,15 @@ template <> void reverse<ver_1>(std::string &input_str) {
   }
 }
 
-template <> void reverse<ver_2>(std::string &input_str) {
+template <> void cci::reverse<cci::ver_2>(std::string &input_str) {
   reverse(input_str.begin(), input_str.end());
 }
 
+//-----------------------------------------------------------------------------
+// Solutions to Q3
+//-----------------------------------------------------------------------------
 template <>
-bool permutation<ver_1>(const std::string &str1, const std::string &str2) {
+bool cci::permutation<cci::ver_1>(const std::string &str1, const std::string &str2) {
   if (str1.length() != str2.length()) {
     return false;
   }
@@ -131,13 +140,13 @@ bool permutation<ver_1>(const std::string &str1, const std::string &str2) {
 }
 
 template <>
-bool permutation<ver_2>(const std::string &str1, const std::string &str2) {
+bool cci::permutation<cci::ver_2>(const std::string &str1, const std::string &str2) {
   if (str1.length() != str2.length()) {
     return false;
   }
 
-  char chars_in_string1[k_num_ascii_chars] = {};
-  char chars_in_string2[k_num_ascii_chars] = {};
+  char chars_in_string1[cci::k_num_ascii_chars] = {};
+  char chars_in_string2[cci::k_num_ascii_chars] = {};
 
   for (auto current_char : str1) {
     chars_in_string1[(static_cast<uint8_t>(current_char))]++;
@@ -156,7 +165,10 @@ bool permutation<ver_2>(const std::string &str1, const std::string &str2) {
   return true;
 }
 
-void replace_space_with_code(std::string &input_str, size_t length) {
+//-----------------------------------------------------------------------------
+// Solutions to Q4
+//-----------------------------------------------------------------------------
+void cci::replace_space_with_code(std::string &input_str, size_t length) {
   // Count the number of whitespaces.
   size_t space_count = 0;
   for (size_t ii = 0; ii < length; ii++) {
@@ -182,7 +194,10 @@ void replace_space_with_code(std::string &input_str, size_t length) {
   }
 }
 
-std::string string_compress(const std::string &input_str) {
+//-----------------------------------------------------------------------------
+// Solutions to Q5
+//-----------------------------------------------------------------------------
+std::string cci::string_compress(const std::string &input_str) {
   size_t compressed_string_length = 0;
   size_t current_char_count = 1;
 
@@ -236,7 +251,10 @@ std::string string_compress(const std::string &input_str) {
   return compressed_string;
 }
 
-void rotate(image &in_image) {
+//-----------------------------------------------------------------------------
+// Solutions to Q6
+//-----------------------------------------------------------------------------
+void cci::rotate(image &in_image) {
   for (size_t layer = 0; layer < in_image.size() / 2; layer++) {
     size_t first = layer;
     size_t last = in_image.size() - 1 - layer;
@@ -262,9 +280,11 @@ void rotate(image &in_image) {
   }
 }
 
-void setZeros(matrix &in_matrix) {
-
-  if (0 == in_matrix.size()) {
+//-----------------------------------------------------------------------------
+// Solutions to Q7
+//-----------------------------------------------------------------------------
+void cci::setZeros(matrix &in_matrix) {
+  if (in_matrix.empty()) {
     return;
   }
 
@@ -297,16 +317,15 @@ void setZeros(matrix &in_matrix) {
   }
 }
 
-bool isRotation(const std::string &s1, const std::string &s2) {
+//-----------------------------------------------------------------------------
+// Solutions to Q8
+//-----------------------------------------------------------------------------
+bool cci::isRotation(const std::string &s1, const std::string &s2) {
   if ((s1.empty()) || (s1.length() != s2.length())) {
     return false;
   }
 
   std::string s1s1 = s1 + s1;
 
-  if (s1s1.find(s2) == std::string::npos) {
-    return false;
-  }
-
-  return true;
+  return (s1s1.find(s2) != std::string::npos);
 }
