@@ -168,3 +168,39 @@ size_t cci::numOfBitsToConvert(uint32_t a, uint32_t b) {
 uint32_t cci::swapOddAndEvenBits(uint32_t n) {
   return (((n & 0xaaaaaaaau) >> 1u) | ((n & 0x55555555u) << 1u));
 }
+
+//-----------------------------------------------------------------------------
+// Solutions to Q7
+//-----------------------------------------------------------------------------
+static uint32_t findMissingImpl(const std::vector<uint32_t> &array,
+                                size_t column) {
+  if (column >= 32) {
+    // We're done
+    return 0;
+  }
+
+  auto one_bits = std::vector<uint32_t>();
+  auto zero_bits = std::vector<uint32_t>();
+
+  uint32_t mask = (0x1u << column);
+  for (auto temp : array) {
+    if ((temp & mask) == 0) {
+      zero_bits.push_back(temp);
+    } else {
+      one_bits.push_back(temp);
+    }
+  }
+
+  if (zero_bits.size() <= one_bits.size()) {
+    uint32_t v = findMissingImpl(zero_bits, column + 1);
+    return (v << 1u) | 0u;
+  } else {
+    uint32_t v = findMissingImpl(one_bits, column + 1);
+    return (v << 1u) | 1u;
+  }
+}
+
+uint32_t cci::findMissing(const std::vector<uint32_t> &array) {
+  // Start from the least significant bit, and work our way up
+  return findMissingImpl(array, 0);
+}

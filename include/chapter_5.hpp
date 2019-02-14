@@ -50,14 +50,14 @@ uint32_t getNext(uint32_t n);
 uint32_t getPrev(uint32_t n);
 
 //-----------------------------------------------------------------------------
-// Solutions to Q4
+// Solution to Q4
 //-----------------------------------------------------------------------------
 // Check if n is a power of two
 //-----------------------------------------------------------------------------
 bool isPowerOfTwo(uint32_t n);
 
 //-----------------------------------------------------------------------------
-// Solutions to Q5
+// Solution to Q5
 //-----------------------------------------------------------------------------
 // Returns the number of bits that need to be flipped in order to convert a to
 // b (or vice versa)
@@ -65,12 +65,27 @@ bool isPowerOfTwo(uint32_t n);
 size_t numOfBitsToConvert(uint32_t a, uint32_t b);
 
 //-----------------------------------------------------------------------------
-// Solutions to Q6
+// Solution to Q6
 //-----------------------------------------------------------------------------
 // Swap odd and even bits in n
 //-----------------------------------------------------------------------------
 uint32_t swapOddAndEvenBits(uint32_t n);
 
+//-----------------------------------------------------------------------------
+// Solution to Q7
+//-----------------------------------------------------------------------------
+// Find missing number in the input array. The input array contains numbers
+// from 0 through n, except for one number which is missing. Only binary
+// operations are allowed.
+//-----------------------------------------------------------------------------
+uint32_t findMissing(const std::vector<uint32_t> &array);
+
+//-----------------------------------------------------------------------------
+// Solution to Q8
+//
+// TODO
+//-----------------------------------------------------------------------------
+
 } // namespace cci
 
-#endif
+# endif

@@ -15,6 +15,7 @@
 #include <gtest/gtest.h>
 
 #include <vector>
+#include <algorithm>
 
 #include <chapter_5.hpp>
 
@@ -173,3 +174,18 @@ TEST(CciChapter5_Q6, numberOfBitsToConvert) {
     EXPECT_EQ(swapped_expected, swapped);
   }
 }
+
+//-----------------------------------------------------------------------------
+// Tests for Solution to Q7
+//-----------------------------------------------------------------------------
+TEST(CciChapter5_Q7, findMissing) {
+  std::vector<uint32_t> ref_vector = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+  for (auto item : ref_vector) {
+    auto test_vector = ref_vector;
+    test_vector.erase(std::find(test_vector.begin(), test_vector.end(), item));
+    EXPECT_EQ(item, cci::findMissing(test_vector));
+  }
+
+}
+
