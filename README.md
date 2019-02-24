@@ -9,7 +9,6 @@ My solutions to the problems from this
 implemented in modern C++ (up to C++17).
 
 ## Overview
------------
 
 I started this project because I wanted to:
   * practice competitive programming
@@ -48,13 +47,11 @@ Although any updates to Google Test are highly unlikely to break the build,
 please use the revision when debugging.
 
 ## Status
---------
 Chapters 1-5 are now complete. The remaining chapters contain more generic
 questions that focus on testing IQ and generic software skills. I may revisit
 them in the future.
 
 ## Build instructions
--------------------
 **zz-cci** supports Windows and Linux.
 
 ## Build
@@ -81,8 +78,7 @@ Of course you can change the `CMake` generator and build type as you please.
 Now, you can run the binary implementing all the unit tests, `cciUT`. All tests
 should pass.
 
-Final notes
--------------
+## Final notes
 Last, but not least, please fell free to fork and re-use this repository - I
 will be very happy if anyone finds my implementations helpful! However,
 bear in mind the best way to learn is to practice (i.e. code) yourself ;-)
