@@ -220,8 +220,7 @@ std::string cci::string_compress(const std::string &input_str) {
   // Step 2 - if the compressed string is longer than the original one, then
   // return the original string.
   if (compressed_string_length >= input_str.length()) {
-    std::string compressed_string = input_str;
-    return compressed_string;
+    return input_str;
   }
 
   // Step 3 - compress the string and return the compressed version

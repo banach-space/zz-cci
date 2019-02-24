@@ -6,7 +6,8 @@
 //  banach-space@github
 //
 // DESCRIPTION:
-//    Solutions to practice questions from Chapter 2 in [1] - implementation.
+//    The solutions to practice problems from chapter 2 in [1] are implemented
+//    in header files instead.
 //
 //    [1] "Cracking the Coding Interview", Gayle Laakmann McDowell
 //

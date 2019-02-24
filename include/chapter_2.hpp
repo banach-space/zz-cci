@@ -41,7 +41,6 @@ std::vector<T> getVector(const ListType &List) {
 
   return all_vals;
 }
-} // namespace cci
 
 //------------------------------------------------------------------------
 // Solution to Q1
@@ -68,9 +67,9 @@ template <typename ListType, typename T> void removeDuplicates(ListType *list) {
 //------------------------------------------------------------------------
 // Solution to Q2
 //------------------------------------------------------------------------
-// A Basic solution for cci::List<T> (not using iterators)
+// A Basic solution for List<T> (not using iterators)
 template <typename T>
-typename cci::List<T>::Node *findKthElementBasic(const cci::List<T> &list,
+typename List<T>::Node *findKthElementBasic(const List<T> &list,
                                                  size_t k) {
   if (list.empty()) {
     return nullptr;
@@ -91,7 +90,7 @@ typename cci::List<T>::Node *findKthElementBasic(const cci::List<T> &list,
   return it_second;
 }
 
-// A solution for std::list<T> and cci::List<T> (using iterators)
+// A solution for std::list<T> and List<T> (using iterators)
 template <typename ListType>
 typename ListType::const_iterator findKthElement(const ListType &list,
                                                  size_t k) {
@@ -120,7 +119,7 @@ typename ListType::const_iterator findKthElement(const ListType &list,
 // the list. And in general it is not possible unless you have acces to the
 // list.
 template <typename T>
-void deleteNode(typename cci::List<T>::Node *node_to_delete) {
+void deleteNode(typename List<T>::Node *node_to_delete) {
   // Check if this is the last node in the list. If that's the case do nothing.
   if (nullptr == node_to_delete->next_) {
     return;
@@ -128,7 +127,7 @@ void deleteNode(typename cci::List<T>::Node *node_to_delete) {
 
   // Otherwise, copy the contents of node_to_delete->next_ into node_to_delete
   // and delete node_to_delete->next_ instead.
-  typename cci::List<T>::Node *temp = node_to_delete->next_;
+  typename List<T>::Node *temp = node_to_delete->next_;
   node_to_delete->val_ = temp->val_;
   node_to_delete->next_ = temp->next_;
 
@@ -215,7 +214,7 @@ ListType sumNumbersAsAList(ListType &input_list1, ListType &input_list2) {
     }
   }
 
-  // Sum the elements. A bit hacky way, but cci::List has no reverse iterators
+  // Sum the elements. A bit hacky way, but List has no reverse iterators
   auto it1 = input_list1.end();
   auto it2 = input_list2.end();
   while (it1 != input_list1.begin()) {
@@ -242,7 +241,7 @@ ListType sumNumbersAsAList(ListType &input_list1, ListType &input_list2) {
 // Solution to Q6
 //------------------------------------------------------------------------
 // Skipping this one. Not sure how to model cycles in a list with std::list or
-// cci::List. I would have to implement a much more basic list for this.
+// List. I would have to implement a much more basic list for this.
 
 //------------------------------------------------------------------------
 // Solution to Q7
@@ -264,4 +263,5 @@ template <typename ListType> bool polindrone(ListType &input_list) {
   return true;
 }
 
+} // namespace cci
 #endif

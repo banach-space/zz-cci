@@ -54,7 +54,7 @@ TYPED_TEST(CciChapter2_Q1, removeDuplicates) {
       test_list.push_back(value);
     }
 
-    removeDuplicates<TypeParam, int>(&test_list);
+    cci::removeDuplicates<TypeParam, int>(&test_list);
 
     std::vector<int> out_vect = cci::getVector<TypeParam, int>(test_list);
     EXPECT_EQ(out_vect, std::get<1>(test_case));
@@ -106,7 +106,7 @@ TYPED_TEST(CciChapter2_Q2, findKthElement3) {
   }
 
   for (auto k = 0u; k < k_q2_num_samples; k++) {
-    typename TypeParam::const_iterator result = findKthElement(test_list, k);
+    typename TypeParam::const_iterator result = cci::findKthElement(test_list, k);
 
     auto expected_val = test_case[k_q2_num_samples - 1 - k];
     EXPECT_EQ(*result, expected_val);
@@ -139,7 +139,7 @@ TEST(CciChapter2_Q3, deleteNodePtr) {
     while (nullptr != temp && temp->val_ != *it) {
       temp = temp->next_;
     }
-    deleteNode<int>(temp);
+    cci::deleteNode<int>(temp);
     std::vector<int> out_vect = cci::getVector<cci::List<int>, int>(test_list);
 
     // Construct a vector (test_case) using test_case_ref with item pointed by
@@ -213,7 +213,7 @@ TYPED_TEST(CciChapter2_Q4, partition) {
       test_list.push_back(value);
     }
 
-    partition<TypeParam, int>(test_list, std::get<2>(test_case));
+    cci::partition<TypeParam, int>(test_list, std::get<2>(test_case));
 
     std::vector<int> out_vect = cci::getVector<TypeParam, int>(test_list);
 
@@ -252,7 +252,7 @@ TYPED_TEST(CciChapter2_Q5, sumNumbersAsAListReverse) {
     }
 
     auto out_list =
-        sumNumbersAsAListReverse<TypeParam, int>(test_list1, test_list2);
+        cci::sumNumbersAsAListReverse<TypeParam, int>(test_list1, test_list2);
 
     std::vector<int> out_vect = cci::getVector<TypeParam, int>(out_list);
 
@@ -282,7 +282,7 @@ TYPED_TEST(CciChapter2_Q5, sumNumbersAsAList) {
       test_list2.push_back(value);
     }
 
-    auto out_list = sumNumbersAsAList<TypeParam, int>(test_list1, test_list2);
+    auto out_list = cci::sumNumbersAsAList<TypeParam, int>(test_list1, test_list2);
 
     std::vector<int> out_vect = cci::getVector<TypeParam, int>(out_list);
 
@@ -315,7 +315,7 @@ TYPED_TEST(CciChapter2_Q6, polindrone) {
       test_list.push_back(value);
     }
 
-    bool res = polindrone(test_list);
+    bool res = cci::polindrone(test_list);
     EXPECT_EQ(res, std::get<1>(test_case));
   }
 }
