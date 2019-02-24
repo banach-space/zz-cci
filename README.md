@@ -6,7 +6,7 @@
 
 My solutions to the problems from this
 [book](https://www.amazon.co.uk/Cracking-Coding-Interview-Programming-Questions/dp/098478280X)
-implemented in modern C++ (up to C++17).
+implemented in modern C++17.
 
 ## Overview
 
@@ -32,6 +32,7 @@ These were very helpful in:
   * documenting the assumptions that I made about the problems
   * verifying that my implementations satisfy those assumptions
   * maintaining and expanding this repository
+
 The following revision of Google Test was used during the development:
 ```
 commit cc9dcc54129bafebaeb8e9ffa619bffb71a08474 (HEAD -> master, origin/master, origin/HEAD)
@@ -44,7 +45,7 @@ Date:   Tue Oct 30 09:34:35 2018 -0400
     Add Optional() to the cheat sheet doc.
 ```
 Although any updates to Google Test are highly unlikely to break the build,
-please use the revision when debugging.
+please use the above revision when debugging.
 
 ## Status
 Chapters 1-5 are now complete. The remaining chapters contain more generic
@@ -52,11 +53,13 @@ questions that focus on testing IQ and generic software skills. I may revisit
 them in the future.
 
 ## Build instructions
-**zz-cci** supports Windows and Linux.
+**zz-cci** supports Windows and Linux. It should also work on Mac OS, but I
+haven't had the time to tweak my CI to verify that.
 
-## Build
-Because I'm a Linux user, the following build instructions are for Linux, but
-porting this to Windows is rather straightforward.
+## Build 
+Because I'm a Linux user, the following build instructions are for Linux.
+However, porting this to Windows should be rather straightforward (and I do
+test it in my CI).
 
 I assume that **zz-cci** will be built in `<build-dir>` and that the
 top-level source code directory is `<source-dir>`. 
@@ -74,9 +77,10 @@ $ cd <build_dir>
 $ cmake <source_dir>
 $ make
 ```
-Of course you can change the `CMake` generator and build type as you please.
-Now, you can run the binary implementing all the unit tests, `cciUT`. All tests
-should pass.
+Of course you can change the `CMake` generator and the build type
+(`Release\Debug` etc) as required.  Once built, you can run the binary
+implementing all the unit tests, `cciUT`. In the CI that I set-up all tests are
+green.
 
 ## Final notes
 Last, but not least, please fell free to fork and re-use this repository - I
